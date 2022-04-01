@@ -2,8 +2,7 @@ import logging
 from crac_client.converter.converter import Converter
 from crac_client.gui import Gui
 from crac_client.loc import _name
-from crac_client.retriever.retriever import Retriever
-from crac_client.streaming import set_camera_status, set_cameras, set_retriever
+from crac_client.streaming import set_camera_status, set_cameras
 from crac_protobuf.camera_pb2 import (
     CameraAction,
     CameraResponse,
@@ -50,6 +49,3 @@ class CameraConverter(Converter):
                 }
             }
         )
-    
-    def set_initial_retriever(self, retriever: Retriever, _: Gui):
-        set_retriever(retriever=retriever)

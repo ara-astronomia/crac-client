@@ -1,3 +1,4 @@
+from multiprocessing import Queue
 from crac_client.config import Config
 from crac_client.converter.converter import Converter
 from crac_client.gui import Gui
@@ -16,10 +17,8 @@ import grpc
 
 
 class ButtonRetriever(Retriever):
-    def __init__(self, converter: Converter) -> None:
-        super().__init__(converter)
-        self.channel = grpc.insecure_channel(f'{Config.getValue("ip", "server")}:{Config.getValue("port", "server")}')
-        self.client = ButtonStub(self.channel)
+    def __init__(self, converter: Converter, queue: Queue) -> None:
+        super().__init__(converter, queue)
 
     key_to_button_type_conversion = {
         ButtonKey.KEY_TELE_SWITCH: ButtonType.TELE_SWITCH,
@@ -28,13 +27,33 @@ class ButtonRetriever(Retriever):
         ButtonKey.KEY_DOME_LIGHT: ButtonType.DOME_LIGHT,
     }
 
-    def setAction(self, action: str, key: ButtonKey, g_ui: Gui):
-        if key is ButtonKey.KEY_DOME_LIGHT and g_ui:
-            g_ui.set_autolight(False)
+    def setAction(self, action: str, key: ButtonKey, g_ui: Gui = None):
+        # if key is ButtonKey.KEY_DOME_LIGHT and g_ui:
+        #     g_ui.set_autolight(False)
         request = ButtonRequest(action=ButtonAction.Value(action), type=ButtonRetriever.key_to_button_type_conversion[key])
-        call_future = self.client.SetAction.future(request, wait_for_ready=True)
-        call_future.add_done_callback(self.callback)
+        with grpc.insecure_channel(
+            f'{Config.getValue("ip", "server")}:{Config.getValue("port", "server")}',
+            options=[
+                ("grpc.max_send_message_length", -1),
+                ("grpc.max_receive_message_length", -1),
+                ("grpc.so_reuseport", 1),
+                ("grpc.use_local_subchannel_pool", 1),
+            ],
+        ) as channel:
+            client = ButtonStub(channel)
+            response = client.SetAction(request, wait_for_ready=True)
+            self.callback(response)
 
     def getStatus(self):
-        call_future = self.client.GetStatus.future(ButtonsRequest(), wait_for_ready=True)
-        call_future.add_done_callback(self.callback)
+        with grpc.insecure_channel(
+            f'{Config.getValue("ip", "server")}:{Config.getValue("port", "server")}',
+            options=[
+                ("grpc.max_send_message_length", -1),
+                ("grpc.max_receive_message_length", -1),
+                ("grpc.so_reuseport", 1),
+                ("grpc.use_local_subchannel_pool", 1),
+            ],
+        ) as channel:
+            client = ButtonStub(channel)
+            response = client.GetStatus(ButtonsRequest(), wait_for_ready=True)
+            self.callback(response)
