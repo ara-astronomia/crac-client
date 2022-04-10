@@ -65,20 +65,43 @@ class Gui:
                         ]]), title="Tende", pad=(3, 0))
                     ],
                     [
-                        sg.Frame(layout=([[
-                            sg.Button(_name(ButtonLabel.LABEL_CAMERA_DISCONNECTED), key=ButtonKey.KEY_CAMERA1_CONNECTION, metadata="CAMERA_CONNECT", disabled=True, size=(10, 1), tooltip="connetti alla videocamera", button_color=("white", "red")),
-                            sg.Button(_name(ButtonLabel.LABEL_CAMERA_HIDDEN), key=ButtonKey.KEY_CAMERA1_DISPLAY, metadata="CAMERA_SHOW", disabled=True, size=(8, 1), tooltip="mostra la videocamera", button_color=("white", "red")),
-                        ]]), title="Camera 1", pad=(3, 10)),
-                        sg.Frame(layout=([[
-                            sg.Button(_name(ButtonLabel.LABEL_CAMERA_DISCONNECTED), key=ButtonKey.KEY_CAMERA2_CONNECTION, metadata="CAMERA_CONNECT", disabled=True, size=(10, 1), tooltip="connetti alla videocamera", button_color=("white", "red")),
-                            sg.Button(_name(ButtonLabel.LABEL_CAMERA_HIDDEN), key=ButtonKey.KEY_CAMERA2_DISPLAY, metadata="CAMERA_SHOW", disabled=True, size=(8, 1), tooltip="mostra la videocamera", button_color=("white", "red")),
-                        ]]), title="Camera 2", pad=(3, 10)),
-                        sg.Checkbox('Enable Autodisplay', key="autodisplay", default=True, tooltip="le camere mostrano automaticamente le immagini quando il telescopio è in slewing")
+                        sg.pin(
+                            sg.Frame(layout=([[
+                                sg.Button(_name(ButtonLabel.LABEL_CAMERA_DISCONNECTED), key=ButtonKey.KEY_CAMERA1_CONNECTION, metadata="CAMERA_CONNECT", disabled=True, size=(10, 1), tooltip="connetti alla videocamera", button_color=("white", "red")),
+                                sg.Button(_name(ButtonLabel.LABEL_CAMERA_HIDDEN), key=ButtonKey.KEY_CAMERA1_DISPLAY, metadata="CAMERA_SHOW", disabled=True, size=(8, 1), tooltip="mostra la videocamera", button_color=("white", "red")),
+                            ]]), title="Camera 1", pad=(3, 10), key="camera1"),
+                        shrink=True),
+                        sg.pin(
+                            sg.Frame(layout=([[
+                                sg.Button(_name(ButtonLabel.LABEL_CAMERA_DISCONNECTED), key=ButtonKey.KEY_CAMERA2_CONNECTION, metadata="CAMERA_CONNECT", disabled=True, size=(10, 1), tooltip="connetti alla videocamera", button_color=("white", "red")),
+                                sg.Button(_name(ButtonLabel.LABEL_CAMERA_HIDDEN), key=ButtonKey.KEY_CAMERA2_DISPLAY, metadata="CAMERA_SHOW", disabled=True, size=(8, 1), tooltip="mostra la videocamera", button_color=("white", "red")),
+                            ]]), title="Camera 2", pad=(3, 10), key="camera2"),
+                        shrink=True)
                     ],
                     [
-                        sg.Frame(layout=([[
-                            sg.Combo(values=tuple(), size=(35,30), key='camera-combo')
-                        ]]), title="Movimento Camera", pad=(3, 10))
+                        sg.pin(
+                            sg.Frame(layout=([
+                                [
+                                    sg.Combo(values=tuple(), size=(35,30), key='camera-combo'),
+                                    sg.Checkbox('Enable Autodisplay', key="autodisplay", default=True, tooltip="le camere mostrano automaticamente le immagini quando il telescopio è in slewing"),
+                                ],
+                                [
+                                    sg.Button("TOP LEFT", key=ButtonKey.KEY_CAMERA_MOVE_UP, metadata="MOVE_TOP_LEFT", disabled=False, size=(6, 1), tooltip="muovi la camera in alto a sinistra", button_color=("white", "red")),
+                                    sg.Button("UP", key=ButtonKey.KEY_CAMERA_MOVE_TOP_LEFT, metadata="MOVE_UP", disabled=False, size=(6, 1), tooltip="muovi la camera in alto", button_color=("white", "red")),
+                                    sg.Button("TOP RIGHT", key=ButtonKey.KEY_CAMERA_MOVE_TOP_RIGHT, metadata="MOVE_TOP_RIGHT", disabled=False, size=(6, 1), tooltip="muovi la camera in alto a destra", button_color=("white", "red")),
+                                ],
+                                [
+                                    sg.Button("LEFT", key=ButtonKey.KEY_CAMERA_MOVE_LEFT, metadata="MOVE_LEFT", disabled=False, size=(6, 1), tooltip="muovi la camera a sinistra", button_color=("white", "red")),
+                                    sg.Button("STOP", key=ButtonKey.KEY_CAMERA_STOP_MOVE, metadata="MOVE_STOP", disabled=False, size=(6, 1), tooltip="ferma la camera", button_color=("white", "red")),
+                                    sg.Button("RIGHT", key=ButtonKey.KEY_CAMERA_MOVE_RIGHT, metadata="MOVE_RIGHT", disabled=False, size=(6, 1), tooltip="muovi la camera in a destra", button_color=("white", "red")),
+                                ],
+                                [
+                                    sg.Button("DOWN LEFT", key=ButtonKey.KEY_CAMERA_MOVE_BOTTOM_LEFT, metadata="MOVE_BOTTOM_LEFT", disabled=False, size=(6, 1), tooltip="muovi la camera in basso a sinistra", button_color=("white", "red")),
+                                    sg.Button("DOWN", key=ButtonKey.KEY_CAMERA_MOVE_DOWN, metadata="MOVE_DOWN", disabled=False, size=(6, 1), tooltip="muovi la camera in basso", button_color=("white", "red")),
+                                    sg.Button("DOWN RIGHT", key=ButtonKey.KEY_CAMERA_MOVE_BOTTOM_RIGHT, metadata="MOVE_BOTTOM_RIGHT", disabled=False, size=(6, 1), tooltip="muovi la camera in basso a destra", button_color=("white", "red")),
+                                ],
+                            ]), title="Movimento Camera", pad=(3, 10), key="camera-remote")
+                        , shrink=True)
                     ],
                     [
                         sg.Frame(layout=([[

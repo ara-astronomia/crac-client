@@ -18,12 +18,12 @@ class TelescopeRetriever(Retriever):
         self.channel = grpc.insecure_channel(f'{Config.getValue("ip", "server")}:{Config.getValue("port", "server")}')
         self.client = TelescopeStub(self.channel)
 
-    key_to_telescope_action_conversion = [
+    key_to_telescope_action_conversion = (
         ButtonKey.KEY_SYNC,
         ButtonKey.KEY_PARK,
         ButtonKey.KEY_FLAT,
         ButtonKey.KEY_TELESCOPE_CONNECTION_TOGGLE,
-    ]
+    )
 
     def setAction(self, action: str, autolight: bool):
         request = TelescopeRequest(action=TelescopeAction.Value(action), autolight=autolight)

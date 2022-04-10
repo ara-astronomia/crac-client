@@ -19,4 +19,4 @@ class Retriever(ABC):
             logger.error(f"the retrieval of the response threw an error {err=}, {type(err)=}")
             raise err
         else:
-            JOBS.append({"convert": self.converter.convert, "response": response})
+            JOBS.put({"convert": self.converter.convert, "response": response})

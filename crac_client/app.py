@@ -13,7 +13,7 @@ from crac_client.converter.curtains_converter import CurtainsConverter
 from crac_client.converter.roof_converter import RoofConverter
 from crac_client.converter.telescope_converter import TelescopeConverter
 from crac_client.gui_constants import GuiKey
-from crac_client.jobs import JOBS
+from crac_client.jobs import JOBS, ENABLED
 from crac_client.retriever.button_retriever import ButtonRetriever
 from crac_client.retriever.camera_retriever import CameraRetriever
 from crac_client.retriever.curtains_retriever import CurtainsRetriever
@@ -29,11 +29,15 @@ from sys import platform
 from time import sleep
 
 
-def deque():
-    while len(JOBS) > 0:
-        logger.debug(f"there are {len(JOBS)} jobs")
-        job = JOBS.popleft()
+def deque(block=False):
+    if block:
+        job = JOBS.get(block=True)
         job['convert'](job['response'], g_ui)
+    else:
+        while not JOBS.empty():
+            logger.debug(f"there are {JOBS.qsize()} jobs")
+            job = JOBS.get()
+            job['convert'](job['response'], g_ui)
 
 def open_vlc(source: str):
     if platform == "linux" or platform == "linux2":
@@ -58,19 +62,26 @@ roof_retriever = RoofRetriever(RoofConverter())
 button_retriever = ButtonRetriever(ButtonConverter())
 telescope_retriever = TelescopeRetriever(TelescopeConverter())
 curtains_retriever = CurtainsRetriever(CurtainsConverter())
+camera_retriever = CameraRetriever(CameraConverter())
+camera_retriever.listCameras()
+deque(block=True)
+logger.debug(f"ENABLED is {ENABLED}")
 source1 = config.Config.getValue("source", "camera1")
 source2 = config.Config.getValue("source", "camera2")
-if source1:
+logger.debug(f"ENABLED is {ENABLED['camera1']} and source1 is {source1}")
+logger.debug(f"ENABLED is {ENABLED['camera2']} and source2 is {source2}")
+if ENABLED["camera1"] and source1:
+    ENABLED["source1"] = True
     stream1 = open_vlc(source1)
-if source2:
+    logger.debug(f"ENABLED after source1 is {ENABLED}")
+if ENABLED["camera2"] and source2:
+    ENABLED["source2"] = True
     stream2 = open_vlc(source2)
-camera_retriever = CameraRetriever(CameraConverter())
-if not source1:
+    logger.debug(f"ENABLED after source2 is {ENABLED}")
+if ENABLED["camera1"] and not source1:
     camera_retriever.setAction(action=CameraAction.Name(CameraAction.CAMERA_CONNECT), name="camera1")
-if not source2:
+if ENABLED["camera1"] and not source2:
     camera_retriever.setAction(action=CameraAction.Name(CameraAction.CAMERA_CONNECT), name="camera2")
-camera_retriever.listCameras()
-
 deque()
 
 if not source1 or not source2:
@@ -84,17 +95,17 @@ while True:
         case v if v in [None, GuiKey.EXIT, GuiKey.SHUTDOWN]:
             g_ui = None
             telescope_retriever.setAction(action=TelescopeAction.Name(TelescopeAction.TELESCOPE_DISCONNECT), autolight=False)
-            if not source1:
+            if ENABLED["camera1"] and not source1:
                 camera_retriever.setAction(action=CameraAction.Name(CameraAction.CAMERA_DISCONNECT), name="camera1")
-            if not source2:
+            if ENABLED["camera2"] and not source2:
                 camera_retriever.setAction(action=CameraAction.Name(CameraAction.CAMERA_DISCONNECT), name="camera2")
             deque()
-            if not source1 or not source2:
+            if (ENABLED["camera1"] and not source1) or (ENABLED["camera2"] and not source2):
                 stop_server()
-            if source1:
+            if ENABLED["camera1"] and source1:
                 sleep(1)
                 close_vlc(stream1)
-            if source2:
+            if ENABLED["camera2"] and source2:
                 sleep(1)
                 close_vlc(stream2)
             break
@@ -106,19 +117,24 @@ while True:
             telescope_retriever.setAction(action=g_ui.win[v].metadata, autolight=g_ui.is_autolight())
         case v if v in CurtainsRetriever.key_to_curtains_action_conversion:
             curtains_retriever.setAction(action=g_ui.win[v].metadata)
-        case ButtonKey.KEY_CAMERA1_DISPLAY if not source1:
+        case ButtonKey.KEY_CAMERA1_DISPLAY if ENABLED["camera1"] and not source1:
             connection_button = g_ui.win[v]
             camera_retriever.setAction(action=connection_button.metadata, name="camera1", g_ui=g_ui)
-        case ButtonKey.KEY_CAMERA2_DISPLAY if not source2:
+        case ButtonKey.KEY_CAMERA2_DISPLAY if ENABLED["camera2"] and not source2:
             connection_button = g_ui.win[v]
             camera_retriever.setAction(action=connection_button.metadata, name="camera2", g_ui=g_ui)
+        case v if v in CameraRetriever.key_to_camera_move_conversion:
+            move_button = g_ui.win[v]
+            camera_name = g_ui.win.find_element('camera-combo').Get()
+            logger.debug(f"Camera name is: {camera_name}")
+            camera_retriever.setAction(action=CameraAction.Name(CameraAction.CAMERA_MOVE), name=camera_name, move=move_button.metadata, g_ui=g_ui)
         case _:
             roof_retriever.setAction(action=RoofAction.Name(RoofAction.CHECK_ROOF))
             telescope_retriever.setAction(action=TelescopeAction.Name(TelescopeAction.CHECK_TELESCOPE), autolight=g_ui.is_autolight())
             curtains_retriever.setAction(action=CurtainsAction.Name(CurtainsAction.CHECK_CURTAIN))
-            if not source1:
+            if ENABLED["camera1"]:
                 camera_retriever.setAction(action=CameraAction.Name(CameraAction.CAMERA_CHECK), name="camera1", g_ui=g_ui)
-            if not source2:
+            if ENABLED["camera2"]:
                 camera_retriever.setAction(action=CameraAction.Name(CameraAction.CAMERA_CHECK), name="camera2", g_ui=g_ui)
             button_retriever.getStatus()
             
