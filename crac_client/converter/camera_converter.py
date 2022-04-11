@@ -13,7 +13,9 @@ from crac_protobuf.camera_pb2 import (
     CamerasResponse,
     CameraStatus,
 )
-
+from crac_protobuf.button_pb2 import (
+    ButtonKey,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -48,10 +50,10 @@ class CameraConverter(Converter):
 
         if response.camera1.name:
             values.append(response.camera1.name)
-            ENABLED["camera1"] = True
+            ENABLED["camera1"] = response.camera1.features
         if response.camera2.name:
             values.append(response.camera2.name)
-            ENABLED["camera2"] = True
+            ENABLED["camera2"] = response.camera2.features
         
         if len(values) == 1:
             g_ui.win["camera-remote"](visible=False)
@@ -61,9 +63,9 @@ class CameraConverter(Converter):
         
         logger.debug(f"Camera enabling value is: {ENABLED}")
         
-        if not ENABLED["camera1"] or ENABLED["source1"]:
+        if not ENABLED["camera1"] or ButtonKey.KEY_CAMERA1_DISPLAY not in ENABLED["camera1"] or ENABLED["source1"]:
             g_ui.win["camera1"](visible=False)
-        if not ENABLED["camera2"] or ENABLED["source1"]:
+        if not ENABLED["camera2"] or ButtonKey.KEY_CAMERA2_DISPLAY not in ENABLED["camera2"] or ENABLED["source2"]:
             g_ui.win["camera2"](visible=False)
     
         set_cameras(
