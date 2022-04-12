@@ -69,12 +69,14 @@ class Gui:
                             sg.Frame(layout=([[
                                 sg.Button(_name(ButtonLabel.LABEL_CAMERA_DISCONNECTED), key=ButtonKey.KEY_CAMERA1_CONNECTION, metadata="CAMERA_CONNECT", disabled=True, size=(10, 1), tooltip="connetti alla videocamera", button_color=("white", "red")),
                                 sg.Button(_name(ButtonLabel.LABEL_CAMERA_HIDDEN), key=ButtonKey.KEY_CAMERA1_DISPLAY, metadata="CAMERA_SHOW", disabled=True, size=(8, 1), tooltip="mostra la videocamera", button_color=("white", "red")),
+                                sg.Button(ButtonLabel.LABEL_CAMERA_IR_ENABLED, key=ButtonKey.KEY_CAMERA1_IR_TOGGLE, metadata="CAMERA_IR_ENABLE", disabled=False, size=(10, 1), tooltip="attiva o disattiva l'infrarosso", button_color=("white", "red")),
                             ]]), title="Camera 1", pad=(3, 10), key="camera1"),
                         shrink=True),
                         sg.pin(
                             sg.Frame(layout=([[
                                 sg.Button(_name(ButtonLabel.LABEL_CAMERA_DISCONNECTED), key=ButtonKey.KEY_CAMERA2_CONNECTION, metadata="CAMERA_CONNECT", disabled=True, size=(10, 1), tooltip="connetti alla videocamera", button_color=("white", "red")),
                                 sg.Button(_name(ButtonLabel.LABEL_CAMERA_HIDDEN), key=ButtonKey.KEY_CAMERA2_DISPLAY, metadata="CAMERA_SHOW", disabled=True, size=(8, 1), tooltip="mostra la videocamera", button_color=("white", "red")),
+                                sg.Button(ButtonLabel.LABEL_CAMERA_IR_ENABLED, key=ButtonKey.KEY_CAMERA2_IR_TOGGLE, metadata="CAMERA_IR_ENABLE", disabled=False, size=(10, 1), tooltip="attiva o disattiva l'infrarosso", button_color=("white", "red")),
                             ]]), title="Camera 2", pad=(3, 10), key="camera2"),
                         shrink=True)
                     ],

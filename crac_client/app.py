@@ -78,11 +78,16 @@ if ENABLED["camera2"] and source2:
     ENABLED["source2"] = True
     stream2 = open_vlc(source2)
     logger.debug(f"ENABLED after source2 is {ENABLED}")
-if ENABLED["camera1"] and not source1:
-    camera_retriever.setAction(action=CameraAction.Name(CameraAction.CAMERA_CONNECT), name="camera1")
-if ENABLED["camera1"] and not source2:
-    camera_retriever.setAction(action=CameraAction.Name(CameraAction.CAMERA_CONNECT), name="camera2")
-deque()
+if ENABLED["camera1"]:
+    camera_retriever.setAction(action=CameraAction.Name(CameraAction.CAMERA_IR_DISABLE), name="camera1", g_ui=g_ui)
+    if not source1:
+        camera_retriever.setAction(action=CameraAction.Name(CameraAction.CAMERA_CONNECT), name="camera1")
+    
+if ENABLED["camera2"]:
+    camera_retriever.setAction(action=CameraAction.Name(CameraAction.CAMERA_IR_DISABLE), name="camera2", g_ui=g_ui)
+    if not source2:
+        camera_retriever.setAction(action=CameraAction.Name(CameraAction.CAMERA_CONNECT), name="camera2")
+deque(block=True)
 
 if not source1 or not source2:
     start_server()
@@ -95,11 +100,15 @@ while True:
         case v if v in [None, GuiKey.EXIT, GuiKey.SHUTDOWN]:
             g_ui = None
             telescope_retriever.setAction(action=TelescopeAction.Name(TelescopeAction.TELESCOPE_DISCONNECT), autolight=False)
-            if ENABLED["camera1"] and not source1:
-                camera_retriever.setAction(action=CameraAction.Name(CameraAction.CAMERA_DISCONNECT), name="camera1")
-            if ENABLED["camera2"] and not source2:
-                camera_retriever.setAction(action=CameraAction.Name(CameraAction.CAMERA_DISCONNECT), name="camera2")
-            deque()
+            if ENABLED["camera1"]:
+                if not source1:
+                    camera_retriever.setAction(action=CameraAction.Name(CameraAction.CAMERA_DISCONNECT), name="camera1")
+                camera_retriever.setAction(action=CameraAction.Name(CameraAction.CAMERA_IR_AUTO), name="camera1", g_ui=g_ui)
+            if ENABLED["camera2"]:
+                if not source2:
+                    camera_retriever.setAction(action=CameraAction.Name(CameraAction.CAMERA_DISCONNECT), name="camera2")
+                camera_retriever.setAction(action=CameraAction.Name(CameraAction.CAMERA_IR_AUTO), name="camera2", g_ui=g_ui)
+            deque(block=True)
             if (ENABLED["camera1"] and not source1) or (ENABLED["camera2"] and not source2):
                 stop_server()
             if ENABLED["camera1"] and source1:
@@ -128,6 +137,10 @@ while True:
             camera_name = g_ui.win.find_element('camera-combo').Get()
             logger.debug(f"Camera name is: {camera_name}")
             camera_retriever.setAction(action=CameraAction.Name(CameraAction.CAMERA_MOVE), name=camera_name, move=move_button.metadata, g_ui=g_ui)
+        case ButtonKey.KEY_CAMERA1_IR_TOGGLE:
+            camera_retriever.setAction(action=g_ui.win[v].metadata, name="camera1", g_ui=g_ui)
+        case ButtonKey.KEY_CAMERA2_IR_TOGGLE:
+            camera_retriever.setAction(action=g_ui.win[v].metadata, name="camera2", g_ui=g_ui)
         case _:
             roof_retriever.setAction(action=RoofAction.Name(RoofAction.CHECK_ROOF))
             telescope_retriever.setAction(action=TelescopeAction.Name(TelescopeAction.CHECK_TELESCOPE), autolight=g_ui.is_autolight())
