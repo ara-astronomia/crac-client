@@ -3,6 +3,7 @@ from crac_client.converter.converter import Converter
 from crac_client.gui import Gui
 from crac_client.jobs import ENABLED
 from crac_client.loc import _name
+from crac_client.retriever.camera_retriever import CameraRetriever
 from crac_client.retriever.retriever import Retriever
 from crac_client.streaming import set_camera_status, set_cameras, set_retriever
 from crac_protobuf.button_pb2 import (
@@ -32,20 +33,12 @@ class CameraConverter(Converter):
         if g_ui is None:
             return
         
-        if (
-            ButtonKey.KEY_CAMERA1_CONNECTION not in ENABLED["camera1"] and
-            ButtonKey.KEY_CAMERA1_DISPLAY not in ENABLED["camera1"] and
-            ButtonKey.KEY_CAMERA1_IR_TOGGLE not in ENABLED["camera1"]
-        ):
+        if not CameraRetriever.key_to_camera1_display_conversion.intersection(ENABLED["camera1"]):
             g_ui.win["camera1"](visible = False)
         else:
             g_ui.win["camera1"](visible = True)
 
-        if (
-            ButtonKey.KEY_CAMERA2_CONNECTION not in ENABLED["camera2"] and
-            ButtonKey.KEY_CAMERA2_DISPLAY not in ENABLED["camera2"] and
-            ButtonKey.KEY_CAMERA2_IR_TOGGLE not in ENABLED["camera2"]
-        ):
+        if not CameraRetriever.key_to_camera2_display_conversion.intersection(ENABLED["camera2"]):
             g_ui.win["camera2"](visible = False)
         else:
             g_ui.win["camera2"](visible = True)
@@ -59,24 +52,8 @@ class CameraConverter(Converter):
             g_ui.win["cameras-autodisplay"](visible = True)
 
         if (
-            ButtonKey.KEY_CAMERA_STOP_MOVE not in ENABLED["camera1"] and
-            ButtonKey.KEY_CAMERA_MOVE_UP not in ENABLED["camera1"] and
-            ButtonKey.KEY_CAMERA_MOVE_TOP_RIGHT not in ENABLED["camera1"] and
-            ButtonKey.KEY_CAMERA_MOVE_RIGHT not in ENABLED["camera1"] and
-            ButtonKey.KEY_CAMERA_MOVE_BOTTOM_RIGHT not in ENABLED["camera1"] and
-            ButtonKey.KEY_CAMERA_MOVE_DOWN not in ENABLED["camera1"] and
-            ButtonKey.KEY_CAMERA_MOVE_BOTTOM_LEFT not in ENABLED["camera1"] and
-            ButtonKey.KEY_CAMERA_MOVE_LEFT not in ENABLED["camera1"] and
-            ButtonKey.KEY_CAMERA_MOVE_TOP_LEFT not in ENABLED["camera1"] and
-            ButtonKey.KEY_CAMERA_STOP_MOVE not in ENABLED["camera2"] and
-            ButtonKey.KEY_CAMERA_MOVE_UP not in ENABLED["camera2"] and
-            ButtonKey.KEY_CAMERA_MOVE_TOP_RIGHT not in ENABLED["camera2"] and
-            ButtonKey.KEY_CAMERA_MOVE_RIGHT not in ENABLED["camera2"] and
-            ButtonKey.KEY_CAMERA_MOVE_BOTTOM_RIGHT not in ENABLED["camera2"] and
-            ButtonKey.KEY_CAMERA_MOVE_DOWN not in ENABLED["camera2"] and
-            ButtonKey.KEY_CAMERA_MOVE_BOTTOM_LEFT not in ENABLED["camera2"] and
-            ButtonKey.KEY_CAMERA_MOVE_LEFT not in ENABLED["camera2"] and
-            ButtonKey.KEY_CAMERA_MOVE_TOP_LEFT not in ENABLED["camera2"]
+            not CameraRetriever.key_to_camera_move_conversion.intersection(ENABLED["camera1"]) and
+            not CameraRetriever.key_to_camera_move_conversion.intersection(ENABLED["camera2"])
         ):
             g_ui.win["camera-remote"](visible = False)
         else:
@@ -109,30 +86,10 @@ class CameraConverter(Converter):
 
         combo_names = ["-- Scegli la camera --"]
 
-        if (
-            ButtonKey.KEY_CAMERA_STOP_MOVE in ENABLED["camera1"] or
-            ButtonKey.KEY_CAMERA_MOVE_UP in ENABLED["camera1"] or
-            ButtonKey.KEY_CAMERA_MOVE_TOP_RIGHT in ENABLED["camera1"] or
-            ButtonKey.KEY_CAMERA_MOVE_RIGHT in ENABLED["camera1"] or
-            ButtonKey.KEY_CAMERA_MOVE_BOTTOM_RIGHT in ENABLED["camera1"] or
-            ButtonKey.KEY_CAMERA_MOVE_DOWN in ENABLED["camera1"] or
-            ButtonKey.KEY_CAMERA_MOVE_BOTTOM_LEFT in ENABLED["camera1"] or
-            ButtonKey.KEY_CAMERA_MOVE_LEFT in ENABLED["camera1"] or
-            ButtonKey.KEY_CAMERA_MOVE_TOP_LEFT in ENABLED["camera1"]
-        ):
+        if CameraRetriever.key_to_camera_move_conversion.intersection(ENABLED["camera1"]):
             combo_names.append(response.camera1.name)
         
-        if (
-            ButtonKey.KEY_CAMERA_STOP_MOVE in ENABLED["camera2"] or
-            ButtonKey.KEY_CAMERA_MOVE_UP in ENABLED["camera2"] or
-            ButtonKey.KEY_CAMERA_MOVE_TOP_RIGHT in ENABLED["camera2"] or
-            ButtonKey.KEY_CAMERA_MOVE_RIGHT in ENABLED["camera2"] or
-            ButtonKey.KEY_CAMERA_MOVE_BOTTOM_RIGHT in ENABLED["camera2"] or
-            ButtonKey.KEY_CAMERA_MOVE_DOWN in ENABLED["camera2"] or
-            ButtonKey.KEY_CAMERA_MOVE_BOTTOM_LEFT in ENABLED["camera2"] or
-            ButtonKey.KEY_CAMERA_MOVE_LEFT in ENABLED["camera2"] or
-            ButtonKey.KEY_CAMERA_MOVE_TOP_LEFT in ENABLED["camera2"]
-        ):
+        if CameraRetriever.key_to_camera_move_conversion.intersection(ENABLED["camera2"]):
             combo_names.append(response.camera2.name)
         
         if len(values) == 1:

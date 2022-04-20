@@ -27,7 +27,7 @@ class CameraRetriever(Retriever):
         self.channel = grpc.insecure_channel(f'{Config.getValue("ip", "server")}:{Config.getValue("port", "server")}')
         self.client = CameraStub(self.channel)
     
-    key_to_camera_move_conversion = (
+    key_to_camera_move_conversion = {
         ButtonKey.KEY_CAMERA_STOP_MOVE,
         ButtonKey.KEY_CAMERA_MOVE_UP,
         ButtonKey.KEY_CAMERA_MOVE_TOP_RIGHT,
@@ -37,7 +37,19 @@ class CameraRetriever(Retriever):
         ButtonKey.KEY_CAMERA_MOVE_BOTTOM_LEFT,
         ButtonKey.KEY_CAMERA_MOVE_LEFT,
         ButtonKey.KEY_CAMERA_MOVE_TOP_LEFT,
-    )
+    }
+
+    key_to_camera1_display_conversion = {
+        ButtonKey.KEY_CAMERA1_CONNECTION,
+        ButtonKey.KEY_CAMERA1_DISPLAY,
+        ButtonKey.KEY_CAMERA1_IR_TOGGLE,
+    }
+
+    key_to_camera2_display_conversion = {
+        ButtonKey.KEY_CAMERA2_CONNECTION,
+        ButtonKey.KEY_CAMERA2_DISPLAY,
+        ButtonKey.KEY_CAMERA2_IR_TOGGLE,
+    }
 
     def video(self, name: str) -> CameraResponse:
         return self.client.Video(CameraRequest(name=name))
