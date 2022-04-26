@@ -7,12 +7,14 @@ license = "GPL3"
 
 [tool.poetry.dependencies]
 python = "^3.10"
-crac-protobuf = { path = "../crac-protobuf/dist/crac-protobuf-0.1.17.tar.gz" }
+crac-protobuf = { path = "../crac-protobuf/dist/crac-protobuf-0.1.18.tar.gz" }
 grpcio-tools = "^1.43.0"
 PySimpleGUI = "^4.56.0"
 Flask = "^2.0.3"
 opencv-python = "^4.5.5"
 python-dotenv = "^0.20.0"
+plotly = "^5.7.0"
+kaleido = "0.2.1"
 
 [tool.poetry.dev-dependencies]
 autopep8 = "^1.6.0"

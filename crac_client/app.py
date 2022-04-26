@@ -1,18 +1,15 @@
 import logging
 import logging.config
-from queue import Empty
-import subprocess
-
-
 logging.config.fileConfig('logging.conf')
 
-
+import subprocess
 from crac_client import config, gui
 from crac_client.converter.button_converter import ButtonConverter
 from crac_client.converter.camera_converter import CameraConverter
 from crac_client.converter.curtains_converter import CurtainsConverter
 from crac_client.converter.roof_converter import RoofConverter
 from crac_client.converter.telescope_converter import TelescopeConverter
+from crac_client.converter.weather_converter import WeatherConverter
 from crac_client.gui_constants import GuiKey
 from crac_client.jobs import JOBS, ENABLED
 from crac_client.retriever.button_retriever import ButtonRetriever
@@ -20,12 +17,14 @@ from crac_client.retriever.camera_retriever import CameraRetriever
 from crac_client.retriever.curtains_retriever import CurtainsRetriever
 from crac_client.retriever.roof_retriever import RoofRetriever
 from crac_client.retriever.telescope_retriever import TelescopeRetriever
+from crac_client.retriever.weather_retriever import WeatherRetriever
 from crac_client.streaming import start_server, stop_server
 from crac_protobuf.button_pb2 import ButtonKey
 from crac_protobuf.camera_pb2 import CameraAction
 from crac_protobuf.curtains_pb2 import CurtainsAction
 from crac_protobuf.roof_pb2 import RoofAction
 from crac_protobuf.telescope_pb2 import TelescopeAction
+from queue import Empty
 from sys import platform
 from time import sleep
 
@@ -70,7 +69,6 @@ def __backend_streaming(enabled: list, source1: str, source2: str) -> bool:
     (enabled['camera1'] or enabled['camera2']) and (not source1 or not source2)
 
 
-
 logger = logging.getLogger('crac_client.app')
 g_ui = gui.Gui()
 roof_retriever = RoofRetriever(RoofConverter())
@@ -78,6 +76,7 @@ button_retriever = ButtonRetriever(ButtonConverter())
 telescope_retriever = TelescopeRetriever(TelescopeConverter())
 curtains_retriever = CurtainsRetriever(CurtainsConverter())
 camera_retriever = CameraRetriever(CameraConverter())
+weather_retriever = WeatherRetriever(WeatherConverter())
 camera_retriever.listCameras()
 blocking_deque()
 logger.debug(f"ENABLED is {ENABLED}")
@@ -150,5 +149,6 @@ while True:
             camera_retriever.setAction(action=CameraAction.Name(CameraAction.CAMERA_CHECK), name="camera1", g_ui=g_ui)
             camera_retriever.setAction(action=CameraAction.Name(CameraAction.CAMERA_CHECK), name="camera2", g_ui=g_ui)
             button_retriever.getStatus()
+            weather_retriever.getStatus(g_ui.win["weather-updated-at"].get())
             
     deque()

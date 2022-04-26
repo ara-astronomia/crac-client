@@ -168,7 +168,24 @@ class Gui:
                             ],
                             [sg.Text(GuiLabel.NO_ALERT.value, size=(58, 1), justification='center', background_color="#B0C4DE", font=("Helvetica", 12), text_color="#FF0000", key="alert", relief=sg.RELIEF_RIDGE)]
                         ]), title='Status CRaC', relief=sg.RELIEF_GROOVE
-                    )]
+                    )],
+                    [
+                        sg.Frame(layout=([
+                            [
+                                sg.In(key='weather-updated-at', visible=False), 
+                            ],
+                            [
+                                sg.Image(key="wind-speed", expand_x=True, expand_y=True, size=(60, 60)),
+                                sg.Image(key="wind-gust-speed", expand_x=True, expand_y=True, size=(60, 60)),
+                                sg.Image(key="temperature", expand_x=True, expand_y=True, size=(60, 60)),
+                            ],
+                            [
+                                sg.Image(key="humidity", expand_x=True, expand_y=True, size=(60, 60)),
+                                sg.Image(key="rain-rate", expand_x=True, expand_y=True, size=(60, 60)),
+                                sg.Image(key="barometer", expand_x=True, expand_y=True, size=(60, 60)),
+                            ],
+                        ]), title="Meteo", expand_x=True, expand_y=True)
+                    ],
                  ]
 
         self.win = sg.Window('CRaC -- Control Roof and Curtains by ARA', layout, grab_anywhere=False, finalize=True)
