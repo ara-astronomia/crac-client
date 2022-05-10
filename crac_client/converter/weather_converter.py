@@ -64,4 +64,4 @@ class WeatherConverter(Converter):
 
         fig.update_layout(paper_bgcolor='lightslategrey', font={
                           'color': "white", 'family': "Arial", 'size': 40})
-        return fig.to_image(format="png", scale=0.25)
+        return fig.to_image(format="png", scale=0.20)
