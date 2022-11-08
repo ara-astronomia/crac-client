@@ -46,7 +46,7 @@ class Gui:
         self.delta_pt = 1.5 * self.t
         self.h = int(self.l / 1.8)
         self.was_light_turned_on = False
-#        sg.theme('DarkBlue')
+#        sg.theme('Dark')
 
         theme_dict = {'BACKGROUND': '#2B475D',
                 'TEXT': '#FFFFFF',
