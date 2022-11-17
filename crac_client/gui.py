@@ -59,7 +59,7 @@ class Gui:
 
         # sg.theme_add_new('Dashboard', theme_dict)     # if using 4.20.0.1+
         sg.LOOK_AND_FEEL_TABLE['Dashboard'] = theme_dict
-        sg.theme('Dashboard')
+        sg.theme('dark')
 
         BORDER_COLOR = '#C7D5E0'
         PAD = (2, 2)
@@ -116,22 +116,22 @@ class Gui:
                         sg.pin(
                             sg.Frame(layout=([
                                 [
-                                    sg.Combo(values=tuple(), size=(28,30), key='camera-combo')
+                                    sg.Combo(values=tuple(), size=(17,1), key='camera-combo')
                                 ],
                                 [
-                                    sg.Button("TOP LEFT", font=FONT_BUTTON_CAM, key=ButtonKey.KEY_CAMERA_MOVE_UP, metadata="MOVE_TOP_LEFT", disabled=False, size=(6, 1), tooltip="muovi la camera in alto a sinistra", button_color=("black", "white")),
-                                    sg.Button("UP", font=FONT_BUTTON_CAM, key=ButtonKey.KEY_CAMERA_MOVE_TOP_LEFT, metadata="MOVE_UP", disabled=False, size=(6, 1), tooltip="muovi la camera in alto", button_color=("black", "white")),
-                                    sg.Button("TOP RIGHT", font=FONT_BUTTON_CAM, key=ButtonKey.KEY_CAMERA_MOVE_TOP_RIGHT, metadata="MOVE_TOP_RIGHT", disabled=False, size=(6, 1), tooltip="muovi la camera in alto a destra", button_color=("black", "white")),
+                                    sg.RealtimeButton('↖️', key=ButtonKey.KEY_CAMERA_MOVE_UP, metadata="MOVE_TOP_LEFT", disabled=False, tooltip="muovi la camera in alto a sinistra" ),
+                                    sg.RealtimeButton('⬆️', key=ButtonKey.KEY_CAMERA_MOVE_TOP_LEFT, metadata="MOVE_UP", disabled=False, tooltip="muovi la camera in alto"),
+                                    sg.RealtimeButton('↗️', key=ButtonKey.KEY_CAMERA_MOVE_TOP_RIGHT, metadata="MOVE_TOP_RIGHT", disabled=False, tooltip="muovi la camera in alto a destra"),
                                 ],
                                 [
-                                    sg.Button("LEFT", font=FONT_BUTTON_CAM, key=ButtonKey.KEY_CAMERA_MOVE_LEFT, metadata="MOVE_LEFT", disabled=False, size=(6, 1), tooltip="muovi la camera a sinistra", button_color=("black", "white")),
-                                    sg.Button("STOP", font=FONT_BUTTON_CAM, key=ButtonKey.KEY_CAMERA_STOP_MOVE, metadata="MOVE_STOP", disabled=False, size=(6, 1), tooltip="ferma la camera", button_color=("black", "white")),
-                                    sg.Button("RIGHT", font=FONT_BUTTON_CAM, key=ButtonKey.KEY_CAMERA_MOVE_RIGHT, metadata="MOVE_RIGHT", disabled=False, size=(6, 1), tooltip="muovi la camera in a destra", button_color=("black", "white")),
+                                    sg.RealtimeButton('⬅️', key=ButtonKey.KEY_CAMERA_MOVE_LEFT, metadata="MOVE_LEFT", disabled=False, tooltip="muovi la camera a sinistra"),
+                                    sg.RealtimeButton('❌', key=ButtonKey.KEY_CAMERA_STOP_MOVE, metadata="MOVE_STOP", disabled=False, tooltip="ferma la camera",),
+                                    sg.RealtimeButton('➡️', key=ButtonKey.KEY_CAMERA_MOVE_RIGHT, metadata="MOVE_RIGHT", disabled=False, tooltip="muovi la camera in a destra"),
                                 ],
                                 [
-                                    sg.Button("DOWN LEFT", font=FONT_BUTTON_CAM, key=ButtonKey.KEY_CAMERA_MOVE_BOTTOM_LEFT, metadata="MOVE_BOTTOM_LEFT", disabled=False, size=(6, 1), tooltip="muovi la camera in basso a sinistra", button_color=("black", "white")),
-                                    sg.Button("DOWN", font=FONT_BUTTON_CAM, key=ButtonKey.KEY_CAMERA_MOVE_DOWN, metadata="MOVE_DOWN", disabled=False, size=(6, 1), tooltip="muovi la camera in basso", button_color=("black", "white")),
-                                    sg.Button("DOWN RIGHT", font=FONT_BUTTON_CAM, key=ButtonKey.KEY_CAMERA_MOVE_BOTTOM_RIGHT, metadata="MOVE_BOTTOM_RIGHT", disabled=False, size=(6, 1), tooltip="muovi la camera in basso a destra", button_color=("black", "white")),
+                                    sg.RealtimeButton('↙️', key=ButtonKey.KEY_CAMERA_MOVE_BOTTOM_LEFT, metadata="MOVE_BOTTOM_LEFT", disabled=False, tooltip="muovi la camera in basso a sinistra"),
+                                    sg.RealtimeButton('⬇️', key=ButtonKey.KEY_CAMERA_MOVE_DOWN, metadata="MOVE_DOWN", disabled=False, tooltip="muovi la camera in basso"),
+                                    sg.RealtimeButton('↘️', key=ButtonKey.KEY_CAMERA_MOVE_BOTTOM_RIGHT, metadata="MOVE_BOTTOM_RIGHT", disabled=False, tooltip="muovi la camera in basso a destra"),
                                 ],
                             ]), title="Movimento Camera", pad=(3, 10), key="camera-remote"),
                         shrink=True)
