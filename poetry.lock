@@ -39,7 +39,7 @@ python-versions = "^3.9"
 
 [package.source]
 type = "file"
-url = "../crac-protobuf/dist/crac-protobuf-0.1.18.tar.gz"
+url = "../crac-protobuf/dist/crac_protobuf-0.1.18.tar.gz"
 
 [[package]]
 name = "flask"
@@ -251,7 +251,7 @@ watchdog = ["watchdog"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "3754e7a8d46c16be450d408b2fffa1119afeeacda3512c6b38e3282b57265649"
+content-hash = "1fa062ca2cf7d84ea3a80720c93490477cceffab886d5d781822495fb56b98c6"
 
 [metadata.files]
 autopep8 = [
@@ -267,7 +267,7 @@ colorama = [
     {file = "colorama-0.4.6.tar.gz", hash = "sha256:08695f5cb7ed6e0531a20572697297273c47b8cae5a63ffc6d6ed5c201be6e44"},
 ]
 crac-protobuf = [
-    {file = "crac-protobuf-0.1.18.tar.gz", hash = "sha256:1ad2b2af3ceb4286be3de8eecdf7b4a77a0e7c21dc7131fa9ac3f9092713be2e"},
+    {file = "crac_protobuf-0.1.18.tar.gz", hash = "sha256:1ad2b2af3ceb4286be3de8eecdf7b4a77a0e7c21dc7131fa9ac3f9092713be2e"},
 ]
 flask = [
     {file = "Flask-2.2.2-py3-none-any.whl", hash = "sha256:b9c46cc36662a7949f34b52d8ec7bb59c0d74ba08ba6cb9ce9adc1d8676d9526"},
