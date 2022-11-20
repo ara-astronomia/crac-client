@@ -180,31 +180,28 @@ class Gui:
                         ]]), title="Luce Cupola", pad=PAD_DOWN)
                     ]]
         
-        block_stato_crac =[[sg.Text('Stato di CRaC', font=FONT)],
-                        [    
-                            sg.Frame(layout=([
-                                    [
-                                        sg.Column(layout=(
-                                            [sg.Text('Telescopio', size=(25, 1), justification='center', font=("Helvetica", 12))],
+        block_stato_crac = [[sg.Text('Stato di CRaC', font=FONT)],
+                    
+                        [
+                        sg.Frame(layout=
+                                        ([sg.Text('', size=(25, 1), justification='center', font=("Helvetica", 12))],
                                             [
                                                 sg.Text(GuiLabel.TELESCOPE_DISCONNECTED.value, size=(10, 1), justification='center', font=("Helvetica", 12), key='status-tele', background_color="white", text_color="red"),
                                                 sg.Text(GuiLabel.TELESCOPE_TRACKING_OFF.value, size=(10, 1), justification='center', font=("Helvetica", 12), key='status-tracking', background_color="white", text_color="red"),
                                                 sg.Text(GuiLabel.TELESCOPE_SLEWING_OFF.value, size=(10, 1), justification='center', font=("Helvetica", 12), key='status-slewing', background_color="white", text_color="red"),
                                             ]
-                                        )),
-                                        sg.Column(layout=(
-                                            [sg.Text('Tenda Ovest', size=(11, 1), justification='center', font=("Helvetica", 12)), sg.Text('Tenda Est', size=(11, 1), justification='center', font=("Helvetica", 12))],
+                                        ),title='Telescopio', relief=sg.RELIEF_GROOVE),
+                        sg.Frame(layout=
+                                        ([sg.Text('Tenda Ovest', size=(11, 1), justification='center', font=("Helvetica", 12)), sg.Text('Tenda Est', size=(11, 1), justification='center', font=("Helvetica", 12))],
                                             [
                                                 sg.Text(GuiLabel.CURTAIN_DISABLED.value, size=(11, 1), justification='center', font=("Helvetica", 12), key='status-curtain_west', background_color="red", text_color="white"),
                                                 sg.Text(GuiLabel.CURTAIN_DISABLED.value, size=(11, 1), justification='center', font=("Helvetica", 12), key='status-curtain_east', background_color="red", text_color="white")
                                             ]
-                                        ))
-
-                                    ],
-                                    [sg.Text(GuiLabel.NO_ALERT.value, size=(58, 1), justification='center', background_color="#B0C4DE", font=("Helvetica", 12), text_color="#FF0000", key="alert", relief=sg.RELIEF_RIDGE)]
-                                ]), title='Status CRaC', relief=sg.RELIEF_GROOVE)
-                            ]]
-
+                                        ), title='Tende', relief=sg.RELIEF_GROOVE)],
+                        [sg.Text(GuiLabel.NO_ALERT.value, size=(61, 1), justification='center', background_color="#B0C4DE", font=("Helvetica", 12), text_color="#FF0000", key="alert", relief=sg.RELIEF_RIDGE)]
+                        ]
+        
+  
         block_meteo =[[sg.Text('Dati Meteo', font=FONT),sg.Text(' ', size =(5,1)),sg.Text('Tendenza Barometro (3 ore)', size=(23, 1), justification='left', font=("Helvetica", 12), pad=((0, 0), (10, 0))), 
                         sg.Text('-5 mmbar', size=(8, 1), justification='center', font=("Helvetica", 12), key='tendenza_bar', background_color="white", text_color="#2c2825", pad=(0, 0)),
                         sg.Text('       previsioni', size=(11, 1), justification='left', font=("Helvetica", 12), pad=((0, 0), (10, 0))), 
@@ -231,11 +228,12 @@ class Gui:
         block_alim = [[sg.Text('Stato Alimentazione - UPS', font=FONT)],
                         [sg.T("Qui ci vanno i gauge dell'UPS, Volt e percent di carica")]]
         
-        block_logo_ara = [[sg.Text('')],
-                        [sg.T("Qui ci va il Logo ARA")]]
+        block_logo_ara = [
+                        [sg.Text("        ", background_color='#000098'),sg.Image("logo_ara.png")]    
+                        ]
 
         layout = [
-                    [sg.Column(block_3T, size=(720, 90), pad=PAD),sg.Column(block_logo_ara, size=(190,90))],
+                    [sg.Column(block_3T, size=(720, 90), pad=PAD),sg.Column(block_logo_ara, size=(190,90), background_color='#000098')],
 
                     [sg.Column([[sg.Column(block_alimentatori, size=(555,90), pad=PAD_LEFT_INSIDE)],
                     [sg.Column(block_stato_tende, size=(555,300),  pad=PAD_LEFT_INSIDE)]],background_color=BORDER_COLOR),

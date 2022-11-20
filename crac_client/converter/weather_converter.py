@@ -47,7 +47,7 @@ class WeatherConverter(Converter):
                     'axis': {'range': [chart.thresholds[0].lower_bound, chart.thresholds[0].upper_bound]},
                     'bar': {'color': "darkslategray"},
                     'bgcolor': "white",
-                    'borderwidth': 4,
+                    'borderwidth': 1,
                     'bordercolor': "darkgray",
                     'steps': [
                         {'range': [chart.thresholds[0].lower_bound,
@@ -63,5 +63,5 @@ class WeatherConverter(Converter):
         )
 
         fig.update_layout(paper_bgcolor='lightslategrey', font={
-                          'color': "white", 'family': "Arial", 'size': 40})
+                          'color': "white", 'family': "Arial", 'size': 35})
         return fig.to_image(format="png", scale=0.20)
