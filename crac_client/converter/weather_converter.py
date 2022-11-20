@@ -6,6 +6,7 @@ from crac_protobuf.chart_pb2 import (
     Chart,
     WeatherResponse,
     Threshold,
+    ThresholdType,
 )
 import plotly.graph_objects as go
 import base64
@@ -33,7 +34,6 @@ class WeatherConverter(Converter):
             g_ui.win["barometer"](source=barometer_image)
             g_ui.win["weather-updated-at"](response.updated_at)
 
-
     def gauge(self, chart: Chart):
         fig = go.Figure(
             go.Indicator(
@@ -44,19 +44,12 @@ class WeatherConverter(Converter):
                 #delta={'reference': chart.thresholds[0].error, 'font': {
                 #    'size': 60}, 'increasing': {'color': "red"}, 'decreasing': {'color': "green"}},
                 gauge={
-                    'axis': {'range': [chart.thresholds[0].lower_bound, chart.thresholds[0].upper_bound]},
+                    'axis': {'range': [chart.min, chart.max]},
                     'bar': {'color': "darkslategray"},
                     'bgcolor': "white",
                     'borderwidth': 1,
                     'bordercolor': "darkgray",
-                    'steps': [
-                        {'range': [chart.thresholds[0].lower_bound,
-                                   chart.thresholds[0].warning], 'color': "white"},
-                        {'range': [chart.thresholds[0].warning,
-                                   chart.thresholds[0].error], 'color': "orange"},
-                        {'range': [
-                            chart.thresholds[0].error, chart.thresholds[0].upper_bound], 'color': "red"},
-                    ],
+                    'steps': [self.build_range(threshold) for threshold in chart.thresholds],
                     'threshold': {'line': {'color': "black", 'width': 4}, 'thickness': 1, 'value': chart.value}
                 }
             )
@@ -65,3 +58,18 @@ class WeatherConverter(Converter):
         fig.update_layout(paper_bgcolor='lightslategrey', font={
                           'color': "white", 'family': "Arial", 'size': 35})
         return fig.to_image(format="png", scale=0.20)
+
+    def build_range(self, threshold: Threshold):
+        return {
+            "range": [threshold.lower_bound, threshold.upper_bound],
+            "color": self.get_color_by_type(threshold.threshold_type)
+        }
+
+    def get_color_by_type(self, type: ThresholdType):
+        if (type == ThresholdType.THRESHOLD_TYPE_NORMAL):
+            return "white"
+        if (type == ThresholdType.THRESHOLD_TYPE_WARNING):
+            return "orange"
+        if (type == ThresholdType.THRESHOLD_TYPE_DANGER):
+            return "red"
+        return "white"

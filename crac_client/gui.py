@@ -69,7 +69,7 @@ class Gui:
         SIZE_GAUGE = (20, 20)
         FONT_BUTTON_CAM=("Helvetica", 8)
         
-        block_3T = [[sg.Text('Controllo 3T - Tetto Tende Telescopio', font=FONT)],
+        block_3T = [[sg.Text('Controllo 3T - Tetto Telescopio Tende', font=FONT)],
                     [
                         sg.Frame(layout=([[
                             sg.Button(_name(ButtonLabel.LABEL_CLOSE), key=ButtonKey.KEY_ROOF, metadata="OPEN", disabled=False, size=(8, 1), tooltip="apre il tetto", button_color=("white", "red")),

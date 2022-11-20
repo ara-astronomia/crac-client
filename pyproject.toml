@@ -7,7 +7,7 @@ license = "GPL3"
 
 [tool.poetry.dependencies]
 python = "^3.10"
-crac-protobuf = { path = "../crac-protobuf/dist/crac_protobuf-0.1.18.tar.gz" }
+crac-protobuf = { path = "../crac-protobuf/dist/crac_protobuf-0.1.19.tar.gz" }
 grpcio-tools = "^1.43.0"
 PySimpleGUI = "^4.56.0"
 Flask = "^2.0.3"
