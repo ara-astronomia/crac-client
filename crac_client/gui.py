@@ -48,14 +48,16 @@ class Gui:
         self.was_light_turned_on = False
 #        sg.theme('Dark')
 
-        theme_dict = {'BACKGROUND': '#2B475D',
-                'TEXT': '#FFFFFF',
-                'INPUT': '#F2EFE8',
-                'TEXT_INPUT': '#000000',
-                'SCROLL': '#F2EFE8',
-                'BUTTON': ('#000000', '#C2D4D8'),
-                'PROGRESS': ('#FFFFFF', '#C7D5E0'),
-                'BORDER': 1,'SLIDER_DEPTH': 0, 'PROGRESS_DEPTH': 0}
+        theme_dict = {
+            'BACKGROUND': '#2B475D',
+            'TEXT': '#FFFFFF',
+            'INPUT': '#F2EFE8',
+            'TEXT_INPUT': '#000000',
+            'SCROLL': '#F2EFE8',
+            'BUTTON': ('#000000', '#C2D4D8'),
+            'PROGRESS': ('#FFFFFF', '#C7D5E0'),
+            'BORDER': 1,'SLIDER_DEPTH': 0, 'PROGRESS_DEPTH': 0
+        }
 
         # sg.theme_add_new('Dashboard', theme_dict)     # if using 4.20.0.1+
         sg.LOOK_AND_FEEL_TABLE['Dashboard'] = theme_dict
@@ -69,54 +71,57 @@ class Gui:
         SIZE_GAUGE = (20, 20)
         FONT_BUTTON_CAM=("Helvetica", 8)
         
-        block_3T = [[sg.Text('Controllo 3T - Tetto Telescopio Tende', font=FONT)],
-                    [
-                        sg.Frame(layout=([[
-                            sg.Button(_name(ButtonLabel.LABEL_CLOSE), key=ButtonKey.KEY_ROOF, metadata="OPEN", disabled=False, size=(8, 1), tooltip="apre il tetto", button_color=("white", "red")),
-                        ]]), title="Tetto", pad=PAD_DOWN),
-                        sg.Frame(layout=([[
-                            sg.Button(_name(ButtonLabel.LABEL_TELESCOPE_DISCONNECTED), key=ButtonKey.KEY_TELESCOPE_CONNECTION_TOGGLE, metadata="TELESCOPE_CONNECT", disabled=True, size=(10, 1), tooltip='connetti crac al telescopio', button_color=("white", "red")),
-                            sg.Button(_name(ButtonLabel.LABEL_SYNC), key=ButtonKey.KEY_SYNC, metadata="SYNC", disabled=True, size=(8, 1), tooltip='sincronizza il telescopio sulle coordinate di park', button_color=("white", "red")),
-                            sg.Button(_name(ButtonLabel.LABEL_PARK), key=ButtonKey.KEY_PARK, metadata="PARK_POSITION", disabled=True, size=(8, 1), tooltip='porta il telescopio in posizione di park e disattiva il tracking', button_color=("white", "red")),
-                            sg.Button(_name(ButtonLabel.LABEL_FLAT), key=ButtonKey.KEY_FLAT, metadata="FLAT_POSITION", disabled=True, size=(8, 1) , tooltip='porta il telescopio in posizione di flat e disattiva il tracking con il pannello spento', button_color=("white", "red"))
-                        ]]), title="Telescopio", pad=PAD_DOWN),
-                        sg.Frame(layout=([[
-                            sg.Button(_name(ButtonLabel.LABEL_DISABLE), key=ButtonKey.KEY_CURTAINS, metadata="ENABLE", disabled=True, size=(8, 1), tooltip='clicca per attivare le tendine', button_color=("white", "red")),
-                            sg.Button(_name(ButtonLabel.LABEL_CALIBRATE), key=ButtonKey.KEY_CALIBRATE, metadata="CALIBRATE_CURTAINS", disabled=True,  size=(10, 1), tooltip='clicca per calibrare le tendine', button_color=("white", "red"))
-                        ]]), title="Tende", pad=PAD_DOWN)
-                    ]]
-
+        block_3T = [
+            [sg.Text('Controllo 3T - Tetto Telescopio Tende', font=FONT)],
+            [
+                sg.Frame(layout=([[
+                    sg.Button(_name(ButtonLabel.LABEL_CLOSE), key=ButtonKey.KEY_ROOF, metadata="OPEN", disabled=False, size=(8, 1), tooltip="apre il tetto", button_color=("white", "red")),
+                ]]), title="Tetto", pad=PAD_DOWN),
+                sg.Frame(layout=([[
+                    sg.Button(_name(ButtonLabel.LABEL_TELESCOPE_DISCONNECTED), key=ButtonKey.KEY_TELESCOPE_CONNECTION_TOGGLE, metadata="TELESCOPE_CONNECT", disabled=True, size=(10, 1), tooltip='connetti crac al telescopio', button_color=("white", "red")),
+                    sg.Button(_name(ButtonLabel.LABEL_SYNC), key=ButtonKey.KEY_SYNC, metadata="SYNC", disabled=True, size=(8, 1), tooltip='sincronizza il telescopio sulle coordinate di park', button_color=("white", "red")),
+                    sg.Button(_name(ButtonLabel.LABEL_PARK), key=ButtonKey.KEY_PARK, metadata="PARK_POSITION", disabled=True, size=(8, 1), tooltip='porta il telescopio in posizione di park e disattiva il tracking', button_color=("white", "red")),
+                    sg.Button(_name(ButtonLabel.LABEL_FLAT), key=ButtonKey.KEY_FLAT, metadata="FLAT_POSITION", disabled=True, size=(8, 1) , tooltip='porta il telescopio in posizione di flat e disattiva il tracking con il pannello spento', button_color=("white", "red"))
+                ]]), title="Telescopio", pad=PAD_DOWN),
+                sg.Frame(layout=([[
+                    sg.Button(_name(ButtonLabel.LABEL_DISABLE), key=ButtonKey.KEY_CURTAINS, metadata="ENABLE", disabled=True, size=(8, 1), tooltip='clicca per attivare le tendine', button_color=("white", "red")),
+                    sg.Button(_name(ButtonLabel.LABEL_CALIBRATE), key=ButtonKey.KEY_CALIBRATE, metadata="CALIBRATE_CURTAINS", disabled=True,  size=(10, 1), tooltip='clicca per calibrare le tendine', button_color=("white", "red"))
+                ]]), title="Tende", pad=PAD_DOWN)
+            ]
+        ]
         
-        block_video = [[sg.Text('Videocamere', font=FONT)],
-                [sg.Column(layout=(
+        block_video = [
+            [sg.Text('Videocamere', font=FONT)],
+            [
+                sg.Column(layout=(
                     [
                         sg.Column(layout=(
-                        [sg.pin(
-                            sg.Frame(layout=([[
-                                sg.Button(_name(ButtonLabel.LABEL_CAMERA_DISCONNECTED), key=ButtonKey.KEY_CAMERA1_CONNECTION, metadata="CAMERA_CONNECT", disabled=True, size=(10, 1), tooltip="connetti alla videocamera", button_color=("white", "red")),
-                                sg.Button(_name(ButtonLabel.LABEL_CAMERA_HIDDEN), key=ButtonKey.KEY_CAMERA1_DISPLAY, metadata="CAMERA_SHOW", disabled=True, size=(8, 1), tooltip="mostra la videocamera", button_color=("white", "red")),
-                                sg.Button(_name(ButtonLabel.LABEL_CAMERA_IR_DISABLED), key=ButtonKey.KEY_CAMERA1_IR_TOGGLE, metadata="CAMERA_IR_ENABLE", disabled=False, size=(10, 1), tooltip="attiva o disattiva l'infrarosso", button_color=("white", "red")),
-                            ]]), title="Camera 1", pad=PAD_DOWN, key="camera1"),
-                        shrink=True)],
-                        [sg.pin(
-                            sg.Frame(layout=([[
-                                sg.Button(_name(ButtonLabel.LABEL_CAMERA_DISCONNECTED), key=ButtonKey.KEY_CAMERA2_CONNECTION, metadata="CAMERA_CONNECT", disabled=True, size=(10, 1), tooltip="connetti alla videocamera", button_color=("white", "red")),
-                                sg.Button(_name(ButtonLabel.LABEL_CAMERA_HIDDEN), key=ButtonKey.KEY_CAMERA2_DISPLAY, metadata="CAMERA_SHOW", disabled=True, size=(8, 1), tooltip="mostra la videocamera", button_color=("white", "red")),
-                                sg.Button(_name(ButtonLabel.LABEL_CAMERA_IR_DISABLED), key=ButtonKey.KEY_CAMERA2_IR_TOGGLE, metadata="CAMERA_IR_ENABLE", disabled=False, size=(10, 1), tooltip="attiva o disattiva l'infrarosso", button_color=("white", "red")),
-                            ]]), title="Camera 2", pad=PAD_DOWN, key="camera2"),
-                        shrink=True)],
-                        [sg.pin(
-                            sg.Frame(layout=([[
-                                sg.Checkbox('Abilita Autodisplay', key="autodisplay", default=True, tooltip="le camere mostrano automaticamente il video quando il telescopio è in slewing"),
-                            ]]), title="Camere", key="cameras-autodisplay"),
-                        shrink=True)]
+                            [sg.pin(
+                                sg.Frame(layout=([[
+                                    sg.Button(_name(ButtonLabel.LABEL_CAMERA_DISCONNECTED), key=ButtonKey.KEY_CAMERA1_CONNECTION, metadata="CAMERA_CONNECT", disabled=True, size=(10, 1), tooltip="connetti alla videocamera", button_color=("white", "red")),
+                                    sg.Button(_name(ButtonLabel.LABEL_CAMERA_HIDDEN), key=ButtonKey.KEY_CAMERA1_DISPLAY, metadata="CAMERA_SHOW", disabled=True, size=(8, 1), tooltip="mostra la videocamera", button_color=("white", "red")),
+                                    sg.Button(_name(ButtonLabel.LABEL_CAMERA_IR_DISABLED), key=ButtonKey.KEY_CAMERA1_IR_TOGGLE, metadata="CAMERA_IR_ENABLE", disabled=False, size=(10, 1), tooltip="attiva o disattiva l'infrarosso", button_color=("white", "red")),
+                                ]]), title="Camera 1", pad=PAD_DOWN, key="camera1"),
+                            shrink=True)],
+                            [sg.pin(
+                                sg.Frame(layout=([[
+                                    sg.Button(_name(ButtonLabel.LABEL_CAMERA_DISCONNECTED), key=ButtonKey.KEY_CAMERA2_CONNECTION, metadata="CAMERA_CONNECT", disabled=True, size=(10, 1), tooltip="connetti alla videocamera", button_color=("white", "red")),
+                                    sg.Button(_name(ButtonLabel.LABEL_CAMERA_HIDDEN), key=ButtonKey.KEY_CAMERA2_DISPLAY, metadata="CAMERA_SHOW", disabled=True, size=(8, 1), tooltip="mostra la videocamera", button_color=("white", "red")),
+                                    sg.Button(_name(ButtonLabel.LABEL_CAMERA_IR_DISABLED), key=ButtonKey.KEY_CAMERA2_IR_TOGGLE, metadata="CAMERA_IR_ENABLE", disabled=False, size=(10, 1), tooltip="attiva o disattiva l'infrarosso", button_color=("white", "red")),
+                                ]]), title="Camera 2", pad=PAD_DOWN, key="camera2"),
+                            shrink=True)],
+                            [sg.pin(
+                                sg.Frame(layout=([[
+                                    sg.Checkbox('Abilita Autodisplay', key="autodisplay", default=True, tooltip="le camere mostrano automaticamente il video quando il telescopio è in slewing"),
+                                ]]), title="Camere", key="cameras-autodisplay"),
+                            shrink=True)]
                         ))
                     ],
                     [
                         sg.pin(
                             sg.Frame(layout=([
                                 [
-                                    sg.Combo(values=tuple(), size=(17,1), key='camera-combo')
+                                    sg.Combo(values=tuple(), size=(17, 1), key='camera-combo')
                                 ],
                                 [
                                     sg.RealtimeButton('↖️', key=ButtonKey.KEY_CAMERA_MOVE_UP, metadata="MOVE_TOP_LEFT", disabled=False, tooltip="muovi la camera in alto a sinistra" ),
@@ -137,116 +142,125 @@ class Gui:
                         shrink=True)
                     ]
                 ))  
-            ]]
+            ]
+        ]
 
         
-        block_stato_tende = [[sg.Text('Stato Tende', font=FONT)],
-                    [
-                        sg.Canvas(size=(self.l, self.h), background_color='grey', key='canvas'),
-                        sg.Frame(layout=([[
-                                sg.Column(layout=(
-                                    [sg.Text('Est', size=(5, 1), justification='left', font=("Helvetica", 12), pad=((0, 0), (10, 0)))],
-                                    [sg.Text('0', size=(5, 1), justification='right', font=("Helvetica", 12), key='apert_e', background_color="white", text_color="#2c2825", pad=(0, 0))],
-                                    [sg.Text('Ovest', size=(5, 1), justification='left', font=("Helvetica", 12), pad=((0, 0), (50, 0)))],
-                                    [sg.Text('0', size=(5, 1), justification='right', font=("Helvetica", 12), key='apert_w', background_color="white", text_color="#2c2825", pad=((0, 0), (0, 30)))]
-                                ))
-                            ]]), title='Tende', relief=sg.RELIEF_GROOVE, pad=(2, 0)
-                        ),
-                        sg.Frame(layout=([[
-                                sg.Column(layout=(
-                                    [sg.Text('Alt', size=(5, 1), justification='left', font=("Helvetica", 12), pad=((0, 0), (10, 0)))],
-                                    [sg.Text('0', size=(5, 1), justification='right', font=("Helvetica", 12), key='alt', background_color="white", text_color="#2c2825", pad=(0, 0))],
-                                    [sg.Text('Az', size=(5, 1), justification='left', font=("Helvetica", 12), pad=((0, 0), (50, 0)))],
-                                    [sg.Text('0', size=(5, 1), justification='right', font=("Helvetica", 12), key='az', background_color="white", text_color="#2c2825", pad=((0, 0), (0, 30)))]
-                                ))
-                            ]]), title='Telescopio', relief=sg.RELIEF_GROOVE, pad=((6, 0), (0, 0))
-                        )
-                    ]]
+        block_stato_tende = [
+            [sg.Text('Stato Tende', font=FONT)],
+            [
+                sg.Canvas(size=(self.l, self.h), background_color='grey', key='canvas'),
+                sg.Frame(layout=([[
+                    sg.Column(layout=(
+                        [sg.Text('Est', size=(5, 1), justification='left', font=("Helvetica", 12), pad=((0, 0), (10, 0)))],
+                        [sg.Text('0', size=(5, 1), justification='right', font=("Helvetica", 12), key='apert_e', background_color="white", text_color="#2c2825", pad=(0, 0))],
+                        [sg.Text('Ovest', size=(5, 1), justification='left', font=("Helvetica", 12), pad=((0, 0), (50, 0)))],
+                        [sg.Text('0', size=(5, 1), justification='right', font=("Helvetica", 12), key='apert_w', background_color="white", text_color="#2c2825", pad=((0, 0), (0, 30)))]
+                    ))
+                ]]), title='Tende', relief=sg.RELIEF_GROOVE, pad=(2, 0)),
+                sg.Frame(layout=([[
+                    sg.Column(layout=(
+                        [sg.Text('Alt', size=(5, 1), justification='left', font=("Helvetica", 12), pad=((0, 0), (10, 0)))],
+                        [sg.Text('0', size=(5, 1), justification='right', font=("Helvetica", 12), key='alt', background_color="white", text_color="#2c2825", pad=(0, 0))],
+                        [sg.Text('Az', size=(5, 1), justification='left', font=("Helvetica", 12), pad=((0, 0), (50, 0)))],
+                        [sg.Text('0', size=(5, 1), justification='right', font=("Helvetica", 12), key='az', background_color="white", text_color="#2c2825", pad=((0, 0), (0, 30)))]
+                    ))
+                ]]), title='Telescopio', relief=sg.RELIEF_GROOVE, pad=((6, 0), (0, 0)))
+            ]
+        ]
         
-        block_alimentatori = [[sg.Text('Alimentatori & Luci', font=FONT)],
-                    [
-                        sg.Frame(layout=([[
-                            sg.Button(_name(ButtonLabel.LABEL_OFF), key=ButtonKey.KEY_TELE_SWITCH, metadata="TURN_ON", disabled=False, size=(8, 1), tooltip="accensione alimentarore telescopio", button_color=("white", "red")),
-                        ]]), title="Telescopio", pad=PAD_DOWN),
-                        sg.Frame(layout=([[
-                            sg.Button(_name(ButtonLabel.LABEL_OFF), key=ButtonKey.KEY_CCD_SWITCH, metadata="TURN_ON", disabled=False, size=(8, 1), tooltip="accensione alimentatore CCD", button_color=("white", "red")),
-                        ]]), title="CCD", pad=PAD_DOWN),
-                        sg.Frame(layout=([[
-                            sg.Button(_name(ButtonLabel.LABEL_OFF), key=ButtonKey.KEY_FLAT_LIGHT, metadata="TURN_ON", disabled=False, size=(8, 1), tooltip="accensione pannnello del flat e attiva il tracking se il telescopio è in posizione flat", button_color=("white", "red")),
-                        ]]), title="Luce Flat", pad=PAD_DOWN),
-                        sg.Frame(layout=([[
-                            sg.Button(_name(ButtonLabel.LABEL_OFF), key=ButtonKey.KEY_DOME_LIGHT, metadata="TURN_ON", disabled=False, size=(8, 1), tooltip="accensioni luci cupola, controllare se il telescopio è in fase di ripresa", button_color=("white", "red")),
-                            sg.Checkbox('Abilita Autolight', key="autolight", default=True, tooltip="le luci della cupola si accendono automaticamente quando il telescopio è in slewing")
-                        ]]), title="Luce Cupola", pad=PAD_DOWN)
-                    ]]
+        block_alimentatori = [
+            [sg.Text('Alimentatori & Luci', font=FONT)],
+            [
+                sg.Frame(layout=([[
+                    sg.Button(_name(ButtonLabel.LABEL_OFF), key=ButtonKey.KEY_TELE_SWITCH, metadata="TURN_ON", disabled=False, size=(8, 1), tooltip="accensione alimentarore telescopio", button_color=("white", "red")),
+                ]]), title="Telescopio", pad=PAD_DOWN),
+                sg.Frame(layout=([[
+                    sg.Button(_name(ButtonLabel.LABEL_OFF), key=ButtonKey.KEY_CCD_SWITCH, metadata="TURN_ON", disabled=False, size=(8, 1), tooltip="accensione alimentatore CCD", button_color=("white", "red")),
+                ]]), title="CCD", pad=PAD_DOWN),
+                sg.Frame(layout=([[
+                    sg.Button(_name(ButtonLabel.LABEL_OFF), key=ButtonKey.KEY_FLAT_LIGHT, metadata="TURN_ON", disabled=False, size=(8, 1), tooltip="accensione pannnello del flat e attiva il tracking se il telescopio è in posizione flat", button_color=("white", "red")),
+                ]]), title="Luce Flat", pad=PAD_DOWN),
+                sg.Frame(layout=([[
+                    sg.Button(_name(ButtonLabel.LABEL_OFF), key=ButtonKey.KEY_DOME_LIGHT, metadata="TURN_ON", disabled=False, size=(8, 1), tooltip="accensioni luci cupola, controllare se il telescopio è in fase di ripresa", button_color=("white", "red")),
+                    sg.Checkbox('Abilita Autolight', key="autolight", default=True, tooltip="le luci della cupola si accendono automaticamente quando il telescopio è in slewing")
+                ]]), title="Luce Cupola", pad=PAD_DOWN)
+            ]
+        ]
         
-        block_stato_crac = [[sg.Text('Stato di CRaC', font=FONT)],
-                    
-                        [
-                        sg.Frame(layout=
-                                        ([sg.Text('', size=(25, 1), justification='center', font=("Helvetica", 12))],
-                                            [
-                                                sg.Text(GuiLabel.TELESCOPE_DISCONNECTED.value, size=(10, 1), justification='center', font=("Helvetica", 12), key='status-tele', background_color="white", text_color="red"),
-                                                sg.Text(GuiLabel.TELESCOPE_TRACKING_OFF.value, size=(10, 1), justification='center', font=("Helvetica", 12), key='status-tracking', background_color="white", text_color="red"),
-                                                sg.Text(GuiLabel.TELESCOPE_SLEWING_OFF.value, size=(10, 1), justification='center', font=("Helvetica", 12), key='status-slewing', background_color="white", text_color="red"),
-                                            ]
-                                        ),title='Telescopio', relief=sg.RELIEF_GROOVE),
-                        sg.Frame(layout=
-                                        ([sg.Text('Tenda Ovest', size=(11, 1), justification='center', font=("Helvetica", 12)), sg.Text('Tenda Est', size=(11, 1), justification='center', font=("Helvetica", 12))],
-                                            [
-                                                sg.Text(GuiLabel.CURTAIN_DISABLED.value, size=(11, 1), justification='center', font=("Helvetica", 12), key='status-curtain_west', background_color="red", text_color="white"),
-                                                sg.Text(GuiLabel.CURTAIN_DISABLED.value, size=(11, 1), justification='center', font=("Helvetica", 12), key='status-curtain_east', background_color="red", text_color="white")
-                                            ]
-                                        ), title='Tende', relief=sg.RELIEF_GROOVE)],
-                        [sg.Text(GuiLabel.NO_ALERT.value, size=(61, 1), justification='center', background_color="#B0C4DE", font=("Helvetica", 12), text_color="#FF0000", key="alert", relief=sg.RELIEF_RIDGE)]
-                        ]
+        block_stato_crac = [
+            [sg.Text('Stato di CRaC', font=FONT)],
+            [
+                sg.Frame(layout=(
+                    [sg.Text('', size=(25, 1), justification='center', font=("Helvetica", 12))],
+                    [
+                        sg.Text(GuiLabel.TELESCOPE_DISCONNECTED.value, size=(10, 1), justification='center', font=("Helvetica", 12), key='status-tele', background_color="white", text_color="red"),
+                        sg.Text(GuiLabel.TELESCOPE_TRACKING_OFF.value, size=(10, 1), justification='center', font=("Helvetica", 12), key='status-tracking', background_color="white", text_color="red"),
+                        sg.Text(GuiLabel.TELESCOPE_SLEWING_OFF.value, size=(10, 1), justification='center', font=("Helvetica", 12), key='status-slewing', background_color="white", text_color="red"),
+                    ]
+                ), title='Telescopio', relief=sg.RELIEF_GROOVE),
+                sg.Frame(layout=(
+                    [sg.Text('Tenda Ovest', size=(11, 1), justification='center', font=("Helvetica", 12)), sg.Text('Tenda Est', size=(11, 1), justification='center', font=("Helvetica", 12))],
+                    [
+                        sg.Text(GuiLabel.CURTAIN_DISABLED.value, size=(11, 1), justification='center', font=("Helvetica", 12), key='status-curtain_west', background_color="red", text_color="white"),
+                        sg.Text(GuiLabel.CURTAIN_DISABLED.value, size=(11, 1), justification='center', font=("Helvetica", 12), key='status-curtain_east', background_color="red", text_color="white")
+                    ]
+                ), title='Tende', relief=sg.RELIEF_GROOVE)
+            ],
+            [sg.Text(GuiLabel.NO_ALERT.value, size=(61, 1), justification='center', background_color="#B0C4DE", font=("Helvetica", 12), text_color="#FF0000", key="alert", relief=sg.RELIEF_RIDGE)]
+        ]
         
   
-        block_meteo =[[sg.Text('Dati Meteo', font=FONT),sg.Text(' ', size =(5,1)),sg.Text('Tendenza Barometro (3 ore)', size=(23, 1), justification='left', font=("Helvetica", 12), pad=((0, 0), (10, 0))), 
-                        sg.Text('-5 mmbar', size=(8, 1), justification='center', font=("Helvetica", 12), key='tendenza_bar', background_color="white", text_color="#2c2825", pad=(0, 0)),
-                        sg.Text('       previsioni', size=(11, 1), justification='left', font=("Helvetica", 12), pad=((0, 0), (10, 0))), 
-                        sg.Text('In rapido peggioramento', size=(25, 1), justification='center', font=("Helvetica", 12), key='tendenza_meteo', background_color="white", text_color="#2c2825", pad=(0, 0))],
-                        [
-                            sg.Frame(layout=([
-                                [sg.In(key='weather-updated-at', visible=False)],
-                                
-                                [
-                                    sg.Image(key="wind-speed", expand_x=True, expand_y=True, size=SIZE_GAUGE),
-                                    sg.Image(key="wind-gust-speed", expand_x=True, expand_y=True, size=SIZE_GAUGE),
-                                    sg.Image(key="temperature", expand_x=True, expand_y=True, size=SIZE_GAUGE),
-                                
-                                
-                                    sg.Image(key="humidity", expand_x=True, expand_y=True, size=SIZE_GAUGE),
-                                    sg.Image(key="rain-rate", expand_x=True, expand_y=True, size=SIZE_GAUGE),
-                                    sg.Image(key="barometer", expand_x=True, expand_y=True, size=SIZE_GAUGE),
-                                ],
-                            ]), title="Meteo", expand_x=True, expand_y=True)
-                        ],
-                        [sg.Text('Casella di allerta chiusura CRaC', size=(50, 1), justification='center',background_color="white", font=("Helvetica", 12), text_color="red",key='alert_meteo',  pad=((230, 0), (10, 0)))
-                    ]]
+        block_meteo =[
+            [
+                sg.Text('Dati Meteo', font=FONT), sg.Text(' ', size =(5, 1)), sg.Text('Tendenza Barometro (3 ore)', size=(23, 1), justification='left', font=("Helvetica", 12), pad=((0, 0), (10, 0))), 
+                sg.Text('-5 mmbar', size=(8, 1), justification='center', font=("Helvetica", 12), key='tendenza_bar', background_color="white", text_color="#2c2825", pad=(0, 0)),
+                sg.Text('       previsioni', size=(11, 1), justification='left', font=("Helvetica", 12), pad=((0, 0), (10, 0))), 
+                sg.Text('In rapido peggioramento', size=(25, 1), justification='center', font=("Helvetica", 12), key='tendenza_meteo', background_color="white", text_color="#2c2825", pad=(0, 0))
+            ],
+            [
+                sg.Frame(layout=([
+                    [sg.In(key='weather-updated-at', visible=False)],
+                    
+                    [
+                        sg.Image(key="wind-speed", expand_x=True, expand_y=True, size=SIZE_GAUGE),
+                        sg.Image(key="wind-gust-speed", expand_x=True, expand_y=True, size=SIZE_GAUGE),
+                        sg.Image(key="temperature", expand_x=True, expand_y=True, size=SIZE_GAUGE),
+                    
+                    
+                        sg.Image(key="humidity", expand_x=True, expand_y=True, size=SIZE_GAUGE),
+                        sg.Image(key="rain-rate", expand_x=True, expand_y=True, size=SIZE_GAUGE),
+                        sg.Image(key="barometer", expand_x=True, expand_y=True, size=SIZE_GAUGE),
+                    ],
+                ]), title="Meteo", expand_x=True, expand_y=True)
+            ],
+            [sg.Text('Casella di allerta chiusura CRaC', size=(50, 1), justification='center', background_color="white", font=("Helvetica", 12), text_color="red", key='alert_meteo',  pad=((230, 0), (10, 0)))]
+        ]
 
-        block_alim = [[sg.Text('Stato Alimentazione - UPS', font=FONT)],
-                        [sg.T("Qui ci vanno i gauge dell'UPS, Volt e percent di carica")]]
+        block_alim = [
+            [sg.Text('Stato Alimentazione - UPS', font=FONT)],
+            [sg.T("Qui ci vanno i gauge dell'UPS, Volt e percent di carica")]
+        ]
         
         block_logo_ara = [
-                        [sg.Text("        ", background_color='#000098'),sg.Image("images/logo_ara.png")]    
-                        ]
+            [sg.Text("        ", background_color='#000098'), sg.Image("images/logo_ara.png")]    
+        ]
 
         layout = [
-                    [sg.Column(block_3T, size=(720, 90), pad=PAD),sg.Column(block_logo_ara, size=(190,90), background_color='#000098')],
+            [sg.Column(block_3T, size=(720, 90), pad=PAD), sg.Column(block_logo_ara, size=(190, 90), background_color='#000098')],
 
-                    [sg.Column([[sg.Column(block_alimentatori, size=(555,90), pad=PAD_LEFT_INSIDE)],
-                    [sg.Column(block_stato_tende, size=(555,300),  pad=PAD_LEFT_INSIDE)]],background_color=BORDER_COLOR),
-                    sg.Column(block_video, size=(352, 394), pad=PAD_LEFT_INSIDE)],
-
-                    [sg.Column(block_stato_crac, size=(574,150),  pad=PAD_LEFT_INSIDE),sg.Column(block_alim, size=(336,150))],
-                    [sg.Column(block_meteo, size=(916,200),  pad=PAD_LEFT_INSIDE)]
-                ]
-
-
+            [sg.Column(
+                [
+                    [sg.Column(block_alimentatori, size=(555, 90), pad=PAD_LEFT_INSIDE)],
+                    [sg.Column(block_stato_tende, size=(555, 300), pad=PAD_LEFT_INSIDE)]
+                ], background_color=BORDER_COLOR),
+                sg.Column(block_video, size=(352, 394), pad=PAD_LEFT_INSIDE)
+            ],
+            [sg.Column(block_stato_crac, size=(574, 150), pad=PAD_LEFT_INSIDE), sg.Column(block_alim, size=(336, 150))],
+            [sg.Column(block_meteo, size=(916, 200), pad=PAD_LEFT_INSIDE)]
+        ]
         
-        self.win = sg.Window('CRaC -- Control Roof and Curtains by ARA', layout, margins=(5,5), background_color=BORDER_COLOR, grab_anywhere=True, finalize=True)
-        #self.win = sg.Window('CRaC -- Control Roof and Curtains by ARA', layout, grab_anywhere=False, finalize=True)
+        self.win = sg.Window('CRaC -- Control Roof and Curtains by ARA', layout, margins=(5, 5), background_color=BORDER_COLOR, grab_anywhere=True, finalize=True)
         self.base_draw()
 
     def create_background_image(self) -> None:
