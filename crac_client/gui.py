@@ -229,7 +229,7 @@ class Gui:
                         [sg.T("Qui ci vanno i gauge dell'UPS, Volt e percent di carica")]]
         
         block_logo_ara = [
-                        [sg.Text("        ", background_color='#000098'),sg.Image("logo_ara.png")]    
+                        [sg.Text("        ", background_color='#000098'),sg.Image("images/logo_ara.png")]    
                         ]
 
         layout = [
