@@ -214,9 +214,9 @@ class Gui:
         block_meteo =[
             [
                 sg.Text('Dati Meteo', font=FONT), sg.Text(' ', size =(5, 1)), sg.Text('Tendenza Barometro (3 ore)', size=(23, 1), justification='left', font=("Helvetica", 12), pad=((0, 0), (10, 0))), 
-                sg.Text('-5 mmbar', size=(8, 1), justification='center', font=("Helvetica", 12), key='tendenza_bar', background_color="white", text_color="#2c2825", pad=(0, 0)),
+                sg.Text('', size=(8, 1), justification='center', font=("Helvetica", 12), key='barometer-trend', background_color="white", text_color="#2c2825", pad=(0, 0)),
                 sg.Text('       previsioni', size=(11, 1), justification='left', font=("Helvetica", 12), pad=((0, 0), (10, 0))), 
-                sg.Text('In rapido peggioramento', size=(25, 1), justification='center', font=("Helvetica", 12), key='tendenza_meteo', background_color="white", text_color="#2c2825", pad=(0, 0))
+                sg.Text('', size=(25, 1), justification='center', font=("Helvetica", 12), key="barometer-trend-forecast", background_color="white", text_color="#2c2825", pad=(0, 0))
             ],
             [
                 sg.Frame(layout=([

@@ -20,18 +20,22 @@ class WeatherConverter(Converter):
         logger.debug("weathter_converter")
         logger.debug(response)
         if g_ui:
-            wind_speed_image = base64.b64encode(self.gauge(response.wind_speed))
-            wind_gust_speed_image = base64.b64encode(self.gauge(response.wind_gust_speed))
-            temperature_image = base64.b64encode(self.gauge(response.temperature))
-            humidity_image = base64.b64encode(self.gauge(response.humidity))
-            rain_rate_image = base64.b64encode(self.gauge(response.rain_rate))
-            barometer_image = base64.b64encode(self.gauge(response.barometer))
+            charts = self.build_dict_from_chart_list(response.charts)
+            wind_speed_image = base64.b64encode(self.gauge(charts["weather.chart.wind"]))
+            wind_gust_speed_image = base64.b64encode(self.gauge(charts["weather.chart.wind_gust"]))
+            temperature_image = base64.b64encode(self.gauge(charts["weather.chart.temperature"]))
+            humidity_image = base64.b64encode(self.gauge(charts["weather.chart.humidity"]))
+            rain_rate_image = base64.b64encode(self.gauge(charts["weather.chart.rain_rate"]))
+            barometer_image = base64.b64encode(self.gauge(charts["weather.chart.barometer"]))
             g_ui.win["wind-speed"](source=wind_speed_image)
             g_ui.win["wind-gust-speed"](source=wind_gust_speed_image)
             g_ui.win["temperature"](source=temperature_image)
             g_ui.win["humidity"](source=humidity_image)
             g_ui.win["rain-rate"](source=rain_rate_image)
             g_ui.win["barometer"](source=barometer_image)
+            barometer_trend = charts["weather.chart.barometer_trend"]
+            g_ui.win["barometer-trend"](self.check_barometer_trend(barometer_trend))
+            g_ui.win["barometer-trend-forecast"](self.check_barometer_trend_forecast(barometer_trend))
             g_ui.win["weather-updated-at"](response.updated_at)
 
     def gauge(self, chart: Chart):
@@ -73,3 +77,19 @@ class WeatherConverter(Converter):
         if (type == ThresholdType.THRESHOLD_TYPE_DANGER):
             return "red"
         return "white"
+    
+    def check_barometer_trend(self, barometer_trend: Chart):
+        return f"{barometer_trend.value} {barometer_trend.unit_of_measurement}"
+
+    def check_barometer_trend_forecast(self, barometer_trend: Chart):
+        for threashold in barometer_trend.thresholds:
+            if threashold.lower_bound <= barometer_trend.value <= threashold.upper_bound:
+                if threashold.threshold_type == ThresholdType.THRESHOLD_TYPE_NORMAL:
+                    return "Stabile per le prossime 12 ore"
+                if threashold.threshold_type == ThresholdType.THRESHOLD_TYPE_WARNING:
+                    return "In peggioramento entro le prossime 12 ore"
+                if threashold.threshold_type == ThresholdType.THRESHOLD_TYPE_DANGER:
+                    return "In peggioramento ora!"
+
+    def build_dict_from_chart_list(self, charts):
+        return { chart.urn: chart for chart in charts }
