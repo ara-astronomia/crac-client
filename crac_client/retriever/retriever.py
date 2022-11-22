@@ -14,7 +14,7 @@ class Retriever(ABC):
     def callback(self, call_future) -> None:
         try:
             response = call_future.result()
-            logger.info(f"response to be converted is {response}")
+            logger.debug(f"response to be converted is {response}")
         except BaseException as err:
             logger.error(f"the retrieval of the response threw an error {err=}, {type(err)=}")
             raise err
