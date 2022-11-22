@@ -267,7 +267,7 @@ class Gui:
 
         """ Create the background image for the sky when the roof is open and hides immediately it """
 
-        canvas = self.win.find_element('canvas')
+        canvas = self.win['canvas']
         self.img_fondo = PhotoImage(file="cielo_stellato.gif")
         self.image = canvas.TKCanvas.create_image(0, 0, image=self.img_fondo, anchor=NW)
         self.hide_background_image()
@@ -276,14 +276,14 @@ class Gui:
 
         """ Hide the sky when the roof is closed """
 
-        canvas = self.win.find_element('canvas')
+        canvas = self.win['canvas']
         canvas.TKCanvas.itemconfigure(self.image, state='hidden')
 
     def show_background_image(self) -> None:
 
         """ Show the sky when the roof is open """
 
-        canvas = self.win.find_element('canvas')
+        canvas = self.win['canvas']
         canvas.TKCanvas.itemconfigure(self.image, state='normal')
 
     def is_autolight(self):
@@ -293,7 +293,7 @@ class Gui:
             when telescope is slewing
         """
 
-        return self.win.find_element('autolight').Get()
+        return self.win['autolight'].Get()
 
     def is_autodisplay(self):
 
@@ -301,7 +301,7 @@ class Gui:
             read the status of the checkbox that enable/disable the
             camera autodisplay
         """
-        return self.win.find_element('autodisplay').Get()
+        return self.win['autodisplay'].Get()
 
     def set_autolight(self, checked: bool):
         logger.debug(f"Is inside set_autolight method with checked: {checked}")
@@ -322,7 +322,7 @@ class Gui:
         p8 = self.l - 1, (self.h / 11) * 8
         p9 = self.l / 2, (self.h / 11) * 4.5
         p10 = 1, (self.h / 11) * 8
-        canvas = self.win.find_element('canvas')
+        canvas = self.win['canvas']
         self.create_background_image()
         canvas.TKCanvas.create_polygon((p6, p7, p8, p9, p10), width=1, outline='grey', fill='#D8D8D8')
         canvas.TKCanvas.create_polygon((p1, p5, p4, p3, p2), width=1, outline='grey', fill='#848484')
@@ -331,7 +331,7 @@ class Gui:
 
         """ Avvisa che le tende non possono essere aperte """
 
-        self.win.find_element('alert').Update(mess_alert)
+        self.win['alert'].Update(mess_alert)
 
     def __toggle_button__(self, *args, **kwargs):
 
@@ -344,13 +344,13 @@ class Gui:
             # update the relative element with the kwargs attributes (actually
             # we use only update=False but we can also do something like):
             # update=False, tooltip="whatever"...
-            self.win.find_element(key).Update(**kwargs)
+            self.win[key].Update(**kwargs)
 
     def update_status_tele(self, status, text_color: str = 'white', background_color: str = 'red') -> None:
 
         """ Update Tele Status """
 
-        self.win.find_element('status-tele').Update(status, text_color=text_color, background_color=background_color)
+        self.win['status-tele'].Update(status, text_color=text_color, background_color=background_color)
 
     def update_tele_text(self, coords: Dict[str, str]) -> None:
 
@@ -359,21 +359,21 @@ class Gui:
         altitude = int(coords["alt"])
         azimuth = int(coords["az"])
 
-        self.win.find_element('alt').Update(altitude)
-        self.win.find_element('az').Update(azimuth)
+        self.win['alt'].Update(altitude)
+        self.win['az'].Update(azimuth)
 
     def update_status_curtain(self, orientation, status, text_color: str = 'white', background_color: str = 'red') -> None:
 
         """ Update Curtain East Status """
 
-        self.win.find_element(f"status-{orientation}").Update(status, text_color=text_color, background_color=background_color)
+        self.win[f"status-{orientation}"].Update(status, text_color=text_color, background_color=background_color)
 
     def update_curtains_text(self, alpha_e: int, alpha_w: int) -> Tuple[int, int]:
 
         """ Update curtains angular values """
 
-        self.win.find_element('apert_e').Update(alpha_e)
-        self.win.find_element('apert_w').Update(alpha_w)
+        self.win['apert_e'].Update(alpha_e)
+        self.win['apert_w'].Update(alpha_w)
 
     def is_curtains_position_changed(self, east_steps: int, west_steps: int) -> bool:
         if east_steps == self.east_steps and west_steps == self.west_steps:
@@ -395,13 +395,13 @@ class Gui:
 
         """ Update Tracking Status """
 
-        self.win.find_element('status-tracking').Update(status, text_color=text_color, background_color=background_color)
+        self.win['status-tracking'].Update(status, text_color=text_color, background_color=background_color)
 
     def update_status_slewing(self, status, text_color: str = 'white', background_color: str = 'red') -> None:
 
         """ Update Slewing Status """
 
-        self.win.find_element('status-slewing').Update(status, text_color=text_color, background_color=background_color)
+        self.win['status-slewing'].Update(status, text_color=text_color, background_color=background_color)
 
     def update_curtains_graphic(self, alpha_e: int, alpha_w: int) -> None:
 
@@ -414,14 +414,14 @@ class Gui:
         self.tenda_w, self.line2_w, self.line3_w, self.line4_w = self.__create_curtain_polygon__(alpha_w, "W")
 
     def __delete_polygons__(self, *polygons_and_lines) -> None:
-        canvas = self.win.find_element('canvas')
+        canvas = self.win['canvas']
         for polygon in polygons_and_lines:
             canvas.TKCanvas.delete(polygon)
 
     def __create_curtain_polygon__(self, alpha: int, orientation: str) -> tuple:
         pt, pt1, pt2, pt3, pt4, pt5 = self.__create_polygon_coordinates__(alpha, orientation)
 
-        canvas = self.win.find_element('canvas')
+        canvas = self.win['canvas']
 
         return (
                 canvas.TKCanvas.create_polygon((pt, pt1, pt2, pt3, pt4, pt5), width=1, outline='#E0F8F7', fill='#0B4C5F'),
