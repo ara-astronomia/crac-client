@@ -49,7 +49,7 @@ class Gui:
 #        sg.theme('Dark')
 
         theme_dict = {
-            'BACKGROUND': '#2B475D',
+            'BACKGROUND': '#313030',
             'TEXT': '#FFFFFF',
             'INPUT': '#F2EFE8',
             'TEXT_INPUT': '#000000',
@@ -61,7 +61,7 @@ class Gui:
 
         # sg.theme_add_new('Dashboard', theme_dict)     # if using 4.20.0.1+
         sg.LOOK_AND_FEEL_TABLE['Dashboard'] = theme_dict
-        sg.theme('dark')
+        sg.theme('Dashboard')
 
         BORDER_COLOR = '#C7D5E0'
         PAD = (2, 2)
@@ -215,8 +215,8 @@ class Gui:
             [
                 sg.Text('Dati Meteo', font=FONT), sg.Text(' ', size =(5, 1)), sg.Text('Tendenza Barometro (3 ore)', size=(23, 1), justification='left', font=("Helvetica", 12), pad=((0, 0), (10, 0))), 
                 sg.Text('', size=(8, 1), justification='center', font=("Helvetica", 12), key='barometer-trend', background_color="white", text_color="#2c2825", pad=(0, 0)),
-                sg.Text('       previsioni', size=(11, 1), justification='left', font=("Helvetica", 12), pad=((0, 0), (10, 0))), 
-                sg.Text('', size=(25, 1), justification='center', font=("Helvetica", 12), key="barometer-trend-forecast", background_color="white", text_color="#2c2825", pad=(0, 0))
+                sg.Text('       previsioni ', size=(11, 1), justification='left', font=("Helvetica", 12), pad=((0, 0), (10, 0))), 
+                sg.Text('', size=(35, 1), justification='center', font=("Helvetica", 12), key="barometer-trend-forecast", background_color="white", text_color="#2c2825", pad=(0, 0))
             ],
             [
                 sg.Frame(layout=([
