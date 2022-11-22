@@ -1,6 +1,12 @@
 # crac-client
 Client for connection to crac-server via gRPC
 
+# Pre-requisite
+
+sudo apt install python3-tk
+
+sudo apt install libopencv-dev python3-opencv
+
 # Install Dependencies and Configure environment
 
 We are using Poetry as a dependency management and packaging
