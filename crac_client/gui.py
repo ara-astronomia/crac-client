@@ -63,7 +63,7 @@ class Gui:
         sg.LOOK_AND_FEEL_TABLE['Dashboard'] = theme_dict
         sg.theme('Dashboard')
 
-        BORDER_COLOR = '#C7D5E0'
+        BORDER_COLOR = '#444343'
         PAD = (2, 2)
         PAD_LEFT_INSIDE = (1, 1), (1, 1)
         PAD_DOWN = (3, 0)
@@ -258,12 +258,12 @@ class Gui:
 
             [sg.Column(
                 [
-                    [sg.Column(block_alimentatori, size=(555, 90), pad=PAD_LEFT_INSIDE)],
-                    [sg.Column(block_stato_tende, size=(555, 300), pad=PAD_LEFT_INSIDE)]
+                    [sg.Column(block_alimentatori, size=(569, 90), pad=PAD_LEFT_INSIDE)],
+                    [sg.Column(block_stato_tende, size=(569, 300), pad=PAD_LEFT_INSIDE)]
                 ], background_color=BORDER_COLOR),
-                sg.Column(block_video, size=(352, 394), pad=PAD_LEFT_INSIDE)
+                sg.Column(block_video, size=(336, 393), pad=PAD_LEFT_INSIDE)
             ],
-            [sg.Column(block_stato_crac, size=(574, 150), pad=PAD_LEFT_INSIDE), sg.Column(block_alim, size=(336, 150))],
+            [sg.Column(block_stato_crac, size=(574, 170), pad=PAD_LEFT_INSIDE), sg.Column(block_alim, size=(336, 180))],
             [sg.Column(block_meteo, size=(916, 200), pad=PAD_LEFT_INSIDE)]
         ]
         
