@@ -238,8 +238,15 @@ class Gui:
         ]
 
         block_alim = [
-            [sg.Text('Stato Alimentazione - UPS', font=FONT)],
-            [sg.T("Qui ci vanno i gauge dell'UPS, Volt e percent di carica")]
+            [sg.Text('Stato Rete-Alimentazione - UPS', font=FONT)],
+            [sg.Frame(layout = (
+            [sg.T('Batterie',size=(7,1), font=('Helvetica, 8')), sg.T(' %',size=(6,1), font=('Helvetica, 9'), key='_OUT-BATT-CUPOLA_'), sg.ProgressBar(100, orientation='h', size=(17,3), bar_color=('red', 'white'), relief=sg.RELIEF_RAISED  ,key='_PERCENT-BATT-CUPOLA_')],
+            [sg.T('Tensione',size=(7,1),font=('Helvetica, 8')),sg.T('V', font=('Helvetica, 9'), size=(6,1), key='_OUT-VOLT-CUPOLA_'), sg.ProgressBar(250, orientation='h', size=(17,3), bar_color=('red', 'white'), relief=sg.RELIEF_RAISED  ,key='_VOLT-CUPOLA_')],
+            ),title='Cupola', title_color=('green'), relief=sg.RELIEF_GROOVE)],
+            [sg.Frame(layout = (
+            [sg.T('Batterie',size=(7,1), font=('Helvetica, 8')), sg.T(' %',size=(6,1), font=('Helvetica, 9'), key='_OUT-BATT-ROOM_'), sg.ProgressBar(100, orientation='h', size=(17,3), bar_color=('red', 'white'), relief=sg.RELIEF_RAISED  ,key='_PERCENT-BATT-ROOM_')],
+            [sg.T('Tensione',size=(7,1), font=('Helvetica, 8')), sg.T(' V',size=(6,1), font=('Helvetica, 9'), key='_OUT-VOLT-ROOM_'), sg.ProgressBar(250, orientation='h', size=(17,3), bar_color=('red', 'white'), relief=sg.RELIEF_RAISED  ,key='_VOLT-ROOM_')],
+            ),title='Control Room', title_color=('red'), relief=sg.RELIEF_GROOVE)]
         ]
         
         block_logo_ara = [
@@ -262,7 +269,20 @@ class Gui:
         
         self.win = sg.Window('CRaC -- Control Roof and Curtains by ARA', layout, margins=(5, 5), background_color=BORDER_COLOR, grab_anywhere=True, finalize=True)
         self.base_draw()
-
+        
+        self.update_progress_bar() #just for preview
+	
+	#change the update values ​​to those sent by crack-server
+    def update_progress_bar(self) -> None:
+        self.win.find_element('_OUT-BATT-CUPOLA_').Update(str(14.8)+' %', text_color=('red'))
+        self.win['_PERCENT-BATT-CUPOLA_'].update(14.8, bar_color=('red', 'white'))
+        self.win.find_element('_OUT-VOLT-CUPOLA_').Update(str(230.3)+' v', text_color=('green'))
+        self.win['_VOLT-CUPOLA_'].update(230.3, bar_color=('green', 'white'))
+        self.win.find_element('_OUT-BATT-ROOM_').Update(str(48.6)+' %', text_color=('gold'))
+        self.win['_PERCENT-BATT-ROOM_'].update(48.6, bar_color=('gold', 'white'))
+        self.win.find_element('_OUT-VOLT-ROOM_').Update(str(198.8)+' V', text_color=('red'))
+        self.win['_VOLT-ROOM_'].update(198.8, bar_color=('red', 'white'))    
+    
     def create_background_image(self) -> None:
 
         """ Create the background image for the sky when the roof is open and hides immediately it """
