@@ -63,7 +63,7 @@ class Gui:
         sg.LOOK_AND_FEEL_TABLE['Dashboard'] = theme_dict
         sg.theme('Dashboard')
 
-        BORDER_COLOR = '#C7D5E0'
+        BORDER_COLOR = '#444343'
         PAD = (2, 2)
         PAD_LEFT_INSIDE = (1, 1), (1, 1)
         PAD_DOWN = (3, 0)
@@ -152,22 +152,35 @@ class Gui:
                 sg.Canvas(size=(self.l, self.h), background_color='grey', key='canvas'),
                 sg.Frame(layout=([[
                     sg.Column(layout=(
-                        [sg.Text('Est', size=(5, 1), justification='left', font=("Helvetica", 12), pad=((0, 0), (10, 0)))],
-                        [sg.Text('0', size=(5, 1), justification='right', font=("Helvetica", 12), key='apert_e', background_color="white", text_color="#2c2825", pad=(0, 0))],
-                        [sg.Text('Ovest', size=(5, 1), justification='left', font=("Helvetica", 12), pad=((0, 0), (50, 0)))],
-                        [sg.Text('0', size=(5, 1), justification='right', font=("Helvetica", 12), key='apert_w', background_color="white", text_color="#2c2825", pad=((0, 0), (0, 30)))]
+                        
                     ))
-                ]]), title='Tende', relief=sg.RELIEF_GROOVE, pad=(2, 0)),
-                sg.Frame(layout=([[
-                    sg.Column(layout=(
-                        [sg.Text('Alt', size=(5, 1), justification='left', font=("Helvetica", 12), pad=((0, 0), (10, 0)))],
-                        [sg.Text('0', size=(5, 1), justification='right', font=("Helvetica", 12), key='alt', background_color="white", text_color="#2c2825", pad=(0, 0))],
-                        [sg.Text('Az', size=(5, 1), justification='left', font=("Helvetica", 12), pad=((0, 0), (50, 0)))],
-                        [sg.Text('0', size=(5, 1), justification='right', font=("Helvetica", 12), key='az', background_color="white", text_color="#2c2825", pad=((0, 0), (0, 30)))]
-                    ))
-                ]]), title='Telescopio', relief=sg.RELIEF_GROOVE, pad=((6, 0), (0, 0)))
-            ]
+                ]]), title='Airmass', relief=sg.RELIEF_GROOVE, pad=(0, 0))],
+                [
+                    sg.Frame(layout=([[
+                       
+                            sg.Text('Est', size=(5, 1), justification='right', font=("Helvetica", 8), pad=(0, 0)),
+                            sg.Text('0', size=(5, 1), justification='right', font=("Helvetica", 8), key='apert_e', background_color="white", text_color="#2c2825", pad=(0, 0)),
+                            sg.Text('Ovest', size=(5, 1), justification='right', font=("Helvetica", 8), pad=(0, 0)),
+                            sg.Text('0', size=(5, 1), justification='right', font=("Helvetica", 8), key='apert_w', background_color="white", text_color="#2c2825", pad=(0, 0))
+                        ]]), title='Tende', relief=sg.RELIEF_GROOVE, pad=((6, 0), (0, 0))),
+                                  
+                    sg.Frame(layout=([[
+                            sg.Text('Alt', size=(4, 1), justification='right', font=("Helvetica", 8), pad=(0, 0)),
+                            sg.Text('0', size=(5, 1), justification='right', font=("Helvetica", 8), key='alt', background_color="white", text_color="#2c2825", pad=(0, 0)),
+                            sg.Text('Az', size=(4, 1), justification='right', font=("Helvetica", 8), pad=(0, 0)),
+                            sg.Text('0', size=(5, 1), justification='right', font=("Helvetica", 8), key='az', background_color="white", text_color="#2c2825", pad=(0, 0)),
+                            sg.Text('Ar', size=(4, 1), justification='right', font=("Helvetica", 8), pad=(0, 0)),
+                            sg.Text('0', size=(10, 1), justification='right', font=("Helvetica", 8), key='_AR_', background_color="white", text_color="#2c2825", pad=(0, 0)),
+                            sg.Text('Dec', size=(4, 1), justification='right', font=("Helvetica", 8), pad=(0, 0)),
+                            sg.Text('0', size=(10, 1), justification='right', font=("Helvetica", 8), key='_DEC_', background_color="white", text_color="#2c2825", pad=(0, 0)),
+                            sg.Text('TSL', size=(4, 1), justification='right', font=("Helvetica", 8), pad=(0, 0)),
+                            sg.Text('0', size=(10, 1), justification='right', font=("Helvetica", 8), key='_TSL_', background_color="white", text_color="#2c2825", pad=(0, 0))
+                        ]]), title='Telescopio', relief=sg.RELIEF_GROOVE, pad=((6, 0), (0, 0)))
+                    
+                ]
+                
         ]
+        
         
         block_alimentatori = [
             [sg.Text('Alimentatori & Luci', font=FONT)],
@@ -251,12 +264,12 @@ class Gui:
 
             [sg.Column(
                 [
-                    [sg.Column(block_alimentatori, size=(555, 90), pad=PAD_LEFT_INSIDE)],
-                    [sg.Column(block_stato_tende, size=(555, 300), pad=PAD_LEFT_INSIDE)]
+                    [sg.Column(block_alimentatori, size=(569, 90), pad=PAD_LEFT_INSIDE)],
+                    [sg.Column(block_stato_tende, size=(569, 300), pad=PAD_LEFT_INSIDE)]
                 ], background_color=BORDER_COLOR),
-                sg.Column(block_video, size=(352, 394), pad=PAD_LEFT_INSIDE)
+                sg.Column(block_video, size=(336, 393), pad=PAD_LEFT_INSIDE)
             ],
-            [sg.Column(block_stato_crac, size=(574, 150), pad=PAD_LEFT_INSIDE), sg.Column(block_alim, size=(336, 150))],
+            [sg.Column(block_stato_crac, size=(574, 170), pad=PAD_LEFT_INSIDE), sg.Column(block_alim, size=(336, 180))],
             [sg.Column(block_meteo, size=(916, 200), pad=PAD_LEFT_INSIDE)]
         ]
         
