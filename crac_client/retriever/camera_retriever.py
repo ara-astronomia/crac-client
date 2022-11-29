@@ -1,4 +1,5 @@
 import logging
+from typing import Union
 from crac_client.config import Config
 from crac_client.gui import Gui
 from crac_client.jobs import JOBS
@@ -54,7 +55,7 @@ class CameraRetriever(Retriever):
     def video(self, name: str) -> CameraResponse:
         return self.client.Video(CameraRequest(name=name))
 
-    def setAction(self, action: str, name: str, move: Move = None, g_ui: Gui = None) -> CameraResponse:
+    def setAction(self, action: str, name: str, move: Move = None, g_ui: Union[Gui, None] = None) -> CameraResponse:
         camera_action = CameraAction.Value(action)
         if camera_action in (CameraAction.CAMERA_HIDE, CameraAction.CAMERA_SHOW) and g_ui:
             g_ui.set_autodisplay(False)

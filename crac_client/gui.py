@@ -221,7 +221,7 @@ class Gui:
             [
                 sg.Frame(layout=([
                     [sg.In(key='weather-updated-at', visible=False)],
-                    
+                    [sg.In(key='weather-interval', visible=False)],
                     [
                         sg.Image(key="wind-speed", expand_x=True, expand_y=True, size=SIZE_GAUGE),
                         sg.Image(key="wind-gust-speed", expand_x=True, expand_y=True, size=SIZE_GAUGE),
@@ -286,7 +286,7 @@ class Gui:
         canvas = self.win['canvas']
         canvas.TKCanvas.itemconfigure(self.image, state='normal')
 
-    def is_autolight(self):
+    def is_autolight(self) -> bool:
 
         """
             read the status of the checkbox that enable/disable the autolight
@@ -295,7 +295,7 @@ class Gui:
 
         return self.win['autolight'].Get()
 
-    def is_autodisplay(self):
+    def is_autodisplay(self) -> bool:
 
         """
             read the status of the checkbox that enable/disable the

@@ -37,6 +37,7 @@ class WeatherConverter(Converter):
             g_ui.win["barometer-trend"](self.check_barometer_trend(barometer_trend))
             g_ui.win["barometer-trend-forecast"](self.check_barometer_trend_forecast(barometer_trend))
             g_ui.win["weather-updated-at"](response.updated_at)
+            g_ui.win["weather-interval"](response.interval)
 
     def gauge(self, chart: Chart):
         fig = go.Figure(
