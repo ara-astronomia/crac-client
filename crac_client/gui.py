@@ -232,7 +232,7 @@ class Gui:
                         sg.Image(key="rain-rate", expand_x=True, expand_y=True, size=SIZE_GAUGE),
                         sg.Image(key="barometer", expand_x=True, expand_y=True, size=SIZE_GAUGE),
                     ],
-                ]), title="Meteo", expand_x=True, expand_y=True)
+                ]), title="Meteo", expand_x=True, expand_y=True, key="weather_block")
             ],
             [sg.Text('Casella di allerta chiusura CRaC', size=(50, 1), justification='center', background_color="white", font=("Helvetica", 12), text_color="red", key='alert_meteo',  pad=((230, 0), (10, 0)))]
         ]

@@ -22,6 +22,13 @@ class WeatherRetriever(Retriever):
         self.client = WeatherStub(self.channel)
 
     def getStatus(self, latest_update: str, interval: str) -> WeatherResponse:
-        if not interval or not latest_update or datetime.now().timestamp() - int(latest_update) >= int(interval):
+        logging.debug(f"latest update is {latest_update}")
+        logging.debug(f"interval is {interval}")
+        now = datetime.now()
+        if (
+            not interval or 
+            not latest_update or 
+            (now - datetime.fromtimestamp(int(latest_update))).seconds >= int(interval)
+        ):
             call_future = self.client.GetStatus.future(WeatherRequest())
             call_future.add_done_callback(self.callback)

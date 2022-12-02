@@ -1,5 +1,7 @@
 import logging
-from turtle import width
+import base64
+import plotly.graph_objects as go
+import PySimpleGUI as sg
 from crac_client.converter.converter import Converter
 from crac_client.gui import Gui
 from crac_protobuf.chart_pb2 import (
@@ -7,10 +9,8 @@ from crac_protobuf.chart_pb2 import (
     WeatherResponse,
     Threshold,
     ThresholdType,
+    WeatherStatus,
 )
-import plotly.graph_objects as go
-import base64
-
 
 logger = logging.getLogger(__name__)
 
@@ -38,6 +38,25 @@ class WeatherConverter(Converter):
             g_ui.win["barometer-trend-forecast"](self.check_barometer_trend_forecast(barometer_trend))
             g_ui.win["weather-updated-at"](response.updated_at)
             g_ui.win["weather-interval"](response.interval)
+            alert = "CONDIZIONI METEO ADEGUATE"
+            background_color = sg.theme_background_color()
+            text_color = sg.theme_text_color()
+            if response.status == WeatherStatus.WEATHER_STATUS_WARNING:
+                alert = "CONDIZIONI DI OSSERVAZIONE AL LIMITE"
+                background_color = "#ffa500"
+                text_color = background_color
+            elif response.status == WeatherStatus.WEATHER_STATUS_DANGER:
+                alert = "SISTEMA IN CHIUSURA PER METEO AVVERSA"
+                background_color = "red"
+                text_color = background_color
+            elif response.status == WeatherStatus.WEATHER_STATUS_UNSPECIFIED:
+                alert = "DATI METEO NON AGGIORNATI"
+                background_color = "#ffa500"
+                text_color = background_color
+            g_ui.win["alert_meteo"](alert, text_color=text_color)
+            g_ui.win["weather_block"].Widget.config(background=background_color)
+            g_ui.win["weather_block"].Widget.config(highlightbackground=background_color)
+            g_ui.win["weather_block"].Widget.config(highlightcolor=background_color)
 
     def gauge(self, chart: Chart):
         fig = go.Figure(
