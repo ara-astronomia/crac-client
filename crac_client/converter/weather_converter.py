@@ -40,23 +40,22 @@ class WeatherConverter(Converter):
             g_ui.win["weather-interval"](response.interval)
             alert = "CONDIZIONI METEO ADEGUATE"
             background_color = sg.theme_background_color()
-            text_color = sg.theme_text_color()
-            if response.status == WeatherStatus.WEATHER_STATUS_WARNING:
+            alert_background_color = "white"
+            alert_text_color = "black"
+            if response.status in (WeatherStatus.WEATHER_STATUS_WARNING, WeatherStatus.WEATHER_STATUS_UNSPECIFIED):
                 alert = "CONDIZIONI DI OSSERVAZIONE AL LIMITE"
                 background_color = "#ffa500"
-                text_color = background_color
+                alert_background_color = background_color
+                alert_text_color = "black"
             elif response.status == WeatherStatus.WEATHER_STATUS_DANGER:
                 alert = "SISTEMA IN CHIUSURA PER METEO AVVERSA"
                 background_color = "red"
-                text_color = background_color
-            elif response.status == WeatherStatus.WEATHER_STATUS_UNSPECIFIED:
-                alert = "DATI METEO NON AGGIORNATI"
-                background_color = "#ffa500"
-                text_color = background_color
-            g_ui.win["alert_meteo"](alert, text_color=text_color)
+                alert_background_color = background_color
+                alert_text_color = "white"
+            g_ui.win["alert_meteo"](alert, background_color=alert_background_color, text_color=alert_text_color)
             g_ui.win["weather_block"].Widget.config(background=background_color)
-            g_ui.win["weather_block"].Widget.config(highlightbackground=background_color)
-            g_ui.win["weather_block"].Widget.config(highlightcolor=background_color)
+            g_ui.win["weather_block"].Widget.config(highlightbackground=alert_background_color)
+            g_ui.win["weather_block"].Widget.config(highlightcolor=alert_text_color)
 
     def gauge(self, chart: Chart):
         fig = go.Figure(
