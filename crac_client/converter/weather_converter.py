@@ -57,6 +57,12 @@ class WeatherConverter(Converter):
                 alert_background_color = background_color
                 alert_text_color = "white"
             g_ui.win["alert_meteo"](alert, background_color=alert_background_color, text_color=alert_text_color)
+            g_ui.win['wind-speed'].ParentRowFrame.config(background=background_color)
+            g_ui.win['wind-gust-speed'].ParentRowFrame.config(background=background_color)
+            g_ui.win['temperature'].ParentRowFrame.config(background=background_color)
+            g_ui.win['humidity'].ParentRowFrame.config(background=background_color)
+            g_ui.win['rain-rate'].ParentRowFrame.config(background=background_color)
+            g_ui.win['barometer'].ParentRowFrame.config(background=background_color)
             g_ui.win["weather_block"].Widget.config(background=background_color)
             g_ui.win["weather_block"].Widget.config(highlightbackground=alert_background_color)
             g_ui.win["weather_block"].Widget.config(highlightcolor=alert_text_color)
