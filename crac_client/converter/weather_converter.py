@@ -20,30 +20,34 @@ class WeatherConverter(Converter):
         logger.debug("weathter_converter")
         logger.debug(response)
         if g_ui:
-            charts = self.build_dict_from_chart_list(response.charts)
-            wind_speed_image = base64.b64encode(self.gauge(charts["weather.chart.wind"]))
-            wind_gust_speed_image = base64.b64encode(self.gauge(charts["weather.chart.wind_gust"]))
-            temperature_image = base64.b64encode(self.gauge(charts["weather.chart.temperature"]))
-            humidity_image = base64.b64encode(self.gauge(charts["weather.chart.humidity"]))
-            rain_rate_image = base64.b64encode(self.gauge(charts["weather.chart.rain_rate"]))
-            barometer_image = base64.b64encode(self.gauge(charts["weather.chart.barometer"]))
-            g_ui.win["wind-speed"](source=wind_speed_image)
-            g_ui.win["wind-gust-speed"](source=wind_gust_speed_image)
-            g_ui.win["temperature"](source=temperature_image)
-            g_ui.win["humidity"](source=humidity_image)
-            g_ui.win["rain-rate"](source=rain_rate_image)
-            g_ui.win["barometer"](source=barometer_image)
-            barometer_trend = charts["weather.chart.barometer_trend"]
-            g_ui.win["barometer-trend"](self.check_barometer_trend(barometer_trend))
-            g_ui.win["barometer-trend-forecast"](self.check_barometer_trend_forecast(barometer_trend))
-            g_ui.win["weather-updated-at"](response.updated_at)
-            g_ui.win["weather-interval"](response.interval)
+            if len(response.charts) > 0:
+                charts = self.build_dict_from_chart_list(response.charts)
+                wind_speed_image = base64.b64encode(self.gauge(charts["weather.chart.wind"]))
+                wind_gust_speed_image = base64.b64encode(self.gauge(charts["weather.chart.wind_gust"]))
+                temperature_image = base64.b64encode(self.gauge(charts["weather.chart.temperature"]))
+                humidity_image = base64.b64encode(self.gauge(charts["weather.chart.humidity"]))
+                rain_rate_image = base64.b64encode(self.gauge(charts["weather.chart.rain_rate"]))
+                barometer_image = base64.b64encode(self.gauge(charts["weather.chart.barometer"]))
+                g_ui.win["wind-speed"](source=wind_speed_image)
+                g_ui.win["wind-gust-speed"](source=wind_gust_speed_image)
+                g_ui.win["temperature"](source=temperature_image)
+                g_ui.win["humidity"](source=humidity_image)
+                g_ui.win["rain-rate"](source=rain_rate_image)
+                g_ui.win["barometer"](source=barometer_image)
+                barometer_trend = charts["weather.chart.barometer_trend"]
+                g_ui.win["barometer-trend"](self.check_barometer_trend(barometer_trend))
+                g_ui.win["barometer-trend-forecast"](self.check_barometer_trend_forecast(barometer_trend))
+                g_ui.win["weather-updated-at"](response.updated_at)
+                g_ui.win["weather-interval"](response.interval)
             alert = "CONDIZIONI METEO ADEGUATE"
             background_color = sg.theme_background_color()
             alert_background_color = "white"
             alert_text_color = "black"
             if response.status in (WeatherStatus.WEATHER_STATUS_WARNING, WeatherStatus.WEATHER_STATUS_UNSPECIFIED):
-                alert = "CONDIZIONI DI OSSERVAZIONE AL LIMITE"
+                if response.status == WeatherStatus.WEATHER_STATUS_UNSPECIFIED:
+                    alert = "CONDIZIONI METEO NON AGGIORNATE"
+                else:
+                    alert = "CONDIZIONI DI OSSERVAZIONE AL LIMITE"
                 background_color = "#ffa500"
                 alert_background_color = background_color
                 alert_text_color = "black"

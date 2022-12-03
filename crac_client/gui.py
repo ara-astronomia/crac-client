@@ -234,7 +234,7 @@ class Gui:
                     ],
                 ]), title="Meteo", expand_x=True, expand_y=True, key="weather_block")
             ],
-            [sg.Text('Casella di allerta chiusura CRaC', size=(50, 1), justification='center', background_color="white", font=("Helvetica", 12), text_color="red", key='alert_meteo',  pad=((230, 0), (10, 0)))]
+            [sg.Text('IN AGGIORNAMENTO', size=(50, 1), justification='center', background_color="red", font=("Helvetica", 12), text_color="white", key='alert_meteo',  pad=((230, 0), (10, 0)))]
         ]
 
         block_alim = [
