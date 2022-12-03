@@ -67,7 +67,10 @@ class Gui:
         PAD = (2, 2)
         PAD_LEFT_INSIDE = (1, 1), (1, 1)
         PAD_DOWN = (3, 0)
-        FONT = 'Any 12'
+        FONT = ('Helvetica', 16)
+        FONT_FRAME = ('Helvetica', 14)
+        FONT_BUTTON = ('Helvetica', 12)
+        FONT_TEXT = ('Helvetica', 14)
         SIZE_GAUGE = (20, 20)
         FONT_BUTTON_CAM=("Helvetica", 8)
         
@@ -75,18 +78,18 @@ class Gui:
             [sg.Text('Controllo 3T - Tetto Telescopio Tende', font=FONT)],
             [
                 sg.Frame(layout=([[
-                    sg.Button(_name(ButtonLabel.LABEL_CLOSE), key=ButtonKey.KEY_ROOF, metadata="OPEN", disabled=False, size=(8, 1), tooltip="apre il tetto", button_color=("white", "red")),
-                ]]), title="Tetto", pad=PAD_DOWN),
+                    sg.Button(_name(ButtonLabel.LABEL_CLOSE), key=ButtonKey.KEY_ROOF, metadata="OPEN", disabled=False, size=(8, 1), tooltip="apre il tetto", button_color=("white", "red"), font=FONT_BUTTON),
+                ]]), title="Tetto", pad=PAD_DOWN, font=FONT_FRAME),
                 sg.Frame(layout=([[
-                    sg.Button(_name(ButtonLabel.LABEL_TELESCOPE_DISCONNECTED), key=ButtonKey.KEY_TELESCOPE_CONNECTION_TOGGLE, metadata="TELESCOPE_CONNECT", disabled=True, size=(10, 1), tooltip='connetti crac al telescopio', button_color=("white", "red")),
-                    sg.Button(_name(ButtonLabel.LABEL_SYNC), key=ButtonKey.KEY_SYNC, metadata="SYNC", disabled=True, size=(8, 1), tooltip='sincronizza il telescopio sulle coordinate di park', button_color=("white", "red")),
-                    sg.Button(_name(ButtonLabel.LABEL_PARK), key=ButtonKey.KEY_PARK, metadata="PARK_POSITION", disabled=True, size=(8, 1), tooltip='porta il telescopio in posizione di park e disattiva il tracking', button_color=("white", "red")),
-                    sg.Button(_name(ButtonLabel.LABEL_FLAT), key=ButtonKey.KEY_FLAT, metadata="FLAT_POSITION", disabled=True, size=(8, 1) , tooltip='porta il telescopio in posizione di flat e disattiva il tracking con il pannello spento', button_color=("white", "red"))
-                ]]), title="Telescopio", pad=PAD_DOWN),
+                    sg.Button(_name(ButtonLabel.LABEL_TELESCOPE_DISCONNECTED), key=ButtonKey.KEY_TELESCOPE_CONNECTION_TOGGLE, metadata="TELESCOPE_CONNECT", disabled=True, size=(10, 1), tooltip='connetti crac al telescopio', button_color=("white", "red"), font=FONT_BUTTON),
+                    sg.Button(_name(ButtonLabel.LABEL_SYNC), key=ButtonKey.KEY_SYNC, metadata="SYNC", disabled=True, size=(8, 1), tooltip='sincronizza il telescopio sulle coordinate di park', button_color=("white", "red"), font=FONT_BUTTON),
+                    sg.Button(_name(ButtonLabel.LABEL_PARK), key=ButtonKey.KEY_PARK, metadata="PARK_POSITION", disabled=True, size=(8, 1), tooltip='porta il telescopio in posizione di park e disattiva il tracking', button_color=("white", "red"), font=FONT_BUTTON),
+                    sg.Button(_name(ButtonLabel.LABEL_FLAT), key=ButtonKey.KEY_FLAT, metadata="FLAT_POSITION", disabled=True, size=(8, 1) , tooltip='porta il telescopio in posizione di flat e disattiva il tracking con il pannello spento', button_color=("white", "red"), font=FONT_BUTTON)
+                ]]), title="Telescopio", pad=PAD_DOWN, font=FONT_FRAME),
                 sg.Frame(layout=([[
-                    sg.Button(_name(ButtonLabel.LABEL_DISABLE), key=ButtonKey.KEY_CURTAINS, metadata="ENABLE", disabled=True, size=(8, 1), tooltip='clicca per attivare le tendine', button_color=("white", "red")),
-                    sg.Button(_name(ButtonLabel.LABEL_CALIBRATE), key=ButtonKey.KEY_CALIBRATE, metadata="CALIBRATE_CURTAINS", disabled=True,  size=(10, 1), tooltip='clicca per calibrare le tendine', button_color=("white", "red"))
-                ]]), title="Tende", pad=PAD_DOWN)
+                    sg.Button(_name(ButtonLabel.LABEL_DISABLE), key=ButtonKey.KEY_CURTAINS, metadata="ENABLE", disabled=True, size=(8, 1), tooltip='clicca per attivare le tendine', button_color=("white", "red"), font=FONT_BUTTON),
+                    sg.Button(_name(ButtonLabel.LABEL_CALIBRATE), key=ButtonKey.KEY_CALIBRATE, metadata="CALIBRATE_CURTAINS", disabled=True,  size=(10, 1), tooltip='clicca per calibrare le tendine', button_color=("white", "red"), font=FONT_BUTTON)
+                ]]), title="Tende", pad=PAD_DOWN, font=FONT_FRAME)
             ]
         ]
         
@@ -98,22 +101,22 @@ class Gui:
                         sg.Column(layout=(
                             [sg.pin(
                                 sg.Frame(layout=([[
-                                    sg.Button(_name(ButtonLabel.LABEL_CAMERA_DISCONNECTED), key=ButtonKey.KEY_CAMERA1_CONNECTION, metadata="CAMERA_CONNECT", disabled=True, size=(10, 1), tooltip="connetti alla videocamera", button_color=("white", "red")),
-                                    sg.Button(_name(ButtonLabel.LABEL_CAMERA_HIDDEN), key=ButtonKey.KEY_CAMERA1_DISPLAY, metadata="CAMERA_SHOW", disabled=True, size=(8, 1), tooltip="mostra la videocamera", button_color=("white", "red")),
-                                    sg.Button(_name(ButtonLabel.LABEL_CAMERA_IR_DISABLED), key=ButtonKey.KEY_CAMERA1_IR_TOGGLE, metadata="CAMERA_IR_ENABLE", disabled=False, size=(10, 1), tooltip="attiva o disattiva l'infrarosso", button_color=("white", "red")),
-                                ]]), title="Camera 1", pad=PAD_DOWN, key="camera1"),
+                                    sg.Button(_name(ButtonLabel.LABEL_CAMERA_DISCONNECTED), key=ButtonKey.KEY_CAMERA1_CONNECTION, metadata="CAMERA_CONNECT", disabled=True, size=(10, 1), tooltip="connetti alla videocamera", button_color=("white", "red"), font=FONT_BUTTON),
+                                    sg.Button(_name(ButtonLabel.LABEL_CAMERA_HIDDEN), key=ButtonKey.KEY_CAMERA1_DISPLAY, metadata="CAMERA_SHOW", disabled=True, size=(8, 1), tooltip="mostra la videocamera", button_color=("white", "red"), font=FONT_BUTTON),
+                                    sg.Button(_name(ButtonLabel.LABEL_CAMERA_IR_DISABLED), key=ButtonKey.KEY_CAMERA1_IR_TOGGLE, metadata="CAMERA_IR_ENABLE", disabled=False, size=(10, 1), tooltip="attiva o disattiva l'infrarosso", button_color=("white", "red"), font=FONT_BUTTON),
+                                ]]), title="Camera 1", pad=PAD_DOWN, key="camera1", font=FONT_FRAME),
                             shrink=True)],
                             [sg.pin(
                                 sg.Frame(layout=([[
-                                    sg.Button(_name(ButtonLabel.LABEL_CAMERA_DISCONNECTED), key=ButtonKey.KEY_CAMERA2_CONNECTION, metadata="CAMERA_CONNECT", disabled=True, size=(10, 1), tooltip="connetti alla videocamera", button_color=("white", "red")),
-                                    sg.Button(_name(ButtonLabel.LABEL_CAMERA_HIDDEN), key=ButtonKey.KEY_CAMERA2_DISPLAY, metadata="CAMERA_SHOW", disabled=True, size=(8, 1), tooltip="mostra la videocamera", button_color=("white", "red")),
-                                    sg.Button(_name(ButtonLabel.LABEL_CAMERA_IR_DISABLED), key=ButtonKey.KEY_CAMERA2_IR_TOGGLE, metadata="CAMERA_IR_ENABLE", disabled=False, size=(10, 1), tooltip="attiva o disattiva l'infrarosso", button_color=("white", "red")),
-                                ]]), title="Camera 2", pad=PAD_DOWN, key="camera2"),
+                                    sg.Button(_name(ButtonLabel.LABEL_CAMERA_DISCONNECTED), key=ButtonKey.KEY_CAMERA2_CONNECTION, metadata="CAMERA_CONNECT", disabled=True, size=(10, 1), tooltip="connetti alla videocamera", button_color=("white", "red"), font=FONT_BUTTON),
+                                    sg.Button(_name(ButtonLabel.LABEL_CAMERA_HIDDEN), key=ButtonKey.KEY_CAMERA2_DISPLAY, metadata="CAMERA_SHOW", disabled=True, size=(8, 1), tooltip="mostra la videocamera", button_color=("white", "red"), font=FONT_BUTTON),
+                                    sg.Button(_name(ButtonLabel.LABEL_CAMERA_IR_DISABLED), key=ButtonKey.KEY_CAMERA2_IR_TOGGLE, metadata="CAMERA_IR_ENABLE", disabled=False, size=(10, 1), tooltip="attiva o disattiva l'infrarosso", button_color=("white", "red"), font=FONT_BUTTON),
+                                ]]), title="Camera 2", pad=PAD_DOWN, key="camera2", font=FONT_FRAME),
                             shrink=True)],
                             [sg.pin(
                                 sg.Frame(layout=([[
                                     sg.Checkbox('Abilita Autodisplay', key="autodisplay", default=True, tooltip="le camere mostrano automaticamente il video quando il telescopio è in slewing"),
-                                ]]), title="Camere", key="cameras-autodisplay"),
+                                ]]), title="Camere", key="cameras-autodisplay", font=FONT_FRAME),
                             shrink=True)]
                         ))
                     ],
@@ -124,21 +127,21 @@ class Gui:
                                     sg.Combo(values=tuple(), size=(17, 1), key='camera-combo')
                                 ],
                                 [
-                                    sg.RealtimeButton('↖️', key=ButtonKey.KEY_CAMERA_MOVE_UP, metadata="MOVE_TOP_LEFT", disabled=False, tooltip="muovi la camera in alto a sinistra" ),
-                                    sg.RealtimeButton('⬆️', key=ButtonKey.KEY_CAMERA_MOVE_TOP_LEFT, metadata="MOVE_UP", disabled=False, tooltip="muovi la camera in alto"),
-                                    sg.RealtimeButton('↗️', key=ButtonKey.KEY_CAMERA_MOVE_TOP_RIGHT, metadata="MOVE_TOP_RIGHT", disabled=False, tooltip="muovi la camera in alto a destra"),
+                                    sg.RealtimeButton('↖️', key=ButtonKey.KEY_CAMERA_MOVE_UP, metadata="MOVE_TOP_LEFT", disabled=False, tooltip="muovi la camera in alto a sinistra", font=FONT_BUTTON),
+                                    sg.RealtimeButton('⬆️', key=ButtonKey.KEY_CAMERA_MOVE_TOP_LEFT, metadata="MOVE_UP", disabled=False, tooltip="muovi la camera in alto", font=FONT_BUTTON),
+                                    sg.RealtimeButton('↗️', key=ButtonKey.KEY_CAMERA_MOVE_TOP_RIGHT, metadata="MOVE_TOP_RIGHT", disabled=False, tooltip="muovi la camera in alto a destra", font=FONT_BUTTON),
                                 ],
                                 [
-                                    sg.RealtimeButton('⬅️', key=ButtonKey.KEY_CAMERA_MOVE_LEFT, metadata="MOVE_LEFT", disabled=False, tooltip="muovi la camera a sinistra"),
-                                    sg.RealtimeButton('❌', key=ButtonKey.KEY_CAMERA_STOP_MOVE, metadata="MOVE_STOP", disabled=False, tooltip="ferma la camera",),
-                                    sg.RealtimeButton('➡️', key=ButtonKey.KEY_CAMERA_MOVE_RIGHT, metadata="MOVE_RIGHT", disabled=False, tooltip="muovi la camera in a destra"),
+                                    sg.RealtimeButton('⬅️', key=ButtonKey.KEY_CAMERA_MOVE_LEFT, metadata="MOVE_LEFT", disabled=False, tooltip="muovi la camera a sinistra", font=FONT_BUTTON),
+                                    sg.RealtimeButton('❌', key=ButtonKey.KEY_CAMERA_STOP_MOVE, metadata="MOVE_STOP", disabled=False, tooltip="ferma la camera", font=FONT_BUTTON),
+                                    sg.RealtimeButton('➡️', key=ButtonKey.KEY_CAMERA_MOVE_RIGHT, metadata="MOVE_RIGHT", disabled=False, tooltip="muovi la camera in a destra", font=FONT_BUTTON),
                                 ],
                                 [
-                                    sg.RealtimeButton('↙️', key=ButtonKey.KEY_CAMERA_MOVE_BOTTOM_LEFT, metadata="MOVE_BOTTOM_LEFT", disabled=False, tooltip="muovi la camera in basso a sinistra"),
-                                    sg.RealtimeButton('⬇️', key=ButtonKey.KEY_CAMERA_MOVE_DOWN, metadata="MOVE_DOWN", disabled=False, tooltip="muovi la camera in basso"),
-                                    sg.RealtimeButton('↘️', key=ButtonKey.KEY_CAMERA_MOVE_BOTTOM_RIGHT, metadata="MOVE_BOTTOM_RIGHT", disabled=False, tooltip="muovi la camera in basso a destra"),
+                                    sg.RealtimeButton('↙️', key=ButtonKey.KEY_CAMERA_MOVE_BOTTOM_LEFT, metadata="MOVE_BOTTOM_LEFT", disabled=False, tooltip="muovi la camera in basso a sinistra", font=FONT_BUTTON),
+                                    sg.RealtimeButton('⬇️', key=ButtonKey.KEY_CAMERA_MOVE_DOWN, metadata="MOVE_DOWN", disabled=False, tooltip="muovi la camera in basso", font=FONT_BUTTON),
+                                    sg.RealtimeButton('↘️', key=ButtonKey.KEY_CAMERA_MOVE_BOTTOM_RIGHT, metadata="MOVE_BOTTOM_RIGHT", disabled=False, tooltip="muovi la camera in basso a destra", font=FONT_BUTTON),
                                 ],
-                            ]), title="Movimento Camera", pad=(3, 10), key="camera-remote"),
+                            ]), title="Movimento Camera", pad=(3, 10), key="camera-remote", font=FONT_FRAME),
                         shrink=True)
                     ]
                 ))  
@@ -157,7 +160,7 @@ class Gui:
                         [sg.Text('Ovest', size=(5, 1), justification='left', font=("Helvetica", 12), pad=((0, 0), (50, 0)))],
                         [sg.Text('0', size=(5, 1), justification='right', font=("Helvetica", 12), key='apert_w', background_color="white", text_color="#2c2825", pad=((0, 0), (0, 30)))]
                     ))
-                ]]), title='Tende', relief=sg.RELIEF_GROOVE, pad=(2, 0)),
+                ]]), title='Tende', relief=sg.RELIEF_GROOVE, pad=(2, 0), font=FONT_FRAME),
                 sg.Frame(layout=([[
                     sg.Column(layout=(
                         [sg.Text('Alt', size=(5, 1), justification='left', font=("Helvetica", 12), pad=((0, 0), (10, 0)))],
@@ -165,7 +168,7 @@ class Gui:
                         [sg.Text('Az', size=(5, 1), justification='left', font=("Helvetica", 12), pad=((0, 0), (50, 0)))],
                         [sg.Text('0', size=(5, 1), justification='right', font=("Helvetica", 12), key='az', background_color="white", text_color="#2c2825", pad=((0, 0), (0, 30)))]
                     ))
-                ]]), title='Telescopio', relief=sg.RELIEF_GROOVE, pad=((6, 0), (0, 0)))
+                ]]), title='Telescopio', relief=sg.RELIEF_GROOVE, pad=((6, 0), (0, 0)), font=FONT_FRAME)
             ]
         ]
         
@@ -173,18 +176,18 @@ class Gui:
             [sg.Text('Alimentatori & Luci', font=FONT)],
             [
                 sg.Frame(layout=([[
-                    sg.Button(_name(ButtonLabel.LABEL_OFF), key=ButtonKey.KEY_TELE_SWITCH, metadata="TURN_ON", disabled=False, size=(8, 1), tooltip="accensione alimentarore telescopio", button_color=("white", "red")),
-                ]]), title="Telescopio", pad=PAD_DOWN),
+                    sg.Button(_name(ButtonLabel.LABEL_OFF), key=ButtonKey.KEY_TELE_SWITCH, metadata="TURN_ON", disabled=False, size=(8, 1), tooltip="accensione alimentarore telescopio", button_color=("white", "red"), font=FONT_BUTTON),
+                ]]), title="Telescopio", pad=PAD_DOWN, font=FONT_FRAME),
                 sg.Frame(layout=([[
-                    sg.Button(_name(ButtonLabel.LABEL_OFF), key=ButtonKey.KEY_CCD_SWITCH, metadata="TURN_ON", disabled=False, size=(8, 1), tooltip="accensione alimentatore CCD", button_color=("white", "red")),
-                ]]), title="CCD", pad=PAD_DOWN),
+                    sg.Button(_name(ButtonLabel.LABEL_OFF), key=ButtonKey.KEY_CCD_SWITCH, metadata="TURN_ON", disabled=False, size=(8, 1), tooltip="accensione alimentatore CCD", button_color=("white", "red"), font=FONT_BUTTON),
+                ]]), title="CCD", pad=PAD_DOWN, font=FONT_FRAME),
                 sg.Frame(layout=([[
-                    sg.Button(_name(ButtonLabel.LABEL_OFF), key=ButtonKey.KEY_FLAT_LIGHT, metadata="TURN_ON", disabled=False, size=(8, 1), tooltip="accensione pannnello del flat e attiva il tracking se il telescopio è in posizione flat", button_color=("white", "red")),
-                ]]), title="Luce Flat", pad=PAD_DOWN),
+                    sg.Button(_name(ButtonLabel.LABEL_OFF), key=ButtonKey.KEY_FLAT_LIGHT, metadata="TURN_ON", disabled=False, size=(8, 1), tooltip="accensione pannnello del flat e attiva il tracking se il telescopio è in posizione flat", button_color=("white", "red"), font=FONT_BUTTON),
+                ]]), title="Luce Flat", pad=PAD_DOWN, font=FONT_FRAME),
                 sg.Frame(layout=([[
-                    sg.Button(_name(ButtonLabel.LABEL_OFF), key=ButtonKey.KEY_DOME_LIGHT, metadata="TURN_ON", disabled=False, size=(8, 1), tooltip="accensioni luci cupola, controllare se il telescopio è in fase di ripresa", button_color=("white", "red")),
+                    sg.Button(_name(ButtonLabel.LABEL_OFF), key=ButtonKey.KEY_DOME_LIGHT, metadata="TURN_ON", disabled=False, size=(8, 1), tooltip="accensioni luci cupola, controllare se il telescopio è in fase di ripresa", button_color=("white", "red"), font=FONT_BUTTON),
                     sg.Checkbox('Abilita Autolight', key="autolight", default=True, tooltip="le luci della cupola si accendono automaticamente quando il telescopio è in slewing")
-                ]]), title="Luce Cupola", pad=PAD_DOWN)
+                ]]), title="Luce Cupola", pad=PAD_DOWN, font=FONT_FRAME)
             ]
         ]
         
@@ -198,14 +201,14 @@ class Gui:
                         sg.Text(GuiLabel.TELESCOPE_TRACKING_OFF.value, size=(10, 1), justification='center', font=("Helvetica", 12), key='status-tracking', background_color="white", text_color="red"),
                         sg.Text(GuiLabel.TELESCOPE_SLEWING_OFF.value, size=(10, 1), justification='center', font=("Helvetica", 12), key='status-slewing', background_color="white", text_color="red"),
                     ]
-                ), title='Telescopio', relief=sg.RELIEF_GROOVE),
+                ), title='Telescopio', relief=sg.RELIEF_GROOVE, font=FONT_FRAME),
                 sg.Frame(layout=(
                     [sg.Text('Tenda Ovest', size=(11, 1), justification='center', font=("Helvetica", 12)), sg.Text('Tenda Est', size=(11, 1), justification='center', font=("Helvetica", 12))],
                     [
                         sg.Text(GuiLabel.CURTAIN_DISABLED.value, size=(11, 1), justification='center', font=("Helvetica", 12), key='status-curtain_west', background_color="red", text_color="white"),
                         sg.Text(GuiLabel.CURTAIN_DISABLED.value, size=(11, 1), justification='center', font=("Helvetica", 12), key='status-curtain_east', background_color="red", text_color="white")
                     ]
-                ), title='Tende', relief=sg.RELIEF_GROOVE)
+                ), title='Tende', relief=sg.RELIEF_GROOVE, font=FONT_FRAME)
             ],
             [sg.Text(GuiLabel.NO_ALERT.value, size=(61, 1), justification='center', background_color="#B0C4DE", font=("Helvetica", 12), text_color="#FF0000", key="alert", relief=sg.RELIEF_RIDGE)]
         ]
@@ -213,10 +216,10 @@ class Gui:
   
         block_meteo =[
             [
-                sg.Text('Dati Meteo', font=FONT), sg.Text(' ', size =(5, 1)), sg.Text('Tendenza Barometro (3 ore)', size=(23, 1), justification='left', font=("Helvetica", 12), pad=((0, 0), (10, 0))), 
-                sg.Text('', size=(8, 1), justification='center', font=("Helvetica", 12), key='barometer-trend', background_color="white", text_color="#2c2825", pad=(0, 0)),
-                sg.Text('       previsioni ', size=(11, 1), justification='left', font=("Helvetica", 12), pad=((0, 0), (10, 0))), 
-                sg.Text('', size=(35, 1), justification='center', font=("Helvetica", 12), key="barometer-trend-forecast", background_color="white", text_color="#2c2825", pad=(0, 0))
+                sg.Text('Dati Meteo', font=FONT), sg.Text(' ', size =(5, 1)), sg.Text('Tendenza Barometro (3 ore)', size=(23, 1), justification='left', font=FONT_TEXT, pad=((0, 0), (10, 0))), 
+                sg.Text('', size=(8, 1), justification='center', font=FONT_TEXT, key='barometer-trend', background_color="white", text_color="#2c2825", pad=(0, 0)),
+                sg.Text('       previsioni ', size=(11, 1), justification='left', font=FONT_TEXT, pad=((0, 0), (10, 0))), 
+                sg.Text('', size=(35, 1), justification='center', font=FONT_TEXT, key="barometer-trend-forecast", background_color="white", text_color="#2c2825", pad=(0, 0))
             ],
             [
                 sg.Frame(layout=([
@@ -232,14 +235,14 @@ class Gui:
                         sg.Image(key="rain-rate", expand_x=True, expand_y=True, size=SIZE_GAUGE),
                         sg.Image(key="barometer", expand_x=True, expand_y=True, size=SIZE_GAUGE),
                     ],
-                ]), title="Meteo", expand_x=True, expand_y=True, key="weather_block")
+                ]), title="", expand_x=True, expand_y=True, key="weather_block", font=FONT_FRAME, relief=sg.RELIEF_FLAT)
             ],
-            [sg.Text('IN AGGIORNAMENTO', size=(50, 1), justification='center', background_color="red", font=("Helvetica", 12), text_color="white", key='alert_meteo',  pad=((230, 0), (10, 0)))]
+            [sg.Text('IN AGGIORNAMENTO', size=(50, 1), justification='center', background_color="red", font=FONT_TEXT, text_color="white", key='alert_meteo',  pad=((230, 0), (10, 0)))]
         ]
 
         block_alim = [
             [sg.Text('Stato Alimentazione - UPS', font=FONT)],
-            [sg.T("Qui ci vanno i gauge dell'UPS, Volt e percent di carica")]
+            [sg.Text("Qui ci vanno i gauge dell'UPS, Volt e percent di carica", font=FONT_TEXT)]
         ]
         
         block_logo_ara = [
