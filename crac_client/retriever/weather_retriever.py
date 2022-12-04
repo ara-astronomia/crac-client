@@ -21,7 +21,14 @@ class WeatherRetriever(Retriever):
         self.channel = grpc.insecure_channel(f'{Config.getValue("ip", "server")}:{Config.getValue("port", "server")}')
         self.client = WeatherStub(self.channel)
 
-    def getStatus(self, latest_update: str) -> WeatherResponse:
-        if not latest_update or datetime.now().timestamp() - int(latest_update) >= 600:
+    def getStatus(self, latest_update: str, interval: str) -> WeatherResponse:
+        logging.debug(f"latest update is {latest_update}")
+        logging.debug(f"interval is {interval}")
+        now = datetime.now()
+        if (
+            not interval or 
+            not latest_update or 
+            (now - datetime.fromtimestamp(int(latest_update))).seconds >= int(interval)
+        ):
             call_future = self.client.GetStatus.future(WeatherRequest())
             call_future.add_done_callback(self.callback)

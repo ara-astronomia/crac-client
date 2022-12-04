@@ -45,7 +45,7 @@ def deque():
         try:
             job = JOBS.get()
         except Empty as e:
-            logger.error("The queue is empt", exc_info=1)
+            logger.error("The queue is empty", exc_info=1)
         else:
             job['convert'](job['response'], g_ui)
 
@@ -65,8 +65,8 @@ def close_vlc(p: subprocess.Popen):
     elif platform == "win32":
         p.terminate()
 
-def __backend_streaming(enabled: list, source1: str, source2: str) -> bool:
-    (enabled['camera1'] or enabled['camera2']) and (not source1 or not source2)
+def __backend_streaming(enabled: dict, source1: str, source2: str) -> bool:
+    return (enabled['camera1'] or enabled['camera2']) and (not source1 or not source2)
 
 
 logger = logging.getLogger('crac_client.app')
@@ -149,6 +149,6 @@ while True:
             camera_retriever.setAction(action=CameraAction.Name(CameraAction.CAMERA_CHECK), name="camera1", g_ui=g_ui)
             camera_retriever.setAction(action=CameraAction.Name(CameraAction.CAMERA_CHECK), name="camera2", g_ui=g_ui)
             button_retriever.getStatus()
-            weather_retriever.getStatus(g_ui.win["weather-updated-at"].get())
+            weather_retriever.getStatus(g_ui.win["weather-updated-at"].get(), g_ui.win["weather-interval"].get())
             
     deque()

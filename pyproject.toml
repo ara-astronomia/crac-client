@@ -7,14 +7,15 @@ license = "GPL3"
 
 [tool.poetry.dependencies]
 python = "^3.10"
-crac-protobuf = { path = "../crac-protobuf/dist/crac_protobuf-0.1.19.1.tar.gz" }
+crac-protobuf = { git = "https://github.com/ara-astronomia/crac-protobuf", branch="11-contract-for-automatic-closure-for-weather-condition" }
 grpcio-tools = "^1.43.0"
-PySimpleGUI = "^4.56.0"
 Flask = "^2.0.3"
 opencv-python = "^4.5.5"
 python-dotenv = "^0.20.0"
 plotly = "^5.7.0"
 kaleido = "0.2.1"
+PySimpleGUI = "^4.60.4"
+
 
 [tool.poetry.dev-dependencies]
 autopep8 = "^1.6.0"
