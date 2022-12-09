@@ -12,6 +12,7 @@ from crac_protobuf.chart_pb2 import (
     WeatherStatus,
 )
 
+
 logger = logging.getLogger(__name__)
 
 
@@ -85,11 +86,11 @@ class WeatherConverter(Converter):
                     'steps': [self.build_range(threshold) for threshold in chart.thresholds],
                     'threshold': {'line': {'color': "black", 'width': 4}, 'thickness': 1, 'value': chart.value}
                 }
-            )
+            ),
+            layout={"paper_bgcolor": 'lightslategrey', "font": {
+                          'color': "white", 'family': "Helvetica", 'size': 35}}
         )
 
-        fig.update_layout(paper_bgcolor='lightslategrey', font={
-                          'color': "white", 'family': "Arial", 'size': 35})
         return fig.to_image(format="png", scale=0.20)
 
     def build_range(self, threshold: Threshold):

@@ -28,7 +28,7 @@ class WeatherRetriever(Retriever):
         if (
             not interval or 
             not latest_update or 
-            (now - datetime.fromtimestamp(int(latest_update))).seconds >= int(interval)
+            (now - datetime.fromtimestamp(float(latest_update))).seconds >= float(interval)
         ):
             call_future = self.client.GetStatus.future(WeatherRequest())
             call_future.add_done_callback(self.callback)

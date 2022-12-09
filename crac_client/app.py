@@ -1,7 +1,7 @@
 import logging
 import logging.config
 logging.config.fileConfig('logging.conf')
-
+from datetime import datetime
 import subprocess
 from crac_client import config, gui
 from crac_client.converter.button_converter import ButtonConverter
@@ -29,6 +29,9 @@ from sys import platform
 from time import sleep
 
 
+logger = logging.getLogger('crac_client.app')
+
+
 def blocking_deque():
     try:
         job = JOBS.get(block=True, timeout=10)
@@ -49,6 +52,7 @@ def deque():
         else:
             job['convert'](job['response'], g_ui)
 
+
 def open_vlc(source: str):
     if platform == "linux" or platform == "linux2":
         return subprocess.Popen(["vlc", source])
@@ -56,6 +60,7 @@ def open_vlc(source: str):
         return subprocess.Popen(["open", "-na", "VLC", source])
     elif platform == "win32":
         return subprocess.Popen(["C:/Program Files/VideoLAN/VLC/vlc.exe", source])
+
 
 def close_vlc(p: subprocess.Popen):
     if platform == "linux" or platform == "linux2":
@@ -65,11 +70,11 @@ def close_vlc(p: subprocess.Popen):
     elif platform == "win32":
         p.terminate()
 
+
 def __backend_streaming(enabled: dict, source1: str, source2: str) -> bool:
     return (enabled['camera1'] or enabled['camera2']) and (not source1 or not source2)
 
 
-logger = logging.getLogger('crac_client.app')
 g_ui = gui.Gui()
 roof_retriever = RoofRetriever(RoofConverter())
 button_retriever = ButtonRetriever(ButtonConverter())
@@ -77,6 +82,8 @@ telescope_retriever = TelescopeRetriever(TelescopeConverter())
 curtains_retriever = CurtainsRetriever(CurtainsConverter())
 camera_retriever = CameraRetriever(CameraConverter())
 weather_retriever = WeatherRetriever(WeatherConverter())
+weather_retriever.getStatus(g_ui.win["weather-updated-at"].get(), g_ui.win["weather-interval"].get())
+blocking_deque()
 camera_retriever.listCameras()
 blocking_deque()
 logger.debug(f"ENABLED is {ENABLED}")
@@ -143,12 +150,12 @@ while True:
         case ButtonKey.KEY_CAMERA2_IR_TOGGLE:
             camera_retriever.setAction(action=g_ui.win[v].metadata, name="camera2", g_ui=g_ui)
         case _:
+            weather_retriever.getStatus(g_ui.win["weather-updated-at"].get(), g_ui.win["weather-interval"].get())
             roof_retriever.setAction(action=RoofAction.Name(RoofAction.CHECK_ROOF))
             telescope_retriever.setAction(action=TelescopeAction.Name(TelescopeAction.CHECK_TELESCOPE), autolight=g_ui.is_autolight())
             curtains_retriever.setAction(action=CurtainsAction.Name(CurtainsAction.CHECK_CURTAIN))
             camera_retriever.setAction(action=CameraAction.Name(CameraAction.CAMERA_CHECK), name="camera1", g_ui=g_ui)
             camera_retriever.setAction(action=CameraAction.Name(CameraAction.CAMERA_CHECK), name="camera2", g_ui=g_ui)
             button_retriever.getStatus()
-            weather_retriever.getStatus(g_ui.win["weather-updated-at"].get(), g_ui.win["weather-interval"].get())
             
     deque()
