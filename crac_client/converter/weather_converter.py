@@ -2,6 +2,7 @@ import logging
 import base64
 import plotly.graph_objects as go
 import PySimpleGUI as sg
+from crac_client.converter import build_dict_from_chart_list
 from crac_client.converter.converter import Converter
 from crac_client.gui import Gui
 from crac_protobuf.chart_pb2 import (
@@ -22,7 +23,7 @@ class WeatherConverter(Converter):
         logger.debug(response)
         if g_ui:
             if len(response.charts) > 0:
-                charts = self.build_dict_from_chart_list(response.charts)
+                charts = build_dict_from_chart_list(response.charts)
                 wind_speed_image = base64.b64encode(self.gauge(charts["weather.chart.wind"]))
                 wind_gust_speed_image = base64.b64encode(self.gauge(charts["weather.chart.wind_gust"]))
                 temperature_image = base64.b64encode(self.gauge(charts["weather.chart.temperature"]))
@@ -120,6 +121,3 @@ class WeatherConverter(Converter):
                     return "In peggioramento entro le prossime 12 ore"
                 if threashold.threshold_type == ThresholdType.THRESHOLD_TYPE_DANGER:
                     return "In peggioramento ora!"
-
-    def build_dict_from_chart_list(self, charts):
-        return { chart.urn: chart for chart in charts }

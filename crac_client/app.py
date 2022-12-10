@@ -1,5 +1,8 @@
 import logging
 import logging.config
+from crac_client.converter.ups_converter import UpsConverter
+
+from crac_client.retriever.ups_retriever import UpsRetriever
 logging.config.fileConfig('logging.conf')
 from datetime import datetime
 import subprocess
@@ -82,6 +85,7 @@ telescope_retriever = TelescopeRetriever(TelescopeConverter())
 curtains_retriever = CurtainsRetriever(CurtainsConverter())
 camera_retriever = CameraRetriever(CameraConverter())
 weather_retriever = WeatherRetriever(WeatherConverter())
+ups_retriever = UpsRetriever(UpsConverter())
 weather_retriever.getStatus(g_ui.win["weather-updated-at"].get(), g_ui.win["weather-interval"].get())
 blocking_deque()
 camera_retriever.listCameras()
@@ -151,6 +155,7 @@ while True:
             camera_retriever.setAction(action=g_ui.win[v].metadata, name="camera2", g_ui=g_ui)
         case _:
             weather_retriever.getStatus(g_ui.win["weather-updated-at"].get(), g_ui.win["weather-interval"].get())
+            ups_retriever.getStatus("", "")
             roof_retriever.setAction(action=RoofAction.Name(RoofAction.CHECK_ROOF))
             telescope_retriever.setAction(action=TelescopeAction.Name(TelescopeAction.CHECK_TELESCOPE), autolight=g_ui.is_autolight())
             curtains_retriever.setAction(action=CurtainsAction.Name(CurtainsAction.CHECK_CURTAIN))
