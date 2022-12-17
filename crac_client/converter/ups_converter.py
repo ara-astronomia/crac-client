@@ -25,6 +25,8 @@ class UpsConverter(Converter):
             self.update_progress_bar(g_ui.win, '_OUT-BATT-CUPOLA_', '_PERCENT-BATT-CUPOLA_', charts["ups.tecnoware-1000.chart.battery"])
             self.update_progress_bar(g_ui.win, '_OUT-VOLT-ROOM_', '_VOLT-ROOM_' , charts["ups.apc-3000.chart.voltage"])
             self.update_progress_bar(g_ui.win, '_OUT-VOLT-CUPOLA_', '_VOLT-CUPOLA_', charts["ups.tecnoware-1000.chart.voltage"])
+            g_ui.win['ups-updated-at'](response.updated_at)
+            g_ui.win['ups-interval'](response.interval)
                 
     #change the update values ​​to those sent by crack-server
     def update_progress_bar(self, win, key1: str, key2: str, chart: Chart) -> None:

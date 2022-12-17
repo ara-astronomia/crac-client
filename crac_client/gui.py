@@ -241,6 +241,8 @@ class Gui:
         ]
 
         block_alim = [
+            [sg.In(key='ups-updated-at', visible=False)],
+            [sg.In(key='ups-interval', visible=False)],
             [sg.Text('Stato Rete-Alimentazione - UPS', font=FONT)],
             [sg.Frame(layout = (
             [sg.T('Batterie',size=(7,1), font=FONT_TEXT), sg.T(' %',size=(6,1), font=FONT_TEXT, key='_OUT-BATT-CUPOLA_'), sg.ProgressBar(100, orientation='h', size=(17,3), bar_color=('red', 'white'), relief=sg.RELIEF_RAISED  ,key='_PERCENT-BATT-CUPOLA_')],
