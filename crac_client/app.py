@@ -1,17 +1,14 @@
 import logging
 import logging.config
-from crac_client.converter.ups_converter import UpsConverter
-
-from crac_client.retriever.ups_retriever import UpsRetriever
-logging.config.fileConfig('logging.conf')
-from datetime import datetime
 import subprocess
+logging.config.fileConfig('logging.conf')
 from crac_client import config, gui
 from crac_client.converter.button_converter import ButtonConverter
 from crac_client.converter.camera_converter import CameraConverter
 from crac_client.converter.curtains_converter import CurtainsConverter
 from crac_client.converter.roof_converter import RoofConverter
 from crac_client.converter.telescope_converter import TelescopeConverter
+from crac_client.converter.ups_converter import UpsConverter
 from crac_client.converter.weather_converter import WeatherConverter
 from crac_client.gui_constants import GuiKey
 from crac_client.jobs import JOBS, ENABLED
@@ -20,6 +17,7 @@ from crac_client.retriever.camera_retriever import CameraRetriever
 from crac_client.retriever.curtains_retriever import CurtainsRetriever
 from crac_client.retriever.roof_retriever import RoofRetriever
 from crac_client.retriever.telescope_retriever import TelescopeRetriever
+from crac_client.retriever.ups_retriever import UpsRetriever
 from crac_client.retriever.weather_retriever import WeatherRetriever
 from crac_client.streaming import start_server, stop_server
 from crac_protobuf.button_pb2 import ButtonKey
@@ -30,6 +28,7 @@ from crac_protobuf.telescope_pb2 import TelescopeAction
 from queue import Empty
 from sys import platform
 from time import sleep
+from typing import Union
 
 
 logger = logging.getLogger('crac_client.app')
@@ -74,7 +73,7 @@ def close_vlc(p: subprocess.Popen):
         p.terminate()
 
 
-def __backend_streaming(enabled: dict, source1: str, source2: str) -> bool:
+def __backend_streaming(enabled: dict, source1: Union[str,None], source2: Union[str,None]) -> bool:
     return (enabled['camera1'] or enabled['camera2']) and (not source1 or not source2)
 
 
@@ -83,52 +82,57 @@ roof_retriever = RoofRetriever(RoofConverter())
 button_retriever = ButtonRetriever(ButtonConverter())
 telescope_retriever = TelescopeRetriever(TelescopeConverter())
 curtains_retriever = CurtainsRetriever(CurtainsConverter())
-camera_retriever = CameraRetriever(CameraConverter())
 weather_retriever = WeatherRetriever(WeatherConverter())
 ups_retriever = UpsRetriever(UpsConverter())
 weather_retriever.getStatus(g_ui.win["weather-updated-at"].get(), g_ui.win["weather-interval"].get())
 blocking_deque()
-camera_retriever.listCameras()
-blocking_deque()
+cameras_enabled = config.Config.getValue("enabled", "camera")
+camera_retriever = CameraRetriever(CameraConverter())
+if cameras_enabled:
+    camera_retriever.listCameras()
+    blocking_deque()
 logger.debug(f"ENABLED is {ENABLED}")
-source1 = config.Config.getValue("source", "camera1")
-source2 = config.Config.getValue("source", "camera2")
-logger.debug(f"ENABLED is {ENABLED['camera1']} and source1 is {source1}")
-logger.debug(f"ENABLED is {ENABLED['camera2']} and source2 is {source2}")
-if source1:
-    stream1 = open_vlc(source1)
-if source2:
-    stream2 = open_vlc(source2)
-camera_retriever.setAction(action=CameraAction.Name(CameraAction.CAMERA_IR_DISABLE), name="camera1", g_ui=g_ui)
-camera_retriever.setAction(action=CameraAction.Name(CameraAction.CAMERA_CONNECT), name="camera1", g_ui=g_ui) 
-camera_retriever.setAction(action=CameraAction.Name(CameraAction.CAMERA_IR_DISABLE), name="camera2", g_ui=g_ui)
-camera_retriever.setAction(action=CameraAction.Name(CameraAction.CAMERA_CONNECT), name="camera2", g_ui=g_ui)
+source1, source2 = None, None
+stream1, stream2 = None, None
+if cameras_enabled:
+    source1 = config.Config.getValue("source", "camera1")
+    source2 = config.Config.getValue("source", "camera2")
+    logger.debug(f"ENABLED is {ENABLED['camera1']} and source1 is {source1}")
+    logger.debug(f"ENABLED is {ENABLED['camera2']} and source2 is {source2}")
+    if source1:
+        stream1 = open_vlc(source1)
+    if source2:
+        stream2 = open_vlc(source2)
+    camera_retriever.setAction(action=CameraAction.Name(CameraAction.CAMERA_IR_DISABLE), name="camera1", g_ui=g_ui)
+    camera_retriever.setAction(action=CameraAction.Name(CameraAction.CAMERA_CONNECT), name="camera1", g_ui=g_ui) 
+    camera_retriever.setAction(action=CameraAction.Name(CameraAction.CAMERA_IR_DISABLE), name="camera2", g_ui=g_ui)
+    camera_retriever.setAction(action=CameraAction.Name(CameraAction.CAMERA_CONNECT), name="camera2", g_ui=g_ui)
 blocking_deque()
 
-if __backend_streaming(ENABLED, source1, source2):
+if cameras_enabled and __backend_streaming(ENABLED, source1, source2):
     start_server()
 
 while True:
     timeout = config.Config.getInt("sleep", "automazione")
-    v, _ = g_ui.win.Read(timeout=timeout)
-    logger.debug(f"Premuto pulsante: {v}")
+    v, _ = g_ui.win.Read(timeout=timeout) # type: ignore    logger.debug(f"Premuto pulsante: {v}")
     match v:
         case v if v in [None, GuiKey.EXIT, GuiKey.SHUTDOWN]:
             g_ui = None
             telescope_retriever.setAction(action=TelescopeAction.Name(TelescopeAction.TELESCOPE_DISCONNECT), autolight=False)
-            camera_retriever.setAction(action=CameraAction.Name(CameraAction.CAMERA_DISCONNECT), name="camera1", g_ui=g_ui)
-            camera_retriever.setAction(action=CameraAction.Name(CameraAction.CAMERA_IR_AUTO), name="camera1", g_ui=g_ui)
-            camera_retriever.setAction(action=CameraAction.Name(CameraAction.CAMERA_DISCONNECT), name="camera2", g_ui=g_ui)
-            camera_retriever.setAction(action=CameraAction.Name(CameraAction.CAMERA_IR_AUTO), name="camera2", g_ui=g_ui)
-            blocking_deque()
-            if __backend_streaming(ENABLED, source1, source2):
-                stop_server()
-            if source1:
-                sleep(1)
-                close_vlc(stream1)
-            if source2:
-                sleep(1)
-                close_vlc(stream2)
+            if cameras_enabled:
+                camera_retriever.setAction(action=CameraAction.Name(CameraAction.CAMERA_DISCONNECT), name="camera1", g_ui=g_ui)
+                camera_retriever.setAction(action=CameraAction.Name(CameraAction.CAMERA_IR_AUTO), name="camera1", g_ui=g_ui)
+                camera_retriever.setAction(action=CameraAction.Name(CameraAction.CAMERA_DISCONNECT), name="camera2", g_ui=g_ui)
+                camera_retriever.setAction(action=CameraAction.Name(CameraAction.CAMERA_IR_AUTO), name="camera2", g_ui=g_ui)
+                blocking_deque()
+                if __backend_streaming(ENABLED, source1, source2):
+                    stop_server()
+                if stream1:
+                    sleep(1)
+                    close_vlc(stream1)
+                if stream2:
+                    sleep(1)
+                    close_vlc(stream2)
             break
         case ButtonKey.KEY_ROOF:
             roof_retriever.setAction(action=g_ui.win[v].metadata)
@@ -139,28 +143,34 @@ while True:
         case v if v in CurtainsRetriever.key_to_curtains_action_conversion:
             curtains_retriever.setAction(action=g_ui.win[v].metadata)
         case ButtonKey.KEY_CAMERA1_DISPLAY:
-            connection_button = g_ui.win[v]
-            camera_retriever.setAction(action=connection_button.metadata, name="camera1", g_ui=g_ui)
+            if cameras_enabled:
+                connection_button = g_ui.win[v]
+                camera_retriever.setAction(action=connection_button.metadata, name="camera1", g_ui=g_ui)
         case ButtonKey.KEY_CAMERA2_DISPLAY:
-            connection_button = g_ui.win[v]
-            camera_retriever.setAction(action=connection_button.metadata, name="camera2", g_ui=g_ui)
+            if cameras_enabled:
+                connection_button = g_ui.win[v]
+                camera_retriever.setAction(action=connection_button.metadata, name="camera2", g_ui=g_ui)
         case v if v in CameraRetriever.key_to_camera_move_conversion:
-            move_button = g_ui.win[v]
-            camera_name = g_ui.win.find_element('camera-combo').Get()
-            logger.debug(f"Camera name is: {camera_name}")
-            camera_retriever.setAction(action=CameraAction.Name(CameraAction.CAMERA_MOVE), name=camera_name, move=move_button.metadata, g_ui=g_ui)
+            if cameras_enabled:
+                move_button = g_ui.win[v]
+                camera_name = g_ui.win.find_element('camera-combo').Get()
+                logger.debug(f"Camera name is: {camera_name}")
+                camera_retriever.setAction(action=CameraAction.Name(CameraAction.CAMERA_MOVE), name=camera_name, move=move_button.metadata, g_ui=g_ui)
         case ButtonKey.KEY_CAMERA1_IR_TOGGLE:
-            camera_retriever.setAction(action=g_ui.win[v].metadata, name="camera1", g_ui=g_ui)
+            if cameras_enabled:
+                camera_retriever.setAction(action=g_ui.win[v].metadata, name="camera1", g_ui=g_ui)
         case ButtonKey.KEY_CAMERA2_IR_TOGGLE:
-            camera_retriever.setAction(action=g_ui.win[v].metadata, name="camera2", g_ui=g_ui)
+            if cameras_enabled:
+                camera_retriever.setAction(action=g_ui.win[v].metadata, name="camera2", g_ui=g_ui)
         case _:
             weather_retriever.getStatus(g_ui.win["weather-updated-at"].get(), g_ui.win["weather-interval"].get())
             ups_retriever.getStatus("", "")
             roof_retriever.setAction(action=RoofAction.Name(RoofAction.CHECK_ROOF))
             telescope_retriever.setAction(action=TelescopeAction.Name(TelescopeAction.CHECK_TELESCOPE), autolight=g_ui.is_autolight())
             curtains_retriever.setAction(action=CurtainsAction.Name(CurtainsAction.CHECK_CURTAIN))
-            camera_retriever.setAction(action=CameraAction.Name(CameraAction.CAMERA_CHECK), name="camera1", g_ui=g_ui)
-            camera_retriever.setAction(action=CameraAction.Name(CameraAction.CAMERA_CHECK), name="camera2", g_ui=g_ui)
+            if cameras_enabled:
+                camera_retriever.setAction(action=CameraAction.Name(CameraAction.CAMERA_CHECK), name="camera1", g_ui=g_ui)
+                camera_retriever.setAction(action=CameraAction.Name(CameraAction.CAMERA_CHECK), name="camera2", g_ui=g_ui)
             button_retriever.getStatus()
             
     deque()
