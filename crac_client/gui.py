@@ -92,63 +92,7 @@ class Gui:
                 ]]), title="Tende", pad=PAD_DOWN, font=FONT_FRAME)
             ]
         ]
-        
-        block_video = [
-            [sg.Text('Videocamere', font=FONT)],
-            [
-                sg.Column(layout=(
-                    [
-                        sg.Column(layout=(
-                            [sg.pin(
-                                sg.Frame(layout=([[
-                                    sg.Button(_name(ButtonLabel.LABEL_CAMERA_DISCONNECTED), key=ButtonKey.KEY_CAMERA1_CONNECTION, metadata="CAMERA_CONNECT", disabled=True, size=(10, 1), tooltip="connetti alla videocamera", button_color=("white", "red"), font=FONT_BUTTON),
-                                    sg.Button(_name(ButtonLabel.LABEL_CAMERA_HIDDEN), key=ButtonKey.KEY_CAMERA1_DISPLAY, metadata="CAMERA_SHOW", disabled=True, size=(8, 1), tooltip="mostra la videocamera", button_color=("white", "red"), font=FONT_BUTTON),
-                                    sg.Button(_name(ButtonLabel.LABEL_CAMERA_IR_DISABLED), key=ButtonKey.KEY_CAMERA1_IR_TOGGLE, metadata="CAMERA_IR_ENABLE", disabled=False, size=(10, 1), tooltip="attiva o disattiva l'infrarosso", button_color=("white", "red"), font=FONT_BUTTON),
-                                ]]), title="Camera 1", pad=PAD_DOWN, key="camera1", font=FONT_FRAME),
-                            shrink=True)],
-                            [sg.pin(
-                                sg.Frame(layout=([[
-                                    sg.Button(_name(ButtonLabel.LABEL_CAMERA_DISCONNECTED), key=ButtonKey.KEY_CAMERA2_CONNECTION, metadata="CAMERA_CONNECT", disabled=True, size=(10, 1), tooltip="connetti alla videocamera", button_color=("white", "red"), font=FONT_BUTTON),
-                                    sg.Button(_name(ButtonLabel.LABEL_CAMERA_HIDDEN), key=ButtonKey.KEY_CAMERA2_DISPLAY, metadata="CAMERA_SHOW", disabled=True, size=(8, 1), tooltip="mostra la videocamera", button_color=("white", "red"), font=FONT_BUTTON),
-                                    sg.Button(_name(ButtonLabel.LABEL_CAMERA_IR_DISABLED), key=ButtonKey.KEY_CAMERA2_IR_TOGGLE, metadata="CAMERA_IR_ENABLE", disabled=False, size=(10, 1), tooltip="attiva o disattiva l'infrarosso", button_color=("white", "red"), font=FONT_BUTTON),
-                                ]]), title="Camera 2", pad=PAD_DOWN, key="camera2", font=FONT_FRAME),
-                            shrink=True)],
-                            [sg.pin(
-                                sg.Frame(layout=([[
-                                    sg.Checkbox('Abilita Autodisplay', key="autodisplay", default=True, tooltip="le camere mostrano automaticamente il video quando il telescopio è in slewing"),
-                                ]]), title="Camere", key="cameras-autodisplay", font=FONT_FRAME),
-                            shrink=True)]
-                        ))
-                    ],
-                    [
-                        sg.pin(
-                            sg.Frame(layout=([
-                                [
-                                    sg.Combo(values=tuple(), size=(17, 1), key='camera-combo')
-                                ],
-                                [
-                                    sg.RealtimeButton('↖️', key=ButtonKey.KEY_CAMERA_MOVE_UP, metadata="MOVE_TOP_LEFT", disabled=False, tooltip="muovi la camera in alto a sinistra", font=FONT_BUTTON),
-                                    sg.RealtimeButton('⬆️', key=ButtonKey.KEY_CAMERA_MOVE_TOP_LEFT, metadata="MOVE_UP", disabled=False, tooltip="muovi la camera in alto", font=FONT_BUTTON),
-                                    sg.RealtimeButton('↗️', key=ButtonKey.KEY_CAMERA_MOVE_TOP_RIGHT, metadata="MOVE_TOP_RIGHT", disabled=False, tooltip="muovi la camera in alto a destra", font=FONT_BUTTON),
-                                ],
-                                [
-                                    sg.RealtimeButton('⬅️', key=ButtonKey.KEY_CAMERA_MOVE_LEFT, metadata="MOVE_LEFT", disabled=False, tooltip="muovi la camera a sinistra", font=FONT_BUTTON),
-                                    sg.RealtimeButton('❌', key=ButtonKey.KEY_CAMERA_STOP_MOVE, metadata="MOVE_STOP", disabled=False, tooltip="ferma la camera", font=FONT_BUTTON),
-                                    sg.RealtimeButton('➡️', key=ButtonKey.KEY_CAMERA_MOVE_RIGHT, metadata="MOVE_RIGHT", disabled=False, tooltip="muovi la camera in a destra", font=FONT_BUTTON),
-                                ],
-                                [
-                                    sg.RealtimeButton('↙️', key=ButtonKey.KEY_CAMERA_MOVE_BOTTOM_LEFT, metadata="MOVE_BOTTOM_LEFT", disabled=False, tooltip="muovi la camera in basso a sinistra", font=FONT_BUTTON),
-                                    sg.RealtimeButton('⬇️', key=ButtonKey.KEY_CAMERA_MOVE_DOWN, metadata="MOVE_DOWN", disabled=False, tooltip="muovi la camera in basso", font=FONT_BUTTON),
-                                    sg.RealtimeButton('↘️', key=ButtonKey.KEY_CAMERA_MOVE_BOTTOM_RIGHT, metadata="MOVE_BOTTOM_RIGHT", disabled=False, tooltip="muovi la camera in basso a destra", font=FONT_BUTTON),
-                                ],
-                            ]), title="Movimento Camera", pad=(3, 10), key="camera-remote", font=FONT_FRAME),
-                        shrink=True)
-                    ]
-                ))  
-            ]
-        ]
 
-        
         block_stato_tende = [
             [sg.Text('Stato Tende', font=FONT)],
             [
@@ -257,7 +201,7 @@ class Gui:
                     [sg.Column(block_alimentatori, size=(555, 90), pad=PAD_LEFT_INSIDE)],
                     [sg.Column(block_stato_tende, size=(555, 300), pad=PAD_LEFT_INSIDE)]
                 ], background_color=BORDER_COLOR),
-                sg.Column(block_video, size=(352, 394), pad=PAD_LEFT_INSIDE)
+                sg.Column([], size=(352, 394), pad=PAD_LEFT_INSIDE)
             ],
             [sg.Column(block_stato_crac, size=(574, 150), pad=PAD_LEFT_INSIDE), sg.Column(block_alim, size=(336, 150))],
             [sg.Column(block_meteo, size=(916, 200), pad=PAD_LEFT_INSIDE)]
@@ -298,21 +242,9 @@ class Gui:
 
         return self.win['autolight'].Get()
 
-    def is_autodisplay(self) -> bool:
-
-        """
-            read the status of the checkbox that enable/disable the
-            camera autodisplay
-        """
-        return self.win['autodisplay'].Get()
-
     def set_autolight(self, checked: bool):
         logger.debug(f"Is inside set_autolight method with checked: {checked}")
         self.win['autolight'](checked)
-
-    def set_autodisplay(self, checked: bool):
-        logger.debug(f"Is inside set_autodisplay method with checked: {checked}")
-        self.win['autodisplay'](checked)
 
     def base_draw(self) -> None:
         p1 = ((int((self.l / 2) - (self.delta_pt / 2))) - (0.9 * self.t), self.h)
