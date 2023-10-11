@@ -23,7 +23,7 @@ class CurtainsRetriever(Retriever):
         ButtonKey.KEY_CALIBRATE,
     ]
 
-    def setAction(self, action: str):
+    async def setAction(self, action: str):
         request = CurtainsRequest(action=CurtainsAction.Value(action))
         call_future = self.client.SetAction.future(request, wait_for_ready=True)
         call_future.add_done_callback(self.callback)

@@ -28,13 +28,13 @@ class ButtonRetriever(Retriever):
         ButtonKey.KEY_DOME_LIGHT: ButtonType.DOME_LIGHT,
     }
 
-    def setAction(self, action: str, key: ButtonKey, g_ui: Gui):
+    async def setAction(self, action: str, key: ButtonKey, g_ui: Gui):
         if key is ButtonKey.KEY_DOME_LIGHT and g_ui:
             g_ui.set_autolight(False)
         request = ButtonRequest(action=ButtonAction.Value(action), type=ButtonRetriever.key_to_button_type_conversion[key])
         call_future = self.client.SetAction.future(request, wait_for_ready=True)
         call_future.add_done_callback(self.callback)
 
-    def getStatus(self):
+    async def getStatus(self):
         call_future = self.client.GetStatus.future(ButtonsRequest(), wait_for_ready=True)
         call_future.add_done_callback(self.callback)

@@ -21,7 +21,7 @@ class WeatherRetriever(Retriever):
         self.channel = grpc.insecure_channel(f'{Config.getValue("ip", "server")}:{Config.getValue("port", "server")}')
         self.client = WeatherStub(self.channel)
 
-    def getStatus(self, latest_update: str, interval: str) -> WeatherResponse:
+    async def getStatus(self, latest_update: str, interval: str) -> WeatherResponse:
         logging.debug(f"latest update is {latest_update}")
         logging.debug(f"interval is {interval}")
         now = datetime.now()

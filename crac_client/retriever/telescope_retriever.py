@@ -25,7 +25,7 @@ class TelescopeRetriever(Retriever):
         ButtonKey.KEY_TELESCOPE_CONNECTION_TOGGLE,
     )
 
-    def setAction(self, action: str, autolight: bool):
+    async def setAction(self, action: str, autolight: bool):
         request = TelescopeRequest(action=TelescopeAction.Value(action), autolight=autolight)
         call_future = self.client.SetAction.future(request, wait_for_ready=True)
         call_future.add_done_callback(self.callback)

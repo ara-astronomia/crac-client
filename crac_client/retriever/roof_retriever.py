@@ -17,7 +17,7 @@ class RoofRetriever(Retriever):
         self.channel = grpc.insecure_channel(f'{Config.getValue("ip", "server")}:{Config.getValue("port", "server")}')
         self.client = RoofStub(self.channel)
 
-    def setAction(self, action: str):
+    async def setAction(self, action: str):
         request = RoofRequest(action=RoofAction.Value(action))
         call_future = self.client.SetAction.future(request, wait_for_ready=True)
         call_future.add_done_callback(self.callback)

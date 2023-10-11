@@ -8,8 +8,8 @@ from crac_client.loc import _name
 from gui_constants import GuiLabel
 import logging
 import math
-import PySimpleGUI as sg  # type: ignore
-from tkinter import PhotoImage, NW
+import PySimpleGUIQt as sg  # type: ignore
+#from tkinter import PhotoImage, NW
 from typing import Tuple
 from typing import Dict
 
@@ -72,7 +72,6 @@ class Gui:
         FONT_BUTTON = ('Helvetica', 10)
         FONT_TEXT = ('Helvetica', 12)
         SIZE_GAUGE = (20, 20)
-        FONT_BUTTON_CAM=("Helvetica", 8)
         
         block_3T = [
             [sg.Text('Controllo 3T - Tetto Telescopio Tende', font=FONT)],
@@ -170,16 +169,16 @@ class Gui:
                     [sg.In(key='weather-updated-at', visible=False)],
                     [sg.In(key='weather-interval', visible=False)],
                     [
-                        sg.Image(key="wind-speed", expand_x=True, expand_y=True, size=SIZE_GAUGE),
-                        sg.Image(key="wind-gust-speed", expand_x=True, expand_y=True, size=SIZE_GAUGE),
-                        sg.Image(key="temperature", expand_x=True, expand_y=True, size=SIZE_GAUGE),
+                        sg.Image(key="wind-speed",size=SIZE_GAUGE),
+                        sg.Image(key="wind-gust-speed",size=SIZE_GAUGE),
+                        sg.Image(key="temperature",size=SIZE_GAUGE),
                     
                     
-                        sg.Image(key="humidity", expand_x=True, expand_y=True, size=SIZE_GAUGE),
-                        sg.Image(key="rain-rate", expand_x=True, expand_y=True, size=SIZE_GAUGE),
-                        sg.Image(key="barometer", expand_x=True, expand_y=True, size=SIZE_GAUGE),
+                        sg.Image(key="humidity",size=SIZE_GAUGE),
+                        sg.Image(key="rain-rate",size=SIZE_GAUGE),
+                        sg.Image(key="barometer",size=SIZE_GAUGE),
                     ],
-                ]), title="", expand_x=True, expand_y=True, key="weather_block", font=FONT_FRAME, relief=sg.RELIEF_FLAT)
+                ]), title="",key="weather_block", font=FONT_FRAME, relief=sg.RELIEF_FLAT)
             ],
             [sg.Text('IN AGGIORNAMENTO', size=(50, 1), justification='center', background_color="red", font=FONT_TEXT, text_color="white", key='alert_meteo',  pad=((230, 0), (10, 0)))]
         ]
@@ -207,7 +206,7 @@ class Gui:
             [sg.Column(block_meteo, size=(916, 200), pad=PAD_LEFT_INSIDE)]
         ]
         
-        self.win = sg.Window('CRaC -- Control Roof and Curtains by ARA', layout, margins=(5, 5), background_color=BORDER_COLOR, grab_anywhere=True, finalize=True)
+        self.win = sg.Window('CRaC -- Control Roof and Curtains by ARA', layout, background_color=BORDER_COLOR, grab_anywhere=True, finalize=True)
         self.base_draw()
 
     def create_background_image(self) -> None:
@@ -215,8 +214,8 @@ class Gui:
         """ Create the background image for the sky when the roof is open and hides immediately it """
 
         canvas = self.win['canvas']
-        self.img_fondo = PhotoImage(file="cielo_stellato.gif")
-        self.image = canvas.TKCanvas.create_image(0, 0, image=self.img_fondo, anchor=NW)
+        #self.img_fondo = PhotoImage(file="cielo_stellato.gif")
+        #self.image = canvas.TKCanvas.create_image(0, 0, image=self.img_fondo, anchor=NW)
         self.hide_background_image()
 
     def hide_background_image(self) -> None:
@@ -224,14 +223,14 @@ class Gui:
         """ Hide the sky when the roof is closed """
 
         canvas = self.win['canvas']
-        canvas.TKCanvas.itemconfigure(self.image, state='hidden')
+        #canvas.TKCanvas.itemconfigure(self.image, state='hidden')
 
     def show_background_image(self) -> None:
 
         """ Show the sky when the roof is open """
 
         canvas = self.win['canvas']
-        canvas.TKCanvas.itemconfigure(self.image, state='normal')
+        #canvas.TKCanvas.itemconfigure(self.image, state='normal')
 
     def is_autolight(self) -> bool:
 
@@ -259,8 +258,8 @@ class Gui:
         p10 = 1, (self.h / 11) * 8
         canvas = self.win['canvas']
         self.create_background_image()
-        canvas.TKCanvas.create_polygon((p6, p7, p8, p9, p10), width=1, outline='grey', fill='#D8D8D8')
-        canvas.TKCanvas.create_polygon((p1, p5, p4, p3, p2), width=1, outline='grey', fill='#848484')
+        # canvas.TKCanvas.create_polygon((p6, p7, p8, p9, p10), width=1, outline='grey', fill='#D8D8D8')
+        # canvas.TKCanvas.create_polygon((p1, p5, p4, p3, p2), width=1, outline='grey', fill='#848484')
 
     def status_alert(self, mess_alert: str) -> None:
 
@@ -345,25 +344,25 @@ class Gui:
         self.__delete_polygons__(self.tenda_e, self.line2_e, self.line3_e, self.line4_e)
         self.__delete_polygons__(self.tenda_w, self.line2_w, self.line3_w, self.line4_w)
 
-        self.tenda_e, self.line2_e, self.line3_e, self.line4_e = self.__create_curtain_polygon__(alpha_e, "E")
-        self.tenda_w, self.line2_w, self.line3_w, self.line4_w = self.__create_curtain_polygon__(alpha_w, "W")
+        # self.tenda_e, self.line2_e, self.line3_e, self.line4_e = self.__create_curtain_polygon__(alpha_e, "E")
+        # self.tenda_w, self.line2_w, self.line3_w, self.line4_w = self.__create_curtain_polygon__(alpha_w, "W")
 
     def __delete_polygons__(self, *polygons_and_lines) -> None:
         canvas = self.win['canvas']
-        for polygon in polygons_and_lines:
-            canvas.TKCanvas.delete(polygon)
+        # for polygon in polygons_and_lines:
+        #     canvas.TKCanvas.delete(polygon)
 
     def __create_curtain_polygon__(self, alpha: int, orientation: str) -> tuple:
         pt, pt1, pt2, pt3, pt4, pt5 = self.__create_polygon_coordinates__(alpha, orientation)
 
         canvas = self.win['canvas']
 
-        return (
-                canvas.TKCanvas.create_polygon((pt, pt1, pt2, pt3, pt4, pt5), width=1, outline='#E0F8F7', fill='#0B4C5F'),
-                canvas.TKCanvas.create_line((pt, pt2), width=1, fill='#E0F8F7'),
-                canvas.TKCanvas.create_line((pt, pt3), width=1, fill='#E0F8F7'),
-                canvas.TKCanvas.create_line((pt, pt4), width=1, fill='#E0F8F7')
-            )
+        # return (
+        #         canvas.TKCanvas.create_polygon((pt, pt1, pt2, pt3, pt4, pt5), width=1, outline='#E0F8F7', fill='#0B4C5F'),
+        #         canvas.TKCanvas.create_line((pt, pt2), width=1, fill='#E0F8F7'),
+        #         canvas.TKCanvas.create_line((pt, pt3), width=1, fill='#E0F8F7'),
+        #         canvas.TKCanvas.create_line((pt, pt4), width=1, fill='#E0F8F7')
+        #     )
 
     def __create_polygon_coordinates__(self, alpha: int, orientation: str) -> Tuple[Tuple[int, int], Tuple[int, int], Tuple[int, int], Tuple[int, int], Tuple[int, int], Tuple[int, int]]:
         angolo_min = self.alpha_min_conf * self.conv  # valore dell'inclinazione della base della tenda in radianti
