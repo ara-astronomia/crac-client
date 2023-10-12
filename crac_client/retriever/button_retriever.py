@@ -18,7 +18,7 @@ import grpc
 class ButtonRetriever(Retriever):
     def __init__(self, converter: Converter) -> None:
         super().__init__(converter)
-        self.channel = grpc.insecure_channel(f'{Config.getValue("ip", "server")}:{Config.getValue("port", "server")}')
+        self.channel = grpc.aio.insecure_channel(f'{Config.getValue("ip", "server")}:{Config.getValue("port", "server")}')
         self.client = ButtonStub(self.channel)
 
     key_to_button_type_conversion = {
@@ -32,9 +32,9 @@ class ButtonRetriever(Retriever):
         if key is ButtonKey.KEY_DOME_LIGHT and g_ui:
             g_ui.set_autolight(False)
         request = ButtonRequest(action=ButtonAction.Value(action), type=ButtonRetriever.key_to_button_type_conversion[key])
-        call_future = self.client.SetAction.future(request, wait_for_ready=True)
-        call_future.add_done_callback(self.callback)
+        response = await self.client.SetAction(request, wait_for_ready=True)
+        self.converter.convert(response)
 
     async def getStatus(self):
-        call_future = self.client.GetStatus.future(ButtonsRequest(), wait_for_ready=True)
-        call_future.add_done_callback(self.callback)
+        response = await self.client.GetStatus(ButtonsRequest(), wait_for_ready=True)
+        self.converter.convert(response)

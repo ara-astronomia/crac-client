@@ -8,17 +8,18 @@ from crac_protobuf.roof_pb2 import (
 )
 
 class RoofConverter(Converter):
-    def convert(self, response: RoofResponse, g_ui: Gui):
 
-        if g_ui is None:
+    def convert(self, response: RoofResponse):
+
+        if self.g_ui is None:
             return
 
         if response.status in (RoofStatus.ROOF_CLOSED, RoofStatus.ROOF_CLOSING, RoofStatus.ROOF_OPENING, RoofStatus.ROOF_ERROR):
-            g_ui.hide_background_image()
+            self.g_ui.hide_background_image()
         elif response.status is RoofStatus.ROOF_OPENED:
-            g_ui.show_background_image()
+            self.g_ui.show_background_image()
 
-        g_ui.win[response.button_gui.key](
+        self.g_ui.win[response.button_gui.key](
             _name(response.button_gui.label),
             disabled=response.button_gui.is_disabled,
             button_color=(
@@ -26,4 +27,4 @@ class RoofConverter(Converter):
                 response.button_gui.button_color.background_color
             )
         )
-        g_ui.win[response.button_gui.key].metadata = RoofAction.Name(response.button_gui.metadata)
+        self.g_ui.win[response.button_gui.key].metadata = RoofAction.Name(response.button_gui.metadata)

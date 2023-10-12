@@ -15,7 +15,7 @@ import grpc
 class CurtainsRetriever(Retriever):
     def __init__(self, converter: Converter) -> None:
         super().__init__(converter)
-        self.channel = grpc.insecure_channel(f'{Config.getValue("ip", "server")}:{Config.getValue("port", "server")}')
+        self.channel = grpc.aio.insecure_channel(f'{Config.getValue("ip", "server")}:{Config.getValue("port", "server")}')
         self.client = CurtainStub(self.channel)
 
     key_to_curtains_action_conversion = [
@@ -25,5 +25,5 @@ class CurtainsRetriever(Retriever):
 
     async def setAction(self, action: str):
         request = CurtainsRequest(action=CurtainsAction.Value(action))
-        call_future = self.client.SetAction.future(request, wait_for_ready=True)
-        call_future.add_done_callback(self.callback)
+        response = await self.client.SetAction(request, wait_for_ready=True)
+        self.converter.convert(response)

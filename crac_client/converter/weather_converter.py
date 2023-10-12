@@ -16,10 +16,10 @@ logger = logging.getLogger(__name__)
 
 
 class WeatherConverter(Converter):
-    def convert(self, response: WeatherResponse, g_ui: Gui):
+    def convert(self, response: WeatherResponse):
         logger.debug("weathter_converter")
         logger.debug(response)
-        if g_ui:
+        if self.g_ui:
             if len(response.charts) > 0:
                 charts = self.build_dict_from_chart_list(response.charts)
                 wind_speed_image = base64.b64encode(self.gauge(charts["weather.chart.wind"]))
@@ -28,17 +28,17 @@ class WeatherConverter(Converter):
                 humidity_image = base64.b64encode(self.gauge(charts["weather.chart.humidity"]))
                 rain_rate_image = base64.b64encode(self.gauge(charts["weather.chart.rain_rate"]))
                 barometer_image = base64.b64encode(self.gauge(charts["weather.chart.barometer"]))
-                g_ui.win["wind-speed"](data_base64=wind_speed_image)
-                g_ui.win["wind-gust-speed"](data_base64=wind_gust_speed_image)
-                g_ui.win["temperature"](data_base64=temperature_image)
-                g_ui.win["humidity"](data_base64=humidity_image)
-                g_ui.win["rain-rate"](data_base64=rain_rate_image)
-                g_ui.win["barometer"](data_base64=barometer_image)
+                self.g_ui.win["wind-speed"](data_base64=wind_speed_image)
+                self.g_ui.win["wind-gust-speed"](data_base64=wind_gust_speed_image)
+                self.g_ui.win["temperature"](data_base64=temperature_image)
+                self.g_ui.win["humidity"](data_base64=humidity_image)
+                self.g_ui.win["rain-rate"](data_base64=rain_rate_image)
+                self.g_ui.win["barometer"](data_base64=barometer_image)
                 barometer_trend = charts["weather.chart.barometer_trend"]
-                g_ui.win["barometer-trend"](self.check_barometer_trend(barometer_trend))
-                g_ui.win["barometer-trend-forecast"](self.check_barometer_trend_forecast(barometer_trend))
-                g_ui.win["weather-updated-at"](response.updated_at)
-                g_ui.win["weather-interval"](response.interval)
+                self.g_ui.win["barometer-trend"](self.check_barometer_trend(barometer_trend))
+                self.g_ui.win["barometer-trend-forecast"](self.check_barometer_trend_forecast(barometer_trend))
+                self.g_ui.win["weather-updated-at"](response.updated_at)
+                self.g_ui.win["weather-interval"](response.interval)
             alert = "CONDIZIONI METEO ADEGUATE"
             background_color = sg.theme_background_color()
             alert_background_color = "white"
@@ -56,16 +56,16 @@ class WeatherConverter(Converter):
                 background_color = "red"
                 alert_background_color = background_color
                 alert_text_color = "white"
-            g_ui.win["alert_meteo"](alert, background_color=alert_background_color, text_color=alert_text_color)
-            # g_ui.win['wind-speed'].ParentRowFrame.config(background=background_color)
-            # g_ui.win['wind-gust-speed'].ParentRowFrame.config(background=background_color)
-            # g_ui.win['temperature'].ParentRowFrame.config(background=background_color)
-            # g_ui.win['humidity'].ParentRowFrame.config(background=background_color)
-            # g_ui.win['rain-rate'].ParentRowFrame.config(background=background_color)
-            # g_ui.win['barometer'].ParentRowFrame.config(background=background_color)
-            # g_ui.win["weather_block"].Widget.config(background=background_color)
-            # g_ui.win["weather_block"].Widget.config(highlightbackground=alert_background_color)
-            # g_ui.win["weather_block"].Widget.config(highlightcolor=alert_text_color)
+            self.g_ui.win["alert_meteo"](alert, background_color=alert_background_color, text_color=alert_text_color)
+            # self.g_ui.win['wind-speed'].ParentRowFrame.config(background=background_color)
+            # self.g_ui.win['wind-gust-speed'].ParentRowFrame.config(background=background_color)
+            # self.g_ui.win['temperature'].ParentRowFrame.config(background=background_color)
+            # self.g_ui.win['humidity'].ParentRowFrame.config(background=background_color)
+            # self.g_ui.win['rain-rate'].ParentRowFrame.config(background=background_color)
+            # self.g_ui.win['barometer'].ParentRowFrame.config(background=background_color)
+            # self.g_ui.win["weather_block"].Widget.config(background=background_color)
+            # self.g_ui.win["weather_block"].Widget.config(highlightbackground=alert_background_color)
+            # self.g_ui.win["weather_block"].Widget.config(highlightcolor=alert_text_color)
 
     def gauge(self, chart: Chart):
         fig = go.Figure(

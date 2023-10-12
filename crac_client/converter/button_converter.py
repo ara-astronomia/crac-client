@@ -10,18 +10,18 @@ from crac_protobuf.button_pb2 import (
 
 
 class ButtonConverter(Converter):
-    def convert(self, response: ButtonResponse, g_ui: Gui):
+    def convert(self, response: ButtonResponse):
     
-        if g_ui is None:
+        if self.g_ui is None:
             return
 
         if isinstance(response, (ButtonResponse)):
-            self.button_convert(response, g_ui)
+            self.button_convert(response)
         elif isinstance(response, (ButtonsResponse)):
-            self.buttons_convert(response, g_ui)
+            self.buttons_convert(response)
         
-    def button_convert(self, response: ButtonsResponse, g_ui: Gui):
-        g_ui.win[response.button_gui.key](
+    def button_convert(self, response: ButtonsResponse):
+        self.g_ui.win[response.button_gui.key](
             _name(response.button_gui.label), 
             disabled=response.button_gui.is_disabled,
             button_color=(
@@ -29,8 +29,8 @@ class ButtonConverter(Converter):
                 response.button_gui.button_color.background_color
             )
         )
-        g_ui.win[response.button_gui.key].metadata = ButtonAction.Name(response.button_gui.metadata)
+        self.g_ui.win[response.button_gui.key].metadata = ButtonAction.Name(response.button_gui.metadata)
 
-    def buttons_convert(self, response: ButtonsResponse, g_ui: Gui):
+    def buttons_convert(self, response: ButtonsResponse):
         for button in response.buttons:
-            self.convert(button, g_ui)
+            self.convert(button)

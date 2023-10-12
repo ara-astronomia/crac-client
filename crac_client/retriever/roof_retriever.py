@@ -14,10 +14,10 @@ import grpc
 class RoofRetriever(Retriever):
     def __init__(self, converter: Converter) -> None:
         super().__init__(converter)
-        self.channel = grpc.insecure_channel(f'{Config.getValue("ip", "server")}:{Config.getValue("port", "server")}')
+        self.channel = grpc.aio.insecure_channel(f'{Config.getValue("ip", "server")}:{Config.getValue("port", "server")}')
         self.client = RoofStub(self.channel)
 
     async def setAction(self, action: str):
         request = RoofRequest(action=RoofAction.Value(action))
-        call_future = self.client.SetAction.future(request, wait_for_ready=True)
-        call_future.add_done_callback(self.callback)
+        response = await self.client.SetAction(request, wait_for_ready=True)
+        self.converter.convert(response)

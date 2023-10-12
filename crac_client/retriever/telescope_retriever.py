@@ -15,7 +15,7 @@ import grpc
 class TelescopeRetriever(Retriever):
     def __init__(self, converter: Converter) -> None:
         super().__init__(converter)
-        self.channel = grpc.insecure_channel(f'{Config.getValue("ip", "server")}:{Config.getValue("port", "server")}')
+        self.channel = grpc.aio.insecure_channel(f'{Config.getValue("ip", "server")}:{Config.getValue("port", "server")}')
         self.client = TelescopeStub(self.channel)
 
     key_to_telescope_action_conversion = (
@@ -27,5 +27,5 @@ class TelescopeRetriever(Retriever):
 
     async def setAction(self, action: str, autolight: bool):
         request = TelescopeRequest(action=TelescopeAction.Value(action), autolight=autolight)
-        call_future = self.client.SetAction.future(request, wait_for_ready=True)
-        call_future.add_done_callback(self.callback)
+        response = await self.client.SetAction(request, wait_for_ready=True)
+        self.converter.convert(response)

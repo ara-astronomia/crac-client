@@ -25,43 +25,41 @@ from queue import Empty
 
 logger = logging.getLogger(__name__)
 
-
-async def deque(g_ui: gui.Gui):
-        while JOBS.qsize() > 0:
-            logger.debug(f"there are {JOBS.qsize()} jobs")
-            try:
-                job = JOBS.get()
-            except Empty as e:
-                logger.error("The queue is empty", exc_info=1)
-            else:
-                job['convert'](job['response'], g_ui)
-
 async def main_loop():
-
     g_ui = gui.Gui()
-    roof_retriever = RoofRetriever(RoofConverter())
-    button_retriever = ButtonRetriever(ButtonConverter())
-    telescope_retriever = TelescopeRetriever(TelescopeConverter())
-    curtains_retriever = CurtainsRetriever(CurtainsConverter())
-    weather_retriever = WeatherRetriever(WeatherConverter())
+    roof_retriever = RoofRetriever(RoofConverter(g_ui))
+    button_retriever = ButtonRetriever(ButtonConverter(g_ui))
+    telescope_retriever = TelescopeRetriever(TelescopeConverter(g_ui))
+    curtains_retriever = CurtainsRetriever(CurtainsConverter(g_ui))
+    weather_retriever = WeatherRetriever(WeatherConverter(g_ui))
+    background_tasks = set()
 
     while True:
         timeout = config.Config.getInt("sleep", "automazione")
         v, _ = g_ui.win.Read(timeout=timeout) # type: ignore
         logger.debug(f"Premuto pulsante: {v}")
+        loop = asyncio.get_event_loop()
         match v:
             case v if v in [None, GuiKey.EXIT, GuiKey.SHUTDOWN]:
                 g_ui = None
                 await telescope_retriever.setAction(action=TelescopeAction.Name(TelescopeAction.TELESCOPE_DISCONNECT), autolight=False)
                 break
             case ButtonKey.KEY_ROOF:
-                await roof_retriever.setAction(action=g_ui.win[v].metadata)
+                task = loop.create_task(roof_retriever.setAction(action=g_ui.win[v].metadata)) 
+                background_tasks.add(task)
+                task.add_done_callback(background_tasks.discard)
             case v if v in ButtonRetriever.key_to_button_type_conversion.keys():
-                await button_retriever.setAction(action=g_ui.win[v].metadata, key=v, g_ui=g_ui)
+                task = loop.create_task(button_retriever.setAction(action=g_ui.win[v].metadata, key=v, g_ui=g_ui))
+                background_tasks.add(task)
+                task.add_done_callback(background_tasks.discard)
             case v if v in TelescopeRetriever.key_to_telescope_action_conversion:
-                await telescope_retriever.setAction(action=g_ui.win[v].metadata, autolight=g_ui.is_autolight())
+                task = loop.create_task(telescope_retriever.setAction(action=g_ui.win[v].metadata, autolight=g_ui.is_autolight()))
+                background_tasks.add(task)
+                task.add_done_callback(background_tasks.discard)
             case v if v in CurtainsRetriever.key_to_curtains_action_conversion:
-                await curtains_retriever.setAction(action=g_ui.win[v].metadata)
+                task = loop.create_task(curtains_retriever.setAction(action=g_ui.win[v].metadata))
+                background_tasks.add(task)
+                task.add_done_callback(background_tasks.discard)
             case _:
                 await asyncio.gather(
                     roof_retriever.setAction(action=RoofAction.Name(RoofAction.CHECK_ROOF)),
@@ -70,7 +68,6 @@ async def main_loop():
                     button_retriever.getStatus(),
                     weather_retriever.getStatus(g_ui.win["weather-updated-at"].get(), g_ui.win["weather-interval"].get())
                 )
+        
                 
-        await deque(g_ui)
-
 asyncio.run(main_loop())
