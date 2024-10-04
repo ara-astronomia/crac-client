@@ -3,9 +3,14 @@ Client for connection to crac-server via gRPC
 
 # Pre-requisite
 
+``` linux
 sudo apt install python3-tk
+```
+or 
 
-sudo apt install libopencv-dev python3-opencv
+``` mac
+brew install python-tk
+```
 
 # Install Dependencies and Configure environment
 
