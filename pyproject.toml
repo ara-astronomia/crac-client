@@ -7,7 +7,7 @@ license = "GPL3"
 
 [tool.poetry.dependencies]
 python = "^3.10"
-crac-protobuf = { git = "https://github.com/ara-astronomia/crac-protobuf", tag="0.1.22.0" }
+crac-protobuf = { git = "https://github.com/ara-astronomia/crac-protobuf", branch="implement_airmass_and_transit" }
 grpcio-tools = "^1.43.0"
 Flask = "^2.0.3"
 opencv-python = "^4.5.5"
