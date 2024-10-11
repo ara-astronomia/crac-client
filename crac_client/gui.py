@@ -193,6 +193,41 @@ class Gui:
             [sg.Text("        ", background_color='#000098'), sg.Image("images/logo_ara.png")]    
         ]
 
+        block_dati_tele = [
+            [sg.Text("Transito e Airmass", font=FONT)],
+            [
+                sg.Column(layout=[
+                    [
+                        sg.Frame(
+                            layout=[
+                                [
+                                    sg.Column(layout=(
+                                        [sg.Text('Ora del transito', size=(15, 1), justification='center', font=("Helvetica", 12), pad=((0, 0), (10, 0)))],
+                                        [sg.Text('0', size=(15, 1), justification='right', font=("Helvetica", 12), key='transit', background_color="white", text_color="#2c2825", pad=(0, 0))],
+                                        [sg.Text('Ore al transito', size=(15, 1), justification='center', font=("Helvetica", 12), pad=((0, 0), (10, 0)))],
+                                        [sg.Text('0', size=(15, 1), justification='right', font=("Helvetica", 12), key='time_to_transit', background_color="white", text_color="#2c2825", pad=((0, 0), (0, 0)))]
+                                    ), vertical_alignment='center', element_justification='center')
+                                ]
+                            ],
+                            title='Transito', relief=sg.RELIEF_GROOVE, pad=(10, 15), font=FONT_FRAME
+                        )
+                    ],
+                    [
+                        sg.Frame(
+                            layout=[
+                                [
+                                    sg.Column(layout=(
+                                        [sg.Text('Airmass attuale', size=(15, 1), justification='center', font=("Helvetica", 12), pad=((0, 0), (10, 0)))],
+                                        [sg.Text('0', size=(15, 1), justification='right', font=("Helvetica", 12), key='airmass', background_color="white", text_color="#2c2825", pad=(0, 0))]
+                                    ), vertical_alignment='center', element_justification='center')
+                                ]
+                            ],
+                            title='Airmass', relief=sg.RELIEF_GROOVE, pad=(10, 15), font=FONT_FRAME
+                        )
+                    ]
+                ], element_justification='left', pad=(0, 0))
+            ]
+        ]
         layout = [
             [sg.Column(block_3T, size=(720, 90), pad=PAD), sg.Column(block_logo_ara, size=(190, 90), background_color='#000098')],
 
@@ -201,7 +236,7 @@ class Gui:
                     [sg.Column(block_alimentatori, size=(555, 90), pad=PAD_LEFT_INSIDE)],
                     [sg.Column(block_stato_tende, size=(555, 300), pad=PAD_LEFT_INSIDE)]
                 ], background_color=BORDER_COLOR),
-                sg.Column([], size=(352, 394), pad=PAD_LEFT_INSIDE)
+                sg.Column(block_dati_tele, size=(352, 394), pad=PAD_LEFT_INSIDE)
             ],
             [sg.Column(block_stato_crac, size=(574, 150), pad=PAD_LEFT_INSIDE), sg.Column(block_alim, size=(336, 150))],
             [sg.Column(block_meteo, size=(916, 200), pad=PAD_LEFT_INSIDE)]
@@ -296,6 +331,17 @@ class Gui:
 
         self.win['alt'].Update(altitude)
         self.win['az'].Update(azimuth)
+
+    def update_transit_airmass(self, transit_airmass: Dict[str, str]) -> None:
+
+        """ Update transit & airmass telescope """
+
+        transit = float(transit_airmass["transit"])
+        time_to_transit = float(transit_airmass["time_to_transit"])
+        airmass = float(transit_airmass["airmass"])
+        self.win['transit'].Update(transit)
+        self.win['time_to_transit'].Update(time_to_transit)
+        self.win['airmass'].Update(airmass)
 
     def update_status_curtain(self, orientation, status, text_color: str = 'white', background_color: str = 'red') -> None:
 
