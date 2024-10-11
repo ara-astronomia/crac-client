@@ -333,15 +333,19 @@ class Gui:
         self.win['az'].Update(azimuth)
 
     def update_transit_airmass(self, transit_airmass: Dict[str, str]) -> None:
-
+        
         """ Update transit & airmass telescope """
-
-        transit = float(transit_airmass["transit"])
-        time_to_transit = float(transit_airmass["time_to_transit"])
-        airmass = float(transit_airmass["airmass"])
+        
+        print(type(transit_airmass))
+        print(transit_airmass['transit'])
+        print(type(transit_airmass['transit']))
+        transit = (transit_airmass["transit"])
+        time_to_transit = (transit_airmass["time_to_transit"])
+        airmass = (transit_airmass["airmass"])
         self.win['transit'].Update(transit)
         self.win['time_to_transit'].Update(time_to_transit)
         self.win['airmass'].Update(airmass)
+
 
     def update_status_curtain(self, orientation, status, text_color: str = 'white', background_color: str = 'red') -> None:
 
