@@ -335,13 +335,26 @@ class Gui:
     def update_transit_airmass(self, transit_airmass: Dict[str, str]) -> None:
         
         """ Update transit & airmass telescope """
-        
-        print(type(transit_airmass))
-        print(transit_airmass['transit'])
-        print(type(transit_airmass['transit']))
+
+        #print(type(transit_airmass['transit']))
+        #print(f"valore di transit: {transit_airmass['transit']}")
+        #print(type(transit_airmass['time_to_transit']))
+        #rint(f"valore di transit_airmass: {transit_airmass['time_to_transit']}")
+        #print(type(transit_airmass['airmass']))
+        #print(f"valore di arimass: {transit_airmass['airmass']}")
         transit = (transit_airmass["transit"])
-        time_to_transit = (transit_airmass["time_to_transit"])
+        time_to_transit =  (transit_airmass["time_to_transit"])
         airmass = (transit_airmass["airmass"])
+        if transit :
+            print(f"valore di airmass:{airmass}")
+        else:
+            print("pippo")
+        if airmass :
+            print(transit_airmass["airmass"])
+        else:
+            print("non c'e airmass")
+
+
         self.win['transit'].Update(transit)
         self.win['time_to_transit'].Update(time_to_transit)
         self.win['airmass'].Update(airmass)
