@@ -194,7 +194,7 @@ class Gui:
         ]
 
         block_dati_tele = [
-            [sg.Text("Transito e Airmass", font=FONT)],
+            
             [
                 sg.Column(layout=[
                     [
@@ -203,11 +203,11 @@ class Gui:
                                 [
                                     sg.Column(layout=(
                                         [sg.Text('Airmass attuale', size=(15, 1), justification='center', font=("Helvetica", 12), pad=((0, 0), (13, 0)))],
-                                        [sg.Text('0', size=(20, 1), justification='right', font=("Helvetica", 10), key='airmass', background_color="white", text_color="#2c2825", pad=(0, 0))]
+                                        [sg.Text('0', size=(20, 1), justification='center', font=("Helvetica", 10), key='airmass', background_color="white", text_color="#2c2825", pad=(0, 0))]
                                     ), vertical_alignment='center', element_justification='center')
                                 ]
                             ],
-                            title='Airmass', relief=sg.RELIEF_GROOVE, pad=(10, 15), font=FONT_FRAME
+                            title='',element_justification='center', relief=sg.RELIEF_GROOVE, pad=(10, 15), font=FONT_FRAME
                         )
                     ]
                 ], element_justification='left', pad=(0, 0))
