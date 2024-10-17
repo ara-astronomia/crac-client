@@ -202,10 +202,10 @@ class Gui:
                             layout=[
                                 [
                                     sg.Column(layout=(
-                                        [sg.Text('Ora del transito', size=(15, 1), justification='center', font=("Helvetica", 12), pad=((0, 0), (10, 0)))],
-                                        [sg.Text('0', size=(15, 1), justification='right', font=("Helvetica", 12), key='transit', background_color="white", text_color="#2c2825", pad=(0, 0))],
-                                        [sg.Text('Ore al transito', size=(15, 1), justification='center', font=("Helvetica", 12), pad=((0, 0), (10, 0)))],
-                                        [sg.Text('0', size=(15, 1), justification='right', font=("Helvetica", 12), key='time_to_transit', background_color="white", text_color="#2c2825", pad=((0, 0), (0, 0)))]
+                                        [sg.Text('Ora del transito', size=(15, 1), justification='center', font=("Helvetica", 12), pad=((0, 0), (13, 0)))],
+                                        [sg.Text('0', size=(20, 1), justification='right', font=("Helvetica", 10), key='transit', background_color="white", text_color="#2c2825", pad=(0, 0))],
+                                        [sg.Text('Ore al transito', size=(15, 1), justification='center', font=("Helvetica", 12), pad=((0, 0), (13, 0)))],
+                                        [sg.Text('0', size=(20, 1), justification='right', font=("Helvetica", 10), key='time_to_transit', background_color="white", text_color="#2c2825", pad=((0, 0), (0, 0)))]
                                     ), vertical_alignment='center', element_justification='center')
                                 ]
                             ],
@@ -217,8 +217,8 @@ class Gui:
                             layout=[
                                 [
                                     sg.Column(layout=(
-                                        [sg.Text('Airmass attuale', size=(15, 1), justification='center', font=("Helvetica", 12), pad=((0, 0), (10, 0)))],
-                                        [sg.Text('0', size=(15, 1), justification='right', font=("Helvetica", 12), key='airmass', background_color="white", text_color="#2c2825", pad=(0, 0))]
+                                        [sg.Text('Airmass attuale', size=(15, 1), justification='center', font=("Helvetica", 12), pad=((0, 0), (13, 0)))],
+                                        [sg.Text('0', size=(20, 1), justification='right', font=("Helvetica", 10), key='airmass', background_color="white", text_color="#2c2825", pad=(0, 0))]
                                     ), vertical_alignment='center', element_justification='center')
                                 ]
                             ],
@@ -335,25 +335,11 @@ class Gui:
     def update_transit_airmass(self, transit_airmass: Dict[str, str]) -> None:
         
         """ Update transit & airmass telescope """
-
-        #print(type(transit_airmass['transit']))
-        #print(f"valore di transit: {transit_airmass['transit']}")
-        #print(type(transit_airmass['time_to_transit']))
-        #rint(f"valore di transit_airmass: {transit_airmass['time_to_transit']}")
-        #print(type(transit_airmass['airmass']))
-        #print(f"valore di arimass: {transit_airmass['airmass']}")
         transit = (transit_airmass["transit"])
         time_to_transit =  (transit_airmass["time_to_transit"])
         airmass = (transit_airmass["airmass"])
-        if transit :
-            print(f"valore di airmass:{airmass}")
-        else:
-            print("pippo")
-        if airmass :
-            print(transit_airmass["airmass"])
-        else:
-            print("non c'e airmass")
-
+        print(f"valore di airmass:{airmass}")
+        print(f"valore del transit time: {transit}")
 
         self.win['transit'].Update(transit)
         self.win['time_to_transit'].Update(time_to_transit)

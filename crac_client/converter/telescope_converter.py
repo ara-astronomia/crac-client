@@ -61,10 +61,9 @@ class TelescopeConverter(Converter):
             g_ui.win[button_gui.key].metadata = TelescopeAction.Name(button_gui.metadata)
 
         logger.debug(f"Altaz coords: {response.aa_coords}")
-        logger.debug(f"Airmass: {response.airmass}")
-        #logger.debug(f"Transit: {response.transit}")
-        #logger.debug(f"Time To Transit: {response.time_to_transit}")
+        print(f"Airmass: {response.airmass}")
+        logger.debug(f"Transit: {response.transit}")
+        logger.debug(f"Time To Transit: {response.time_to_transit}")
         logger.debug(f"coords alt: {response.aa_coords.alt}")
         g_ui.update_tele_text({"alt": response.aa_coords.alt, "az": response.aa_coords.az})
         g_ui.update_transit_airmass({"transit": response.transit, "time_to_transit":response.time_to_transit, "airmass": response.airmass})
-        #g_ui.update_transit_airmass({"airmass": response.airmass})
