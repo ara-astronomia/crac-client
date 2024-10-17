@@ -66,4 +66,4 @@ class TelescopeConverter(Converter):
         logger.debug(f"Time To Transit: {response.time_to_transit}")
         logger.debug(f"coords alt: {response.aa_coords.alt}")
         g_ui.update_tele_text({"alt": response.aa_coords.alt, "az": response.aa_coords.az})
-        g_ui.update_transit_airmass({"transit": response.transit, "time_to_transit":response.time_to_transit, "airmass": response.airmass})
+        g_ui.update_airmass({"airmass": response.airmass})
