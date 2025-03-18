@@ -7,14 +7,13 @@ from crac_protobuf.roof_pb2 import (
     RoofAction,
 )
 
-
 class RoofConverter(Converter):
     def convert(self, response: RoofResponse, g_ui: Gui):
 
         if g_ui is None:
             return
 
-        if response.status in (RoofStatus.ROOF_CLOSED, RoofStatus.ROOF_CLOSING, RoofStatus.ROOF_OPENING):
+        if response.status in (RoofStatus.ROOF_CLOSED, RoofStatus.ROOF_CLOSING, RoofStatus.ROOF_OPENING, RoofStatus.ROOF_ERROR):
             g_ui.hide_background_image()
         elif response.status is RoofStatus.ROOF_OPENED:
             g_ui.show_background_image()

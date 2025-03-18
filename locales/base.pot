@@ -75,3 +75,6 @@ msgstr ""
 
 msgid "LABEL_CAMERA_IR_DISABLED"
 msgstr ""
+
+msgid "LABEL_ERROR"
+msgstr ""
