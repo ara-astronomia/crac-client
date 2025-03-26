@@ -1,7 +1,7 @@
 import logging
 import base64
 import plotly.graph_objects as go
-import PySimpleGUI as sg
+import FreeSimpleGUI as sg
 from crac_client.converter import build_dict_from_chart_list
 from crac_client.converter.converter import Converter
 from crac_client.gui import Gui

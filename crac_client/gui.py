@@ -8,7 +8,7 @@ from crac_client.loc import _name
 from gui_constants import GuiLabel
 import logging
 import math
-import PySimpleGUI as sg  # type: ignore
+import FreeSimpleGUI as sg  # type: ignore
 from tkinter import PhotoImage, NW
 from typing import Tuple
 from typing import Dict

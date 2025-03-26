@@ -1,5 +1,5 @@
 import logging
-from crac_client.converter import build_dict_from_chart_list
+from crac_client.converter import build_dict_from_ups_chart_list
 from crac_client.converter.converter import Converter
 from crac_client.gui import Gui
 from crac_protobuf.chart_pb2 import (
@@ -9,7 +9,7 @@ from crac_protobuf.chart_pb2 import (
 from crac_protobuf.ups_pb2 import (
     UpsResponse,
 )
-import PySimpleGUI as sg
+import FreeSimpleGUI as sg
 
 
 logger = logging.getLogger(__name__)
@@ -20,11 +20,11 @@ class UpsConverter(Converter):
         logger.debug("weathter_converter")
         logger.debug(response)
         if g_ui and len(response.charts) > 0:
-            charts = build_dict_from_chart_list(response.charts)
-            self.update_progress_bar(g_ui.win, '_OUT-BATT-ROOM_', '_PERCENT-BATT-ROOM_', charts["ups.apc-3000.chart.battery"])
-            self.update_progress_bar(g_ui.win, '_OUT-BATT-CUPOLA_', '_PERCENT-BATT-CUPOLA_', charts["ups.tecnoware-1000.chart.battery"])
-            self.update_progress_bar(g_ui.win, '_OUT-VOLT-ROOM_', '_VOLT-ROOM_' , charts["ups.apc-3000.chart.voltage"])
-            self.update_progress_bar(g_ui.win, '_OUT-VOLT-CUPOLA_', '_VOLT-CUPOLA_', charts["ups.tecnoware-1000.chart.voltage"])
+            charts = build_dict_from_ups_chart_list(response.charts)
+            #self.update_progress_bar(g_ui.win, '_OUT-BATT-ROOM_', '_PERCENT-BATT-ROOM_', charts["ups.apc-3000.chart.battery"])
+            self.update_progress_bar(g_ui.win, '_OUT-BATT-CUPOLA_', '_PERCENT-BATT-CUPOLA_', charts["ups.tecnoware.chart.battery"])
+            #self.update_progress_bar(g_ui.win, '_OUT-VOLT-ROOM_', '_VOLT-ROOM_' , charts["ups.apc-3000.chart.voltage"])
+            self.update_progress_bar(g_ui.win, '_OUT-VOLT-CUPOLA_', '_VOLT-CUPOLA_', charts["ups.tecnoware.chart.voltage"])
             g_ui.win['ups-updated-at'](response.updated_at)
             g_ui.win['ups-interval'](response.interval)
                 
