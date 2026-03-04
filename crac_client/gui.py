@@ -71,7 +71,7 @@ class Gui:
         FONT_FRAME = ('Helvetica', 12)
         FONT_BUTTON = ('Helvetica', 10)
         FONT_TEXT = ('Helvetica', 12)
-        SIZE_GAUGE = (20, 20)
+        SIZE_GAUGE = (150, 150)
         FONT_BUTTON_CAM=("Helvetica", 8)
         
         block_3T = [
@@ -170,16 +170,18 @@ class Gui:
                     [sg.In(key='weather-updated-at', visible=False)],
                     [sg.In(key='weather-interval', visible=False)],
                     [
-                        sg.Text('Vento', font=FONT_TEXT), sg.Text('N/A', key="wind-speed", size=(10, 1), background_color="white", text_color="black", justification='center'),
-                        sg.Text('Raffica', font=FONT_TEXT), sg.Text('N/A', key="wind-gust-speed", size=(10, 1), background_color="white", text_color="black", justification='center'),
-                        sg.Text('Temp.', font=FONT_TEXT), sg.Text('N/A', key="temperature", size=(10, 1), background_color="white", text_color="black", justification='center'),
-                        sg.Text('Umidità', font=FONT_TEXT), sg.Text('N/A', key="humidity", size=(10, 1), background_color="white", text_color="black", justification='center'),
-                        sg.Text('Pioggia', font=FONT_TEXT), sg.Text('N/A', key="rain-rate", size=(10, 1), background_color="white", text_color="black", justification='center'),
-                        sg.Text('Barom.', font=FONT_TEXT), sg.Text('N/A', key="barometer", size=(10, 1), background_color="white", text_color="black", justification='center'),
+                        sg.Image(key="wind-speed", expand_x=True, expand_y=True, size=SIZE_GAUGE),
+                        sg.Image(key="wind-gust-speed", expand_x=True, expand_y=True, size=SIZE_GAUGE),
+                        sg.Image(key="temperature", expand_x=True, expand_y=True, size=SIZE_GAUGE),
                     ],
-                ]), title="", expand_x=True, expand_y=True, key="weather_block", font=FONT_FRAME, relief=sg.RELIEF_FLAT)
+                    [
+                        sg.Image(key="humidity", expand_x=True, expand_y=True, size=SIZE_GAUGE),
+                        sg.Image(key="rain-rate", expand_x=True, expand_y=True, size=SIZE_GAUGE),
+                        sg.Image(key="barometer", expand_x=True, expand_y=True, size=SIZE_GAUGE),
+                    ],
+                ]), title="", key="weather_block", font=FONT_FRAME, relief=sg.RELIEF_GROOVE)
             ],
-            [sg.Text('IN AGGIORNAMENTO', size=(50, 1), justification='center', background_color="red", font=FONT_TEXT, text_color="white", key='alert_meteo',  pad=((230, 0), (10, 0)))]
+            [sg.Text('IN AGGIORNAMENTO', size=(50, 1), justification='center', background_color="red", font=FONT_TEXT, text_color="white", key='alert_meteo')]
         ]
 
         block_alim = [
@@ -201,20 +203,23 @@ class Gui:
         ]
 
         layout = [
-            [sg.Column(block_3T, size=(720, 90), pad=PAD), sg.Column(block_logo_ara, size=(190, 90), background_color='#000098')],
+            [sg.Column(block_3T, pad=PAD), sg.Column(block_logo_ara, background_color='#000098')],
 
-            [sg.Column(
-                [
-                    [sg.Column(block_alimentatori, size=(569, 90), pad=PAD_LEFT_INSIDE)],
-                    [sg.Column(block_stato_tende, size=(569, 300), pad=PAD_LEFT_INSIDE)]
+            [
+                sg.Column([
+                    [sg.Column(block_alimentatori, pad=PAD_LEFT_INSIDE)],
+                    [sg.Column(block_stato_tende, pad=PAD_LEFT_INSIDE)],
+                    [sg.Column(block_stato_crac, pad=PAD_LEFT_INSIDE)]
                 ], background_color=BORDER_COLOR),
-                sg.Column([], size=(352, 394), pad=PAD_LEFT_INSIDE)
+                
+                sg.Column([
+                    [sg.Column(block_meteo, key='-METEO-COLUMN-')],
+                    [sg.Column(block_alim)]
+                ])
             ],
-            [sg.Column(block_stato_crac, size=(574, 170), pad=PAD_LEFT_INSIDE), sg.Column(block_alim, size=(336, 180))],
-            [sg.Column(block_meteo, size=(916, 200), pad=PAD_LEFT_INSIDE)]
         ]
         
-        self.win = sg.Window('CRaC -- Control Roof and Curtains by ARA', layout, margins=(5, 5), background_color=BORDER_COLOR, grab_anywhere=True, finalize=True)
+        self.win = sg.Window('CRaC -- Control Roof and Curtains by ARA', layout, margins=(5, 5), background_color=BORDER_COLOR, grab_anywhere=True, finalize=True, resizable=True)
         self.base_draw()
         
         #self.update_progress_bar() #just for preview

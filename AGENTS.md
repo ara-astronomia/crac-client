@@ -18,13 +18,10 @@ CRAC Client is a desktop application providing a Graphical User Interface (GUI) 
 ## 2. Commands (using uv)
 
 ### Execution
-**CRITICAL**: The application MUST be run from the `crac_client/` directory to ensure relative paths for configurations and translations work correctly.
+**CRITICAL**: The application MUST be run from the `crac_client/` directory to ensure relative paths for `logging.conf`, configurations, and translations work correctly.
 
 ```bash
-# Navigate to the source folder
 cd crac_client
-
-# Start the GUI
 uv run python app.py
 ```
 

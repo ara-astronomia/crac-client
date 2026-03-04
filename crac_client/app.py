@@ -23,7 +23,7 @@ from crac_protobuf.roof_pb2 import RoofAction
 from crac_protobuf.telescope_pb2 import TelescopeAction
 from queue import Empty
 from sys import platform
-from time import sleep
+from time import sleep, time
 from typing import Union
 
 
@@ -41,14 +41,19 @@ def blocking_deque():
 
 
 def deque():
-    while JOBS.qsize() > 0:
-        logger.debug(f"there are {JOBS.qsize()} jobs")
-        try:
-            job = JOBS.get()
-        except Empty as e:
-            logger.error("The queue is empty", exc_info=1)
-        else:
-            job['convert'](job['response'], g_ui)
+    if JOBS.qsize() > 0:
+        logger.debug(f"Processamento di {JOBS.qsize()} lavori in coda...")
+        while JOBS.qsize() > 0:
+            try:
+                job = JOBS.get()
+                logger.debug(f"Esecuzione converter per {job['response'].__class__.__name__}")
+                job['convert'](job['response'], g_ui)
+            except Empty as e:
+                logger.error("The queue is empty", exc_info=1)
+        
+        # Forza il refresh della finestra Tkinter
+        if g_ui and g_ui.win:
+            g_ui.win.refresh()
 
 import grpc
 
@@ -61,11 +66,16 @@ curtains_retriever = CurtainsRetriever(CurtainsConverter(), channel=channel)
 ups_retriever = UpsRetriever(UpsConverter(), channel=channel)
 weather_retriever = WeatherRetriever(WeatherConverter(), channel=channel)
 weather_retriever.getStatus(g_ui.win["weather-updated-at"].get(), g_ui.win["weather-interval"].get())
-blocking_deque()
+# blocking_deque()  <-- Rimosso per evitare il freeze di 10s all'avvio
+
+last_auto_polling = 0
 
 while True:
     timeout = config.Config.getInt("sleep", "automazione")
-    v, _ = g_ui.win.Read(timeout=timeout) # type: ignore    logger.debug(f"Premuto pulsante: {v}")
+    v, _ = g_ui.win.Read(timeout=timeout) # type: ignore
+    
+    now = time()
+    
     match v:
         case v if v in [None, GuiKey.EXIT, GuiKey.SHUTDOWN]:
             g_ui = None
@@ -80,11 +90,15 @@ while True:
         case v if v in CurtainsRetriever.key_to_curtains_action_conversion:
             curtains_retriever.setAction(action=g_ui.win[v].metadata)
         case _:
-            weather_retriever.getStatus(g_ui.win["weather-updated-at"].get(), g_ui.win["weather-interval"].get())
-            ups_retriever.getStatus("", "")
-            roof_retriever.setAction(action=RoofAction.Name(RoofAction.CHECK_ROOF))
-            telescope_retriever.setAction(action=TelescopeAction.Name(TelescopeAction.CHECK_TELESCOPE), autolight=g_ui.is_autolight())
-            curtains_retriever.setAction(action=CurtainsAction.Name(CurtainsAction.CHECK_CURTAIN))
-            button_retriever.getStatus()
+            # Esegui il polling automatico solo ogni 5 secondi, non ad ogni iterazione del loop
+            if now - last_auto_polling > 5:
+                logger.debug("Esecuzione polling automatico (5s)")
+                weather_retriever.getStatus(g_ui.win["weather-updated-at"].get(), g_ui.win["weather-interval"].get())
+                ups_retriever.getStatus("", "")
+                roof_retriever.setAction(action=RoofAction.Name(RoofAction.CHECK_ROOF))
+                telescope_retriever.setAction(action=TelescopeAction.Name(TelescopeAction.CHECK_TELESCOPE), autolight=g_ui.is_autolight())
+                curtains_retriever.setAction(action=CurtainsAction.Name(CurtainsAction.CHECK_CURTAIN))
+                button_retriever.getStatus()
+                last_auto_polling = now
             
     deque()
