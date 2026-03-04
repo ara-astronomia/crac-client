@@ -19,28 +19,42 @@ logger = logging.getLogger(__name__)
 
 class WeatherConverter(Converter):
     def convert(self, response: WeatherResponse, g_ui: Gui):
-        logger.debug("weathter_converter")
+        logger.debug("weather_converter")
         logger.debug(response)
         if g_ui:
             if len(response.charts) > 0:
                 charts = build_dict_from_chart_list(response.charts)
-                wind_speed_image = base64.b64encode(self.gauge(charts["weather.chart.wind"]))
-                wind_gust_speed_image = base64.b64encode(self.gauge(charts["weather.chart.wind_gust"]))
-                temperature_image = base64.b64encode(self.gauge(charts["weather.chart.temperature"]))
-                humidity_image = base64.b64encode(self.gauge(charts["weather.chart.humidity"]))
-                rain_rate_image = base64.b64encode(self.gauge(charts["weather.chart.rain_rate"]))
-                barometer_image = base64.b64encode(self.gauge(charts["weather.chart.barometer"]))
-                g_ui.win["wind-speed"](source=wind_speed_image)
-                g_ui.win["wind-gust-speed"](source=wind_gust_speed_image)
-                g_ui.win["temperature"](source=temperature_image)
-                g_ui.win["humidity"](source=humidity_image)
-                g_ui.win["rain-rate"](source=rain_rate_image)
-                g_ui.win["barometer"](source=barometer_image)
-                barometer_trend = charts["weather.chart.barometer_trend"]
-                g_ui.win["barometer-trend"](self.check_barometer_trend(barometer_trend))
-                g_ui.win["barometer-trend-forecast"](self.check_barometer_trend_forecast(barometer_trend))
+                
+                # Mappa tra URN dei grafici e chiavi dei widget GUI
+                chart_mapping = {
+                    "weather.chart.wind": "wind-speed",
+                    "weather.chart.wind_gust": "wind-gust-speed",
+                    "weather.chart.temperature": "temperature",
+                    "weather.chart.humidity": "humidity",
+                    "weather.chart.rain_rate": "rain-rate",
+                    "weather.chart.barometer": "barometer"
+                }
+
+                for urn, gui_key in chart_mapping.items():
+                    if urn in charts:
+                        try:
+                            image_data = base64.b64encode(self.gauge(charts[urn]))
+                            g_ui.win[gui_key](source=image_data)
+                        except Exception as e:
+                            logger.error(f"Errore nella generazione della gauge per {urn}: {e}")
+                    else:
+                        logger.warning(f"Grafico {urn} mancante nella risposta (probabilmente N/A)")
+                        # Opzionale: pulire il widget o mettere un'immagine di placeholder "N/A"
+                
+                # Gestione speciale per il trend del barometro (testo invece di gauge)
+                if "weather.chart.barometer_trend" in charts:
+                    barometer_trend = charts["weather.chart.barometer_trend"]
+                    g_ui.win["barometer-trend"](self.check_barometer_trend(barometer_trend))
+                    g_ui.win["barometer-trend-forecast"](self.check_barometer_trend_forecast(barometer_trend))
+                
                 g_ui.win["weather-updated-at"](response.updated_at)
                 g_ui.win["weather-interval"](response.interval)
+
             alert = "CONDIZIONI METEO ADEGUATE"
             background_color = sg.theme_background_color()
             alert_background_color = "white"
@@ -58,16 +72,23 @@ class WeatherConverter(Converter):
                 background_color = "red"
                 alert_background_color = background_color
                 alert_text_color = "white"
+            
             g_ui.win["alert_meteo"](alert, background_color=alert_background_color, text_color=alert_text_color)
-            g_ui.win['wind-speed'].ParentRowFrame.config(background=background_color)
-            g_ui.win['wind-gust-speed'].ParentRowFrame.config(background=background_color)
-            g_ui.win['temperature'].ParentRowFrame.config(background=background_color)
-            g_ui.win['humidity'].ParentRowFrame.config(background=background_color)
-            g_ui.win['rain-rate'].ParentRowFrame.config(background=background_color)
-            g_ui.win['barometer'].ParentRowFrame.config(background=background_color)
-            g_ui.win["weather_block"].Widget.config(background=background_color)
-            g_ui.win["weather_block"].Widget.config(highlightbackground=alert_background_color)
-            g_ui.win["weather_block"].Widget.config(highlightcolor=alert_text_color)
+            
+            # Aggiornamento colori righe
+            keys_to_color = ['wind-speed', 'wind-gust-speed', 'temperature', 'humidity', 'rain-rate', 'barometer']
+            for k in keys_to_color:
+                try:
+                    g_ui.win[k].ParentRowFrame.config(background=background_color)
+                except Exception:
+                    pass
+
+            try:
+                g_ui.win["weather_block"].Widget.config(background=background_color)
+                g_ui.win["weather_block"].Widget.config(highlightbackground=alert_background_color)
+                g_ui.win["weather_block"].Widget.config(highlightcolor=alert_text_color)
+            except Exception:
+                pass
 
     def gauge(self, chart: Chart):
         fig = go.Figure(
@@ -76,8 +97,6 @@ class WeatherConverter(Converter):
                 value=chart.value,
                 mode="gauge+number+delta",
                 title={'text': f"{chart.title} {chart.unit_of_measurement}", 'font': {'size': 65}},
-                #delta={'reference': chart.thresholds[0].error, 'font': {
-                #    'size': 60}, 'increasing': {'color': "red"}, 'decreasing': {'color': "green"}},
                 gauge={
                     'axis': {'range': [chart.min, chart.max]},
                     'bar': {'color': "darkslategray"},
@@ -121,3 +140,4 @@ class WeatherConverter(Converter):
                     return "In peggioramento entro le prossime 12 ore"
                 if threashold.threshold_type == ThresholdType.THRESHOLD_TYPE_DANGER:
                     return "In peggioramento ora!"
+        return "N/A"
