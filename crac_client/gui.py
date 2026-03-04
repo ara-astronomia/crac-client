@@ -170,14 +170,12 @@ class Gui:
                     [sg.In(key='weather-updated-at', visible=False)],
                     [sg.In(key='weather-interval', visible=False)],
                     [
-                        sg.Image(key="wind-speed", expand_x=True, expand_y=True, size=SIZE_GAUGE),
-                        sg.Image(key="wind-gust-speed", expand_x=True, expand_y=True, size=SIZE_GAUGE),
-                        sg.Image(key="temperature", expand_x=True, expand_y=True, size=SIZE_GAUGE),
-                    
-                    
-                        sg.Image(key="humidity", expand_x=True, expand_y=True, size=SIZE_GAUGE),
-                        sg.Image(key="rain-rate", expand_x=True, expand_y=True, size=SIZE_GAUGE),
-                        sg.Image(key="barometer", expand_x=True, expand_y=True, size=SIZE_GAUGE),
+                        sg.Text('Vento', font=FONT_TEXT), sg.Text('N/A', key="wind-speed", size=(10, 1), background_color="white", text_color="black", justification='center'),
+                        sg.Text('Raffica', font=FONT_TEXT), sg.Text('N/A', key="wind-gust-speed", size=(10, 1), background_color="white", text_color="black", justification='center'),
+                        sg.Text('Temp.', font=FONT_TEXT), sg.Text('N/A', key="temperature", size=(10, 1), background_color="white", text_color="black", justification='center'),
+                        sg.Text('Umidità', font=FONT_TEXT), sg.Text('N/A', key="humidity", size=(10, 1), background_color="white", text_color="black", justification='center'),
+                        sg.Text('Pioggia', font=FONT_TEXT), sg.Text('N/A', key="rain-rate", size=(10, 1), background_color="white", text_color="black", justification='center'),
+                        sg.Text('Barom.', font=FONT_TEXT), sg.Text('N/A', key="barometer", size=(10, 1), background_color="white", text_color="black", justification='center'),
                     ],
                 ]), title="", expand_x=True, expand_y=True, key="weather_block", font=FONT_FRAME, relief=sg.RELIEF_FLAT)
             ],
