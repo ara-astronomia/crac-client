@@ -173,8 +173,6 @@ class Gui:
                         sg.Image(key="wind-speed", expand_x=True, expand_y=True, size=SIZE_GAUGE),
                         sg.Image(key="wind-gust-speed", expand_x=True, expand_y=True, size=SIZE_GAUGE),
                         sg.Image(key="temperature", expand_x=True, expand_y=True, size=SIZE_GAUGE),
-                    ],
-                    [
                         sg.Image(key="humidity", expand_x=True, expand_y=True, size=SIZE_GAUGE),
                         sg.Image(key="rain-rate", expand_x=True, expand_y=True, size=SIZE_GAUGE),
                         sg.Image(key="barometer", expand_x=True, expand_y=True, size=SIZE_GAUGE),
@@ -201,24 +199,23 @@ class Gui:
         block_logo_ara = [
             [sg.Text("        ", background_color='#000098'), sg.Image("images/logo_ara.png")]    
         ]
+layout = [
+    [sg.Column(block_3T, pad=PAD), sg.Column(block_logo_ara, background_color='#000098')],
 
-        layout = [
-            [sg.Column(block_3T, pad=PAD), sg.Column(block_logo_ara, background_color='#000098')],
+    [
+        sg.Column([
+            [sg.Column(block_alimentatori, pad=PAD_LEFT_INSIDE)],
+            [sg.Column(block_stato_tende, pad=PAD_LEFT_INSIDE)],
+            [sg.Column(block_stato_crac, pad=PAD_LEFT_INSIDE)]
+        ], background_color=BORDER_COLOR),
 
-            [
-                sg.Column([
-                    [sg.Column(block_alimentatori, pad=PAD_LEFT_INSIDE)],
-                    [sg.Column(block_stato_tende, pad=PAD_LEFT_INSIDE)],
-                    [sg.Column(block_stato_crac, pad=PAD_LEFT_INSIDE)]
-                ], background_color=BORDER_COLOR),
-                
-                sg.Column([
-                    [sg.Column(block_meteo, key='-METEO-COLUMN-')],
-                    [sg.Column(block_alim)]
-                ])
-            ],
-        ]
-        
+        sg.Column([
+            [sg.Column(block_alim)]
+        ])
+    ],
+    [sg.Column(block_meteo, key='-METEO-COLUMN-')],
+]
+
         self.win = sg.Window('CRaC -- Control Roof and Curtains by ARA', layout, margins=(5, 5), background_color=BORDER_COLOR, grab_anywhere=True, finalize=True, resizable=True)
         self.base_draw()
         
