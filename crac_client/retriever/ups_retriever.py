@@ -1,4 +1,3 @@
-from datetime import datetime
 import logging
 from crac_client.config import Config
 from crac_client.retriever.retriever import Retriever

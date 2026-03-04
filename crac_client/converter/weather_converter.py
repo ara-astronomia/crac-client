@@ -40,6 +40,7 @@ class WeatherConverter(Converter):
                     chart = charts[urn]
                     image_bytes = self.gauge(chart)
                 else:
+                    # Genera un placeholder N/A se il dato manca
                     image_bytes = self.na_gauge(title)
                 
                 image_base64_str = base64.b64encode(image_bytes).decode('utf-8')
@@ -61,9 +62,9 @@ class WeatherConverter(Converter):
 
         # Stato Allerta
         alert = "CONDIZIONI METEO ADEGUATE"
-        background_color = sg.theme_background_color()
-        alert_background_color = "white"
-        alert_text_color = "black"
+        bg_color = sg.theme_background_color()
+        alert_bg = "white"
+        alert_txt = "black"
         
         if response.status in (WeatherStatus.WEATHER_STATUS_WARNING, WeatherStatus.WEATHER_STATUS_UNSPECIFIED):
             if response.status == WeatherStatus.WEATHER_STATUS_UNSPECIFIED:
@@ -71,19 +72,21 @@ class WeatherConverter(Converter):
             else:
                 alert = "CONDIZIONI DI OSSERVAZIONE AL LIMITE"
             background_color = "#ffa500"
-            alert_background_color = background_color
+            alert_bg = background_color
             alert_text_color = "black"
         elif response.status == WeatherStatus.WEATHER_STATUS_DANGER:
             alert = "SISTEMA IN CHIUSURA PER METEO AVVERSA"
             background_color = "red"
-            alert_background_color = background_color
-            alert_text_color = "white"
-        
-        g_ui.win["alert_meteo"].update(alert, background_color=alert_background_color, text_color=alert_text_color)
+            alert_bg = background_color
+            alert_txt = "white"
+
+        g_ui.win["alert_meteo"](alert, background_color=alert_bg, text_color=alert_txt)
         
         try:
-            g_ui.win["weather_block"].Widget.config(background=background_color)
-        except: pass
+            # Rimosso .Widget.config per compatibilità e linting
+            g_ui.win["weather_block"].update(background_color=bg_color)
+        except Exception as e:
+            logger.debug(f"Impossibile aggiornare colore sfondo weather_block: {e}")
 
     def gauge(self, chart: Chart):
         fig = go.Figure(
@@ -91,23 +94,19 @@ class WeatherConverter(Converter):
                 domain={'x': [0, 1], 'y': [0, 0.85]},
                 value=chart.value,
                 mode="gauge+number",
-                title={
-                    'text': f"{chart.title}<br><span style='font-size:0.7em'>{chart.unit_of_measurement}</span>", 
-                    'font': {'size': 18},
-                    'align': 'center'
-                },
+                title={'text': f"{chart.title}<br><span style='font-size:0.7em'>{chart.unit_of_measurement}</span>", 'font': {'size': 18}},
                 gauge={
                     'axis': {'range': [chart.min, chart.max], 'tickwidth': 1, 'tickcolor': "white"},
-                    'bar': {'color': "darkslategray"}, # Ripristinato originale
-                    'bgcolor': "white", # Ripristinato originale
+                    'bar': {'color': "darkslategray"},
+                    'bgcolor': "white",
                     'borderwidth': 1,
-                    'bordercolor': "darkgray", # Ripristinato originale
+                    'bordercolor': "darkgray",
                     'steps': [self.build_range(threshold) for threshold in chart.thresholds],
-                    'threshold': {'line': {'color': "black", 'width': 3}, 'thickness': 0.75, 'value': chart.value} # Ripristinato originale
+                    'threshold': {'line': {'color': "black", 'width': 3}, 'thickness': 0.75, 'value': chart.value}
                 }
             ),
             layout={
-                "paper_bgcolor": '#000033', # Sfondo Blu Notte solo per l'immagine
+                "paper_bgcolor": '#000033', 
                 "font": {'color': "white", 'family': "Helvetica"},
                 "width": 150, "height": 150, 
                 "margin": {'t': 60, 'b': 5, 'l': 15, 'r': 15} 
@@ -119,7 +118,7 @@ class WeatherConverter(Converter):
         """ Genera un'immagine di segnaposto per i dati mancanti """
         fig = go.Figure(
             layout={
-                "paper_bgcolor": '#000033', # Sfondo Blu Notte
+                "paper_bgcolor": '#000033',
                 "width": 150, "height": 150,
                 "annotations": [{
                     "text": f"{title}<br><br><span style='font-size:1.5em'>N/A</span>",
@@ -138,22 +137,27 @@ class WeatherConverter(Converter):
         }
 
     def get_color_by_type(self, type: ThresholdType):
-        # Ripristinati i colori originali delle soglie
-        if (type == ThresholdType.THRESHOLD_TYPE_NORMAL): return "white"
-        if (type == ThresholdType.THRESHOLD_TYPE_WARNING): return "orange"
-        if (type == ThresholdType.THRESHOLD_TYPE_DANGER): return "red"
+        if (type == ThresholdType.THRESHOLD_TYPE_NORMAL):
+            return "white"
+        if (type == ThresholdType.THRESHOLD_TYPE_WARNING):
+            return "orange"
+        if (type == ThresholdType.THRESHOLD_TYPE_DANGER):
+            return "red"
         return "white"
     
     def check_barometer_trend(self, barometer_trend: Chart):
         return f"{barometer_trend.value} {barometer_trend.unit_of_measurement}"
 
     def check_barometer_trend_forecast(self, barometer_trend: Chart):
-        for threashold in barometer_trend.thresholds:
-            if threashold.lower_bound <= barometer_trend.value <= threashold.upper_bound:
-                if threashold.threshold_type == ThresholdType.THRESHOLD_TYPE_NORMAL:
-                    return "Stabile per le prossime 12 ore"
-                if threashold.threshold_type == ThresholdType.THRESHOLD_TYPE_WARNING:
-                    return "In peggioramento entro le prossime 12 ore"
-                if threashold.threshold_type == ThresholdType.THRESHOLD_TYPE_DANGER:
-                    return "In peggioramento ora!"
+        try:
+            for threashold in barometer_trend.thresholds:
+                if threashold.lower_bound <= barometer_trend.value <= threashold.upper_bound:
+                    if threashold.threshold_type == ThresholdType.THRESHOLD_TYPE_NORMAL:
+                        return "Stabile per le prossime 12 ore"
+                    if threashold.threshold_type == ThresholdType.THRESHOLD_TYPE_WARNING:
+                        return "In peggioramento entro le prossime 12 ore"
+                    if threashold.threshold_type == ThresholdType.THRESHOLD_TYPE_DANGER:
+                        return "In peggioramento ora!"
+        except Exception:
+            pass
         return "N/A"

@@ -1,7 +1,9 @@
 import logging
 import logging.config
-import subprocess
-logging.config.fileConfig('logging.conf')
+from queue import Empty
+from time import time
+import grpc
+
 from crac_client import config, gui
 from crac_client.converter.button_converter import ButtonConverter
 from crac_client.converter.curtains_converter import CurtainsConverter
@@ -21,19 +23,15 @@ from crac_protobuf.button_pb2 import ButtonKey
 from crac_protobuf.curtains_pb2 import CurtainsAction
 from crac_protobuf.roof_pb2 import RoofAction
 from crac_protobuf.telescope_pb2 import TelescopeAction
-from queue import Empty
-from sys import platform
-from time import sleep, time
-from typing import Union
 
-
+logging.config.fileConfig('logging.conf')
 logger = logging.getLogger(__name__)
 
 
 def blocking_deque():
     try:
         job = JOBS.get(block=True, timeout=10)
-    except Empty as e:
+    except Empty:
         logger.error("The queue is empty", exc_info=1)
     else:
         job['convert'](job['response'], g_ui)
@@ -48,14 +46,13 @@ def deque():
                 job = JOBS.get()
                 logger.debug(f"Esecuzione converter per {job['response'].__class__.__name__}")
                 job['convert'](job['response'], g_ui)
-            except Empty as e:
+            except Empty:
                 logger.error("The queue is empty", exc_info=1)
         
         # Forza il refresh della finestra Tkinter
         if g_ui and g_ui.win:
             g_ui.win.refresh()
 
-import grpc
 
 g_ui = gui.Gui()
 channel = grpc.insecure_channel(f'{config.Config.getValue("ip", "server")}:{config.Config.getValue("port", "server")}')

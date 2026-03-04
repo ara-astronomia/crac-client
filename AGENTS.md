@@ -107,6 +107,7 @@ To ensure efficiency and safety, the following rules apply to AI agents working 
 - **Mandatory Testing**: A commit can only be made if all relevant unit tests pass. 
 - **Autonomous Fixes**: If tests fail after a modification, the agent should attempt up to **3 iterations** of autonomous fixing before stopping to consult the user.
 - **Atomic Commits**: Prefer small, descriptive commits over large "catch-all" updates.
+- **Linting & Validation**: After any code change, you MUST run the linter (e.g., `uv run ruff check .`) to ensure code quality and prevent syntax errors.
 - **Config Protection**: NEVER stage or commit configuration files (e.g., `config.ini`, `.env`). You may only propose a commit if keys have been added or removed (structural changes), and explicit user permission is mandatory.
 - **Strict Scope**: I am strictly forbidden from modifying any files or directories outside the explicitly authorized project directories without confirmation. I must NEVER delete an entire directory outside the work projects.
 

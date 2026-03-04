@@ -1,4 +1,3 @@
-from re import T
 import config
 from crac_protobuf.button_pb2 import (
     ButtonLabel,
@@ -72,7 +71,6 @@ class Gui:
         FONT_BUTTON = ('Helvetica', 10)
         FONT_TEXT = ('Helvetica', 12)
         SIZE_GAUGE = (150, 150)
-        FONT_BUTTON_CAM=("Helvetica", 8)
         
         block_3T = [
             [sg.Text('Controllo 3T - Tetto Telescopio Tende', font=FONT)],
@@ -199,23 +197,23 @@ class Gui:
         block_logo_ara = [
             [sg.Text("        ", background_color='#000098'), sg.Image("images/logo_ara.png")]    
         ]
-layout = [
-    [sg.Column(block_3T, pad=PAD), sg.Column(block_logo_ara, background_color='#000098')],
+        layout = [
+            [sg.Column(block_3T, pad=PAD), sg.Column(block_logo_ara, background_color='#000098')],
 
-    [
-        sg.Column([
-            [sg.Column(block_alimentatori, pad=PAD_LEFT_INSIDE)],
-            [sg.Column(block_stato_tende, pad=PAD_LEFT_INSIDE)],
-            [sg.Column(block_stato_crac, pad=PAD_LEFT_INSIDE)]
-        ], background_color=BORDER_COLOR),
-
-        sg.Column([
-            [sg.Column(block_alim)]
-        ])
-    ],
-    [sg.Column(block_meteo, key='-METEO-COLUMN-')],
-]
-
+            [
+                sg.Column([
+                    [sg.Column(block_alimentatori, pad=PAD_LEFT_INSIDE)],
+                    [sg.Column(block_stato_tende, pad=PAD_LEFT_INSIDE)],
+                    [sg.Column(block_stato_crac, pad=PAD_LEFT_INSIDE)]
+                ], background_color=BORDER_COLOR),
+                
+                sg.Column([
+                    [sg.Column(block_alim)]
+                ])
+            ],
+            [sg.Column(block_meteo, key='-METEO-COLUMN-')],
+        ]
+        
         self.win = sg.Window('CRaC -- Control Roof and Curtains by ARA', layout, margins=(5, 5), background_color=BORDER_COLOR, grab_anywhere=True, finalize=True, resizable=True)
         self.base_draw()
         
