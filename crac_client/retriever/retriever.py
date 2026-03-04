@@ -8,8 +8,9 @@ logger = logging.getLogger(__name__)
 
 
 class Retriever(ABC):
-    def __init__(self, converter: Converter) -> None:
+    def __init__(self, converter: Converter, channel=None) -> None:
         self.converter = converter
+        self.channel = channel
 
     def callback(self, call_future) -> None:
         try:

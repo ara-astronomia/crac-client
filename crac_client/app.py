@@ -50,13 +50,16 @@ def deque():
         else:
             job['convert'](job['response'], g_ui)
 
+import grpc
+
 g_ui = gui.Gui()
-roof_retriever = RoofRetriever(RoofConverter())
-button_retriever = ButtonRetriever(ButtonConverter())
-telescope_retriever = TelescopeRetriever(TelescopeConverter())
-curtains_retriever = CurtainsRetriever(CurtainsConverter())
-ups_retriever = UpsRetriever(UpsConverter())
-weather_retriever = WeatherRetriever(WeatherConverter())
+channel = grpc.insecure_channel(f'{config.Config.getValue("ip", "server")}:{config.Config.getValue("port", "server")}')
+roof_retriever = RoofRetriever(RoofConverter(), channel=channel)
+button_retriever = ButtonRetriever(ButtonConverter(), channel=channel)
+telescope_retriever = TelescopeRetriever(TelescopeConverter(), channel=channel)
+curtains_retriever = CurtainsRetriever(CurtainsConverter(), channel=channel)
+ups_retriever = UpsRetriever(UpsConverter(), channel=channel)
+weather_retriever = WeatherRetriever(WeatherConverter(), channel=channel)
 weather_retriever.getStatus(g_ui.win["weather-updated-at"].get(), g_ui.win["weather-interval"].get())
 blocking_deque()
 

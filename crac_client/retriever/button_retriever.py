@@ -16,9 +16,10 @@ import grpc
 
 
 class ButtonRetriever(Retriever):
-    def __init__(self, converter: Converter) -> None:
-        super().__init__(converter)
-        self.channel = grpc.insecure_channel(f'{Config.getValue("ip", "server")}:{Config.getValue("port", "server")}')
+    def __init__(self, converter: Converter, channel=None) -> None:
+        super().__init__(converter, channel)
+        if not self.channel:
+            self.channel = grpc.insecure_channel(f'{Config.getValue("ip", "server")}:{Config.getValue("port", "server")}')
         self.client = ButtonStub(self.channel)
 
     key_to_button_type_conversion = {

@@ -16,9 +16,10 @@ logger = logging.getLogger(__name__)
 
 
 class UpsRetriever(Retriever):
-    def __init__(self, converter) -> None:
-        super().__init__(converter)
-        self.channel = grpc.insecure_channel(f'{Config.getValue("ip", "server")}:{Config.getValue("port", "server")}')
+    def __init__(self, converter, channel=None) -> None:
+        super().__init__(converter, channel)
+        if not self.channel:
+            self.channel = grpc.insecure_channel(f'{Config.getValue("ip", "server")}:{Config.getValue("port", "server")}')
         self.client = UpsStub(self.channel)
 
     def getStatus(self, latest_update: str, interval: str) -> UpsResponse:
