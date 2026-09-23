@@ -14,6 +14,22 @@
 >
 > Il codice resta qui per riferimento storico; non aprire PR su questo repo.
 
+---
+
+> **Archived.** Superseded by [crac-cloud](https://github.com/ara-astronomia/crac-cloud),
+> the web interface that took its place in production. No changes here
+> since 2022-04-03, against crac-cloud's continuous development.
+>
+> Advantages of crac-cloud over this desktop client:
+> - **No installation**: just a browser, no Python/Poetry environment to
+>   set up on every machine you want to operate from.
+> - **Centralized deployment**: one service to update, not N scattered
+>   installations to keep in sync.
+> - **Remotely accessible**: no need to be on the same local network as the
+>   server, unlike the direct gRPC connection used here.
+>
+> The code stays here for historical reference; do not open PRs on this repo.
+
 Client for connection to crac-server via gRPC
 
 # Pre-requisite
